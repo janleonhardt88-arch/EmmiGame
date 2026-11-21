@@ -1,9 +1,10 @@
 // Offline-Unterstützung: Dateien aus dem Cache liefern, im Hintergrund aktualisieren.
-const CACHE = 'emmigame-v2';
+const CACHE = 'emmigame-v3';
 const FILES = [
   './', 'index.html', 'manifest.webmanifest', 'css/style.css',
   'js/main.js', 'js/art.js', 'js/audio.js', 'js/data.js', 'js/math.js', 'js/state.js',
   'js/core.js', 'js/vocab.js', 'js/words.js', 'js/games/stage.js', 'js/games/craft.js', 'js/games/climb.js',
+  'js/games/ballet.js', 'js/games/market.js', 'js/recorder.js',
   'fonts/nunito-latin-600-normal.woff2', 'fonts/nunito-latin-800-normal.woff2',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/icon-180.png',
 ];

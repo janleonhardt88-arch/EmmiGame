@@ -1,3 +1,4 @@
+import { clipUrl } from './recorder.js';
 // Soundeffekte (synthetisch, keine Dateien nötig) und Sprachausgabe.
 const prefs = { sound: true, speech: true };
 export function setAudioPrefs(p) { Object.assign(prefs, p); }
@@ -82,16 +83,50 @@ export function findVoice(lang) {
   return voices.find((v) => norm(v.lang).startsWith(base)) || null;
 }
 
-export function speak(text, lang = 'de-DE', { queue = false } = {}) {
-  if (!prefs.speech || !('speechSynthesis' in window)) return;
-  const syn = window.speechSynthesis;
-  if (!queue) syn.cancel();
-  const u = new SpeechSynthesisUtterance(text);
-  u.lang = lang;
-  const v = findVoice(lang);
-  if (v) u.voice = v;
-  u.rate = lang.startsWith('de') ? 1 : 0.85;
-  syn.speak(u);
+// Warteschlange: eigene Aufnahmen und Sprachausgabe nacheinander abspielen
+let chain = Promise.resolve();
+let gen = 0;
+let currentAudio = null;
+
+function playClip(url) {
+  return new Promise((resolve) => {
+    const a = new Audio(url);
+    currentAudio = a;
+    a.onended = a.onerror = () => resolve();
+    a.play().catch(() => resolve());
+  });
+}
+
+function playTTS(text, lang) {
+  return new Promise((resolve) => {
+    if (!('speechSynthesis' in window)) return resolve();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang;
+    const v = findVoice(lang);
+    if (v) u.voice = v;
+    u.rate = lang.startsWith('de') ? 1 : 0.85;
+    let fin = false;
+    const done = () => { if (!fin) { fin = true; resolve(); } };
+    u.onend = done; u.onerror = done;
+    setTimeout(done, 1500 + text.length * 140);
+    window.speechSynthesis.speak(u);
+  });
+}
+
+export function speak(text, lang = 'de-DE', { queue = false, force = false } = {}) {
+  if (!prefs.speech && !force) return;
+  if (!queue) {
+    gen++;
+    chain = Promise.resolve();
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  }
+  const my = gen;
+  chain = chain.then(() => {
+    if (my !== gen) return undefined;
+    const url = clipUrl(lang, text);
+    return url ? playClip(url) : playTTS(text, lang);
+  });
 }
 
 export function voiceInfo(lang) {

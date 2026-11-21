@@ -50,15 +50,15 @@ Pflanzen brauchen Pflege, die Welt wächst sichtbar mit ihrem Lernfortschritt.
 - Stil: niedlich-bunt gezeichnet oder eher Emoji-/Bastel-Look?
 - Mit welchem Ort starten wir als erstem spielbaren Prototyp?
 
-## Stand (v0.2)
-Umgesetzt: Garten, Karate-Dojo, Singbühne, Bastelstube (Perlen-Armbänder), Kletterwand, Hofladen,
-Gürtelsystem, Tagesaufgaben, Elternbereich.
+## Stand (v0.3)
+Umgesetzt: Garten, Karate-Dojo, Ballettstudio (Tanz merken, Uhrzeit), Singbühne (inkl. Sätze),
+Bastelstube (Perlen-Armbänder), Kletterwand, Hofladen (kaufen & verkaufen mit Wechselgeld),
+Gürtelsystem, Tagesaufgaben, eigene Sprachaufnahmen, Elternbereich.
 
 ## Ideen für später
-- 🩰 Ballettbühne: Tanzschritte merken (Memory) + Uhrzeit lernen
-- 🏪 Hofladen verkaufen: Ernte verkaufen, Wechselgeld geben (Euro/Cent)
 - 🐔 Tierhof: Tiere füttern und pflegen, kurze Sätze auf PT/EN
 - 🧶 Bastelstube: Symmetrie-Bilder, Häkel-Muster
-- Sätze statt Einzelwörter auf der Singbühne (z. B. „Eu gosto de …")
-- Eigene Stimmen aufnehmen (Mama auf Portugiesisch)
-- Deko für den Garten, Kostüme für Emmi
+- 🎀 Deko für den Garten, Kostüme für Emmi (Sterne ausgeben)
+- Uhr selbst stellen (Zeiger ziehen), Zeitspannen („Wie spät ist es in 1 Stunde?")
+- Singbühne: kleine Lieder zum Mitsingen, Wörter nachsprechen
+- Lese-Geschichten mit Fragen zum Textverständnis

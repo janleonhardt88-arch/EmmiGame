@@ -438,3 +438,49 @@ export function hold(color, i) {
   ];
   return svg(`<path d="${shapes[i % 3]}" fill="${color}" stroke="rgba(0,0,0,.25)" stroke-width="4"/><ellipse cx="40" cy="38" rx="8" ry="5" fill="#fff" opacity=".45" transform="rotate(-25 40 38)"/><circle cx="52" cy="52" r="5" fill="rgba(0,0,0,.25)"/>`);
 }
+
+// ---------- Uhr ----------
+export function clock(h, m) {
+  const ha = ((h % 12) + m / 60) * 30, ma = m * 6;
+  const nums = Array.from({ length: 12 }, (_, i) => {
+    const n = i + 1, a = (n * 30 - 90) * Math.PI / 180;
+    return `<text x="${(50 + Math.cos(a) * 33).toFixed(1)}" y="${(50 + Math.sin(a) * 33).toFixed(1)}" text-anchor="middle" dominant-baseline="central" font-family="Nunito, sans-serif" font-weight="800" font-size="9" fill="#4a3552">${n}</text>`;
+  }).join('');
+  const ticks = Array.from({ length: 60 }, (_, i) => `<path d="M50 6 L50 ${i % 5 ? 8 : 10}" stroke="${i % 5 ? '#d9cfe2' : '#9b7bff'}" stroke-width="${i % 5 ? 1 : 2}" transform="rotate(${i * 6} 50 50)"/>`).join('');
+  return svg(`
+    <circle cx="50" cy="50" r="47" fill="#fff" stroke="#ff8cc6" stroke-width="5"/>
+    ${ticks}${nums}
+    <path d="M50 50 L50 28" stroke="#ff5a9a" stroke-width="5.5" stroke-linecap="round" transform="rotate(${ha} 50 50)"/>
+    <path d="M50 50 L50 13" stroke="#7356e0" stroke-width="3.2" stroke-linecap="round" transform="rotate(${ma} 50 50)"/>
+    <circle cx="50" cy="50" r="4" fill="#4a3552"/>`);
+}
+
+// ---------- Geld ----------
+export function money(c) {
+  if (c >= 500) {
+    const col = c === 500 ? '#9bb7a8' : c === 1000 ? '#e89a8a' : '#8ab0e8';
+    return svg(`<rect x="2" y="22" width="96" height="56" rx="6" fill="${col}" stroke="rgba(0,0,0,.25)" stroke-width="3"/>
+      <rect x="8" y="28" width="84" height="44" rx="4" fill="none" stroke="#fff" stroke-width="2" opacity=".6"/>
+      <circle cx="74" cy="50" r="12" fill="#fff" opacity=".35"/>
+      <text x="34" y="51" text-anchor="middle" dominant-baseline="central" font-family="Nunito, sans-serif" font-weight="800" font-size="26" fill="#fff" stroke="rgba(0,0,0,.25)" stroke-width="1" paint-order="stroke">${c / 100} €</text>`);
+  }
+  const euro = c >= 100;
+  const r = { 10: 30, 20: 34, 50: 38, 100: 36, 200: 40 }[c] || 32;
+  const outer = euro ? (c === 200 ? '#e3b34c' : '#c9ccd4') : '#e3b34c';
+  const inner = euro ? (c === 200 ? '#c9ccd4' : '#e3b34c') : '#efc75e';
+  const label = euro ? `${c / 100} €` : `${c}`;
+  return svg(`<circle cx="50" cy="50" r="${r}" fill="${outer}" stroke="rgba(0,0,0,.25)" stroke-width="3"/>
+    <circle cx="50" cy="50" r="${r * 0.72}" fill="${inner}"/>
+    <text x="50" y="${euro ? 51 : 47}" text-anchor="middle" dominant-baseline="central" font-family="Nunito, sans-serif" font-weight="800" font-size="${euro ? 20 : 24}" fill="#5a4320">${label}</text>
+    ${euro ? '' : '<text x="50" y="66" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="800" font-size="11" fill="#5a4320">CENT</text>'}`);
+}
+
+export const balletIcon = () => svg(`
+  <path d="M30 70 Q50 52 70 70 Q62 78 50 74 Q38 78 30 70Z" fill="#ffc2dc" stroke="#ff8cc6" stroke-width="3"/>
+  <path d="M40 24 Q50 18 60 24 L58 58 L42 58Z" fill="#ff8cc6" stroke="#e2559a" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M22 86 Q34 74 44 84 Q36 94 22 86Z M78 86 Q66 74 56 84 Q64 94 78 86Z" fill="#ff8cc6" stroke="#e2559a" stroke-width="3"/>
+  <path d="M44 84 L40 72 M56 84 L60 72" stroke="#ff8cc6" stroke-width="3" stroke-linecap="round"/>`);
+
+export const bubbleIcon = () => svg(`
+  <path d="M14 22 Q14 12 26 12 L74 12 Q86 12 86 22 L86 56 Q86 66 74 66 L44 66 L26 84 L30 66 L26 66 Q14 66 14 56Z" fill="#fff" stroke="#9b7bff" stroke-width="4" stroke-linejoin="round"/>
+  <text x="50" y="40" text-anchor="middle" dominant-baseline="central" font-family="Nunito, sans-serif" font-weight="800" font-size="24" fill="#9b7bff">Olá!</text>`);

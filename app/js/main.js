@@ -10,8 +10,12 @@ import { api } from './core.js';
 import stage from './games/stage.js';
 import craft, { CRAFT_LEVELS } from './games/craft.js';
 import climb from './games/climb.js';
+import ballet, { CLOCK_LEVELS } from './games/ballet.js';
+import { renderSell, marketActions, leaveMarket } from './games/market.js';
+import { initClips, canRecord, clipUrl, clipCount, saveClip, deleteClip, startRecording } from './recorder.js';
+import { allTexts } from './vocab.js';
 
-const GAMES = { stage, craft, climb };
+const GAMES = { ballet, stage, craft, climb };
 
 const $ = (s, el = document) => el.querySelector(s);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -27,6 +31,8 @@ const QUESTS = {
   stage: { goal: 1, text: () => 'Ein Lied auf der Bühne', ico: '🎤' },
   craft: { goal: 1, text: () => 'Ein Armband basteln', ico: '📿' },
   climb: { goal: 1, text: () => 'Einmal bis zur Glocke klettern', ico: '🧗' },
+  ballet: { goal: 1, text: () => 'Im Ballettstudio üben', ico: '🩰' },
+  market: { goal: 1, text: () => 'Einen Kunden im Hofladen bedienen', ico: '🛎️' },
 };
 const DAILY_REWARD = 10;
 const today = () => { const d = new Date(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
@@ -69,6 +75,7 @@ setAudioPrefs({ sound: state.sound, speech: state.speech });
 function go(to) {
   if (screen === 'dojo' && to !== 'dojo') dojo = null;
   if (screen !== to) GAMES[screen]?.leave?.();
+  if (screen === 'shop' && to !== 'shop') leaveMarket();
   screen = to;
   render();
 }
@@ -396,6 +403,7 @@ function harvest(i) {
   state.stats.harvested++;
   quest('harvest');
   state.collection[k] = (state.collection[k] || 0) + 1;
+  state.basket[k] = (state.basket[k] || 0) + 1;
   save();
   sfx.harvest();
   renderGarden();
@@ -403,6 +411,7 @@ function harvest(i) {
     <div class="harvest-art">${art.plant(k)}</div>
     <h2>Du hast ${p.deIndef} geerntet!</h2>
     ${wordRows(p)}
+    <p class="note">🧺 Liegt jetzt auch im Erntekorb – im Hofladen kannst du sie verkaufen.</p>
     <button class="btn primary big" data-act="collect" data-n="${p.reward}">+${p.reward} <span class="bi">${art.star()}</span> einsammeln</button>`, { closable: false, cls: 'celebrate' });
   setTimeout(() => { speak(p.pt, 'pt-PT'); speak(p.en, 'en-GB', { queue: true }); }, 500);
 }
@@ -441,6 +450,8 @@ function renderShop() {
         owned, max: owned >= MAX_PER_ANIMAL, info: owned >= MAX_PER_ANIMAL ? 'Dein Garten ist voll davon!' : 'Wohnt in deinem Garten',
       }, bi);
     }).join('');
+  } else if (shopTab === 'sell') {
+    cards = null;
   } else {
     const n = state.beds.length;
     cards = n < MAX_BEDS
@@ -452,9 +463,10 @@ function renderShop() {
     <div class="shop">
       <div class="awning"></div>
       <div class="shop-sign">Hofladen</div>
-      <div class="tabs">${tab('seeds', 'Samen')}${tab('animals', 'Tiere')}${tab('garden', 'Garten')}</div>
-      <div class="shop-grid">${cards}</div>
+      <div class="tabs">${tab('seeds', 'Samen')}${tab('animals', 'Tiere')}${tab('garden', 'Garten')}${tab('sell', '💶 Verkaufen')}</div>
+      ${cards === null ? '<div id="market"></div>' : `<div class="shop-grid">${cards}</div>`}
     </div>`;
+  if (cards === null) renderSell();
 }
 
 function shopCard(c, bi) {
@@ -689,6 +701,14 @@ function parentsPanel() {
         <p class="note">Aktuell: <b>${CRAFT_LEVELS[state.craftLevel].de}</b> – ${CRAFT_LEVELS[state.craftLevel].info}</p>
       </section>
       <section>
+        <h3>Ballett: Uhrzeit</h3>
+        <div class="chips" id="p-clock">
+          <button class="chip ${state.clockAuto ? 'on' : ''}" data-lv="auto">Automatisch</button>
+          ${[1, 2, 3].map((l) => `<button class="chip ${!state.clockAuto && state.clockLevel === l ? 'on' : ''}" data-lv="${l}">${l}</button>`).join('')}
+        </div>
+        <p class="note">Aktuell: <b>${CLOCK_LEVELS[state.clockLevel].de}</b> – ${CLOCK_LEVELS[state.clockLevel].info}</p>
+      </section>
+      <section>
         <h3>Dojo: Einmaleins-Reihen</h3>
         <div class="chips" id="p-rows">
           <button class="chip ${auto ? 'on' : ''}" data-row="auto">Nach Gürtel</button>
@@ -706,6 +726,11 @@ function parentsPanel() {
         <p class="note">Portugiesisch: <b class="${pv.ok ? 'ok' : 'warn'}">${esc(pv.text)}</b> <button class="link" data-act="say" data-lang="pt-PT" data-text="Olá ${esc(state.name)}! Como estás?">▶ testen</button><br>
         Englisch: <b class="${ev.ok ? 'ok' : 'warn'}">${esc(ev.text)}</b> <button class="link" data-act="say" data-lang="en-GB" data-text="Hello ${esc(state.name)}! How are you?">▶ testen</button></p>
         ${pv.ok ? '' : `<p class="note warn-box">Für europäisches Portugiesisch auf Android: Einstellungen → Bedienungshilfen → Text-in-Sprache → Google-Sprachausgabe → Sprachdaten installieren → <b>Português (Portugal)</b>.</p>`}
+      </section>
+      <section>
+        <h3>Eigene Stimmen 🎙️</h3>
+        <p class="note">Nehmt Wörter und Sätze selbst auf (z. B. Mama auf Portugiesisch). Das Spiel spielt dann eure Aufnahme statt der Computerstimme. Bisher: <b>${clipCount()}</b> Aufnahmen.</p>
+        <button class="btn" id="p-rec">Aufnahmen verwalten</button>
       </section>
       <section>
         <h3>Sonstiges</h3>
@@ -734,6 +759,13 @@ function parentsPanel() {
     else { state.craftAuto = false; state.craftLevel = Number(b.dataset.lv); }
     save(); parentsPanel();
   });
+  $('#p-clock', m).addEventListener('click', (e) => {
+    const b = e.target.closest('[data-lv]'); if (!b) return;
+    if (b.dataset.lv === 'auto') state.clockAuto = true;
+    else { state.clockAuto = false; state.clockLevel = Number(b.dataset.lv); }
+    save(); parentsPanel();
+  });
+  $('#p-rec', m).addEventListener('click', () => recordPanel());
   $('#p-rows', m).addEventListener('click', (e) => {
     const b = e.target.closest('[data-row]'); if (!b) return;
     const v = b.dataset.row;
@@ -764,6 +796,63 @@ function parentsPanel() {
   });
 }
 
+// ============ Eigene Aufnahmen ============
+let recLang = 'pt-PT';
+let recording = null;
+function recordPanel(scroll = 0) {
+  const pt = recLang === 'pt-PT';
+  const groups = allTexts(recLang, state.name);
+  groups.push({ group: 'Lob & Gürtel', items: pt ? ['Olá!', 'Muito bem!', 'Obrigado!', ...BELTS.map((b) => b.pt)] : ['Hello!', 'Well done!', ...BELTS.map((b) => b.en)] });
+  const row = (t) => {
+    const has = !!clipUrl(recLang, t);
+    return `<div class="rec-row ${has ? 'has' : ''}" data-t="${esc(t)}"><span class="rt">${esc(t)}</span>
+      <button class="rb" data-r="play" aria-label="Anhören">▶</button>
+      <button class="rb rec" data-r="rec" aria-label="Aufnehmen">●</button>
+      ${has ? '<button class="rb" data-r="del" aria-label="Löschen">🗑</button>' : '<span class="rb-space"></span>'}</div>`;
+  };
+  const m = openModal(`
+    <div class="parents rec">
+      <h2>Eigene Stimmen 🎙️</h2>
+      <p class="note">● antippen, Wort sprechen, ■ zum Stoppen (höchstens 5 Sekunden). ✓ = eigene Aufnahme vorhanden.</p>
+      <div class="chips center">
+        <button class="chip ${pt ? 'on' : ''}" data-rl="pt-PT">🇵🇹 Portugiesisch</button>
+        <button class="chip ${!pt ? 'on' : ''}" data-rl="en-GB">🇬🇧 Englisch</button>
+      </div>
+      ${canRecord() ? '' : '<p class="note warn-box">Aufnehmen geht hier nicht – es braucht eine https-Adresse und ein Mikrofon.</p>'}
+      ${groups.map((g) => `<section><h3>${esc(g.group)}</h3>${[...new Set(g.items)].map(row).join('')}</section>`).join('')}
+      <div class="btn-row"><button class="btn big" data-r="back">Zurück</button></div>
+    </div>`, { cls: 'parents-modal' });
+  m.scrollTop = scroll;
+  m.addEventListener('click', async (e) => {
+    const lb = e.target.closest('[data-rl]');
+    if (lb) { recLang = lb.dataset.rl; recordPanel(); return; }
+    const b = e.target.closest('[data-r]');
+    if (!b) return;
+    const act = b.dataset.r;
+    if (act === 'back') { recording?.stop(); parentsPanel(); return; }
+    const t = b.closest('.rec-row')?.dataset.t;
+    if (!t) return;
+    if (act === 'play') speak(t, recLang, { force: true });
+    else if (act === 'del') { await deleteClip(recLang, t); recordPanel(m.scrollTop); }
+    else if (act === 'rec') {
+      if (recording) { recording.stop(); return; }
+      try {
+        recording = await startRecording(5000);
+        b.classList.add('on');
+        b.textContent = '■';
+        const blob = await recording.done;
+        recording = null;
+        if (blob.size > 0) { await saveClip(recLang, t, blob); toast('Gespeichert ✓'); }
+        recordPanel(m.scrollTop);
+        if (blob.size > 0) speak(t, recLang, { force: true });
+      } catch (err) {
+        recording = null;
+        toast('Mikrofon nicht verfügbar 😕');
+      }
+    }
+  });
+}
+
 // ============ Ereignisse ============
 const actions = {
   goto: (el) => { if (modalOpen()) closeModal(); sfx.tick(); go(el.dataset.to); },
@@ -774,7 +863,7 @@ const actions = {
   animal: (el) => onAnimal(el),
   say: (el) => speak(el.dataset.text, el.dataset.lang),
   collect: (el) => { const n = Number(el.dataset.n); closeModal(); addStars(n); },
-  tab: (el) => { shopTab = el.dataset.tab; sfx.tick(); renderShop(); },
+  tab: (el) => { if (shopTab === 'sell') leaveMarket(); shopTab = el.dataset.tab; sfx.tick(); renderShop(); },
   buy: (el) => buy(el.dataset.kind, el.dataset.id),
   'dojo-start': () => { sfx.pop(); startDojo(); },
   'dojo-pick': (el) => dojoPick(el),
@@ -791,6 +880,7 @@ const actions = {
   },
 };
 for (const g of Object.values(GAMES)) Object.assign(actions, g.actions);
+Object.assign(actions, marketActions);
 
 Object.assign(api, {
   openModal, closeModal, toast, confetti, addStars, addXP, renderTop, wordRows,
@@ -805,6 +895,7 @@ document.addEventListener('click', (e) => {
 document.addEventListener('pointerdown', () => sfx.unlock(), { once: true });
 document.addEventListener('contextmenu', (e) => e.preventDefault());
 
+initClips();
 render();
 
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {

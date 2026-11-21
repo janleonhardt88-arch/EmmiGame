@@ -30,6 +30,10 @@ export function defaults() {
     craftAuto: true,
     bracelets: [],
     climbTops: 0,
+    basket: {},
+    clockLevel: 1,
+    clockAuto: true,
+    danceBest: 0,
   };
 }
 

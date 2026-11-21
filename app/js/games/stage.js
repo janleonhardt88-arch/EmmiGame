@@ -8,6 +8,8 @@ import { api, $, esc, pick, shuffle } from '../core.js';
 const ROUND = 8;
 let round = null;
 
+const say = (w, lang) => w[lang].replace('{name}', state.name);
+
 function canListen(lang) {
   return state.speech && 'speechSynthesis' in window && voiceInfo(LANGS[lang].tts).text !== 'keine Stimme gefunden';
 }
@@ -47,6 +49,11 @@ function start(cat) {
     cat, lang, i: 0, first: 0, results: [],
     qs: targets.map((w) => {
       const r = Math.random();
+      if (CATEGORIES[cat].phrases) {
+        const type = listen && r < 0.4 ? 'plisten' : r < 0.7 ? 'pread' : 'pde';
+        const others = shuffle(words.filter((x) => x.id !== w.id)).slice(0, 3);
+        return { w, type, options: shuffle([w, ...others]) };
+      }
       const type = listen ? (r < 0.5 ? 'listen' : r < 0.75 ? 'read' : 'picture') : (r < 0.5 ? 'read' : 'picture');
       const others = shuffle(words.filter((x) => x.id !== w.id)).slice(0, 3);
       return { w, type, options: shuffle([w, ...others]) };
@@ -63,27 +70,38 @@ function nextQ() {
   round.lock = false;
   renderRound();
   const q = round.qs[round.i];
-  if (q.type === 'listen') setTimeout(() => sayTarget(), 350);
+  if (q.type === 'listen' || q.type === 'plisten') setTimeout(() => sayTarget(), 350);
 }
 
 function sayTarget() {
   const q = round?.qs[round.i];
-  if (q) speak(q.w[round.lang], LANGS[round.lang].tts);
+  if (q) speak(say(q.w, round.lang), LANGS[round.lang].tts);
 }
 
 function renderRound() {
   const q = round.qs[round.i];
   const L = LANGS[round.lang];
-  const notes = Array.from({ length: ROUND }, (_, k) => `<span class="note ${k < round.i ? (round.results[k] ? 'hit' : 'meh') : k === round.i ? 'now' : ''}">♪</span>`).join('');
+  const notes = Array.from({ length: ROUND }, (_, k) => `<span class="mnote ${k < round.i ? (round.results[k] ? 'hit' : 'meh') : k === round.i ? 'now' : ''}">♪</span>`).join('');
   let prompt, options;
-  if (q.type === 'listen') {
+  if (q.type === 'plisten') {
+    prompt = `<button class="listen-btn" data-act="stage-say">${art.iconSpeaker()}</button><p class="prompt-text">Was bedeutet das? 🇩🇪</p>`;
+  } else if (q.type === 'pread') {
+    prompt = `<div class="read-word phrase">${L.flag} ${esc(say(q.w, round.lang))}</div><p class="prompt-text">Was bedeutet das auf Deutsch?</p>`;
+  } else if (q.type === 'pde') {
+    prompt = `<div class="read-word phrase">🇩🇪 ${esc(say(q.w, 'de'))}</div><p class="prompt-text">Wie sagt man das auf ${L.de}?</p>`;
+  } else if (q.type === 'listen') {
     prompt = `<button class="listen-btn" data-act="stage-say">${art.iconSpeaker()}</button><p class="prompt-text">Was hörst du? ${L.flag}</p>`;
   } else if (q.type === 'read') {
     prompt = `<div class="read-word">${L.flag} ${esc(q.w[round.lang])}</div><p class="prompt-text">Welches Bild passt?</p>`;
   } else {
     prompt = `<div class="prompt-pic">${q.w.art()}</div><p class="prompt-text">Wie heißt das auf ${L.de}?</p>`;
   }
-  if (q.type === 'picture') {
+  const textOpts = q.type === 'picture' || q.type[0] === 'p';
+  if (q.type === 'plisten' || q.type === 'pread') {
+    options = q.options.map((o) => `<button class="opt word-opt phrase" data-act="stage-pick" data-id="${o.id}">${esc(say(o, 'de'))}</button>`).join('');
+  } else if (q.type === 'pde') {
+    options = q.options.map((o) => `<button class="opt word-opt phrase" data-act="stage-pick" data-id="${o.id}">${esc(say(o, round.lang))}</button>`).join('');
+  } else if (q.type === 'picture') {
     options = q.options.map((o) => `<button class="opt word-opt" data-act="stage-pick" data-id="${o.id}">${esc(o[round.lang])}</button>`).join('');
   } else {
     options = q.options.map((o) => `<button class="opt pic-opt" data-act="stage-pick" data-id="${o.id}">${o.art()}</button>`).join('');
@@ -98,7 +116,7 @@ function renderRound() {
           <div class="singer" id="singer">${art.avatar(api.hairColor(), '#fff', { outfit: 'tutu', mic: true })}</div>
           <div class="prompt">${prompt}</div>
         </div>
-        <div class="opts ${q.type === 'picture' ? 'words' : 'pics'}">${options}</div>
+        <div class="opts ${textOpts ? 'words' : 'pics'}">${options}</div>
       </div>
       <button class="btn ghost quit" data-act="stage-quit">Aufhören</button>
     </div>`;
@@ -120,7 +138,7 @@ function onPick(btn) {
     fly.className = 'fly-note';
     fly.textContent = pick(['♪', '♫', '♬']);
     $('#singer')?.appendChild(fly);
-    if (q.type !== 'listen') setTimeout(() => speak(q.w[round.lang], LANGS[round.lang].tts), 250);
+    if (q.type !== 'listen' && q.type !== 'plisten') setTimeout(() => speak(say(q.w, round.lang), LANGS[round.lang].tts), 250);
     round.i++;
     save();
     setTimeout(nextQ, 1300);
@@ -129,7 +147,7 @@ function onPick(btn) {
     btn.classList.add('wrong');
     btn.disabled = true;
     sfx.wrong();
-    if (q.type === 'listen') setTimeout(sayTarget, 500);
+    if (q.type === 'listen' || q.type === 'plisten') setTimeout(sayTarget, 500);
   }
 }
 

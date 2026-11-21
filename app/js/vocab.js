@@ -44,6 +44,25 @@ const NATURE = [
   ['ball', 'der Ball', 'ball', 'a bola'],
 ];
 
+const PHRASES = [
+  ['hello', 'Hallo!', 'Hello!', 'Olá!'],
+  ['morning', 'Guten Morgen!', 'Good morning!', 'Bom dia!'],
+  ['night', 'Gute Nacht!', 'Good night!', 'Boa noite!'],
+  ['thanks', 'Danke!', 'Thank you!', 'Obrigada!'],
+  ['please', 'Bitte!', 'Please!', 'Por favor!'],
+  ['sorry', 'Entschuldigung!', 'Sorry!', 'Desculpa!'],
+  ['bye', 'Tschüss!', 'Goodbye!', 'Adeus!'],
+  ['tomorrow', 'Bis morgen!', 'See you tomorrow!', 'Até amanhã!'],
+  ['howareyou', 'Wie geht es dir?', 'How are you?', 'Como estás?'],
+  ['fine', 'Mir geht es gut.', 'I am fine.', 'Estou bem.'],
+  ['name', 'Ich heiße {name}.', 'My name is {name}.', 'Chamo-me {name}.'],
+  ['sing', 'Ich singe gern.', 'I like singing.', 'Eu gosto de cantar.'],
+  ['dance', 'Ich tanze gern.', 'I like dancing.', 'Eu gosto de dançar.'],
+  ['climb', 'Ich klettere gern.', 'I like climbing.', 'Eu gosto de escalar.'],
+  ['hungry', 'Ich habe Hunger.', 'I am hungry.', 'Tenho fome.'],
+  ['love', 'Ich hab dich lieb!', 'I love you!', 'Adoro-te!'],
+];
+
 export const CATEGORIES = {
   colors: {
     de: 'Farben', icon: () => art.colorBlob('#ff8cc6'),
@@ -71,7 +90,22 @@ export const CATEGORIES = {
     de: 'Rund ums Haus', icon: () => art.thing('house'),
     words: NATURE.map(([id, de, en, pt]) => ({ id: 'w-' + id, de, en, pt, art: () => art.thing(id) })),
   },
+  phrases: {
+    de: 'Sätze', icon: () => art.bubbleIcon(), phrases: true,
+    words: PHRASES.map(([id, de, en, pt]) => ({ id: 's-' + id, de, en, pt })),
+  },
 };
+
+// Alle Texte, die vorgelesen werden (für eigene Aufnahmen im Elternbereich)
+export function allTexts(lang, name) {
+  const key = lang.startsWith('pt') ? 'pt' : 'en';
+  const out = [];
+  for (const c of Object.values(CATEGORIES)) {
+    out.push({ group: c.de, items: c.words.map((w) => w[key].replace('{name}', name)) });
+  }
+  out.push({ group: 'Pflanzen', items: Object.values(PLANTS).map((p) => p[key]) });
+  return out;
+}
 
 export const LANGS = {
   pt: { flag: '🇵🇹', de: 'Portugiesisch', tts: 'pt-PT' },

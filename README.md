@@ -9,18 +9,20 @@ Englisch und Deutsch.
 
 Ideen & Konzept: [`docs/BRAINSTORMING.md`](docs/BRAINSTORMING.md)
 
-## Was drin ist (v0.2)
+## Was drin ist (v0.3)
 
 - 🌱 **Garten** – säen, gießen (Plus/Minus bis 100, passt sich automatisch an), ernten
 - 🥋 **Karate-Dojo** – 10 Bretter mit dem Einmaleins, Blitz-Bonus fürs schnelle Rechnen
-- 🎤 **Singbühne** – Vokabeln auf Portugiesisch & Englisch: hören, lesen, Bild ↔ Wort (Farben, Zahlen, Tiere, Obst & Gemüse, Rund ums Haus); jede richtige Antwort ist ein Ton im Lied
+- 🩰 **Ballettstudio** – *Tanz merken* (Schrittfolgen nachtanzen, wird immer länger) und *Uhr-Ballett* (Uhrzeit lesen: volle/halbe Stunden → Viertel → 5-Minuten, adaptiv)
+- 🎤 **Singbühne** – Vokabeln auf Portugiesisch & Englisch: hören, lesen, Bild ↔ Wort (Farben, Zahlen, Tiere, Obst & Gemüse, Rund ums Haus) und **Sätze** (Olá!, Como estás?, Eu gosto de dançar …); jede richtige Antwort ist ein Ton im Lied
 - 🧶 **Bastelstube** – Perlen-Armbänder: Muster fortsetzen und Zahlenfolgen (adaptiv), fertige Armbänder landen im Schmuckkästchen
 - 🧗 **Kletterwand** – Deutsch: Nomen/Verb/Adjektiv, Rechtschreibung (ie, ck, tz, Doppelkonsonant, Dehnungs-h …), Silben klatschen, Reime, Groß/klein
-- 🏪 **Hofladen** – Samen, Tiere, neue Beete; manches erst ab einem bestimmten Gürtel
+- 🏪 **Hofladen** – Samen, Tiere, neue Beete kaufen; **Ernte verkaufen**: Preise addieren und Wechselgeld mit Münzen geben (Euro & Cent)
 - 🥋 **Gürtel** von Weiß bis Schwarz als Fortschritt
 - 🇵🇹🇬🇧🇩🇪 Vokabeln zum Antippen und Anhören (Sprachausgabe des Tablets)
 - ✅ **Tagesaufgaben** – drei kleine Ziele pro Tag mit Bonus-Sternen
-- 🔒 **Elternbereich** (Rechenaufgabe als Sperre): Fortschritt, Schwierigkeit, Einmaleins-Reihen, Name, Haarfarbe
+- 🎙️ **Eigene Stimmen** – im Elternbereich Wörter und Sätze selbst aufnehmen (z. B. Mama auf Portugiesisch); das Spiel spielt dann diese Aufnahmen statt der Computerstimme
+- 🔒 **Elternbereich** (Rechenaufgabe als Sperre): Fortschritt, Schwierigkeiten, Einmaleins-Reihen, Name, Haarfarbe, Aufnahmen
 
 ## Technik
 
