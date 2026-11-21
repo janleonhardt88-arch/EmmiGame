@@ -1153,3 +1153,17 @@ h1, h2, h3 { font-weight: 800; }
 @media (prefers-reduced-motion: reduce) { .eyes, .sun .rays { animation: none !important; } }
 @media (orientation: landscape) { .map-pet { left: auto; right: 78%; } }
 .say-big { display: inline-block; margin-left: 8px; padding: 2px 12px; border-radius: 999px; background: #fff3d6; color: #6b3f1a; font-weight: 800; font-size: 1.15em; animation: popin .4s cubic-bezier(.3, 1.6, .5, 1); }
+
+/* ---------- Prüflauf-Korrekturen ---------- */
+/* Knöpfe unten im Fenster bleiben immer sichtbar, auch wenn der Inhalt lang ist */
+.modal > .btn-row:last-child { position: sticky; bottom: -26px; margin: 14px -28px -26px; padding: 14px 20px 18px; background: linear-gradient(rgba(255, 253, 248, 0), var(--card) 30%); z-index: 3; }
+.modal.wide { width: min(780px, 96vw); }
+.ship-words { width: auto; }
+.harbor-card .chart { width: min(100%, calc((100vh - 400px) * 1.43)); }
+/* Größere Tippflächen für Kinderfinger */
+.pt-say { min-height: 34px; padding-top: 4px; padding-bottom: 4px; }
+.wmap-tabs .tab { min-height: 36px; }
+.modal .btn.small, .modal button.small, .rec-row button { min-height: 36px; }
+@media (orientation: portrait) {
+  .wmap-scroll { height: clamp(260px, 52vh, 620px); }
+}

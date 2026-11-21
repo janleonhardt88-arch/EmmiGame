@@ -154,6 +154,14 @@ css = f'''/* Gezeichnete Hintergrund-Dekorationen – erzeugt mit tools/make-sce
   {pinboard} 97% 30% / auto 44% no-repeat,
   radial-gradient(circle at 20px 20px, #ffd1e3 0 5px, transparent 6px) 0 0 / 60px 60px, #fff1f6; }}
 .craft-table {{ background: {cutmat} 50% 40% / auto 70% no-repeat, linear-gradient(#f0c48a, #e0ac6c); }}
+/* Beim Basteln selbst und auf schmalen Bildschirmen nur Wimpel – Regal und Pinnwand würden verdecken */
+.craft.round .craft-wall {{ background: {bunting(['#ff7eb6', '#4fb3ff', '#ffd23b', '#62cc5c', '#9b7bff'])} 0 0 / 260px auto repeat-x, radial-gradient(circle at 20px 20px, #ffd1e3 0 5px, transparent 6px) 0 0 / 60px 60px, #fff1f6; }}
+.craft.round .craft-table {{ background: linear-gradient(#f0c48a, #e0ac6c); }}
+@media (orientation: portrait), (max-width: 760px) {{
+  .craft-wall {{ background: {bunting(['#ff7eb6', '#4fb3ff', '#ffd23b', '#62cc5c', '#9b7bff'])} 0 0 / 220px auto repeat-x, {pinboard} 96% 14% / auto 16% no-repeat, radial-gradient(circle at 20px 20px, #ffd1e3 0 5px, transparent 6px) 0 0 / 60px 60px, #fff1f6; }}
+  .craft.round .craft-wall {{ background: {bunting(['#ff7eb6', '#4fb3ff', '#ffd23b', '#62cc5c', '#9b7bff'])} 0 0 / 220px auto repeat-x, radial-gradient(circle at 20px 20px, #ffd1e3 0 5px, transparent 6px) 0 0 / 60px 60px, #fff1f6; }}
+  .craft-table {{ background: linear-gradient(#f0c48a, #e0ac6c); }}
+}}
 
 /* Kletterhalle: bunte Griffe, Seil, Kreidebeutel */
 .climb > .climb-wall {{ background:
