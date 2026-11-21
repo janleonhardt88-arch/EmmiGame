@@ -13,6 +13,7 @@ import { canRecord, clipUrl, clipCount, saveClip, deleteClip, startRecording } f
 import { allTexts } from './vocab.js';
 import { playedMinutes } from './playtime.js';
 import { buildLabel } from './version.js';
+import { checkForUpdate } from './update.js';
 
 // ============ Elternbereich ============
 export function parentsGate() {
@@ -146,7 +147,7 @@ export function parentsPanel() {
           <button class="btn danger" id="p-reset">Spielstand löschen</button>
         </div>
       </section>
-      <p class="note" style="text-align:center">Version: ${buildLabel()}</p>
+      <p class="note" style="text-align:center">Version: ${buildLabel()} · <button class="link" id="p-update">Nach Update suchen</button> <span id="p-update-msg"></span></p>
       <button class="btn primary big" data-act="close">Fertig</button>
     </div>`, { cls: 'parents-modal' });
 
@@ -201,6 +202,12 @@ export function parentsPanel() {
     save(); renderTop(); parentsPanel();
   }));
   $('#p-stars', m).addEventListener('click', () => { addStars(20); });
+  $('#p-update', m).addEventListener('click', async () => {
+    const msg = $('#p-update-msg', m);
+    msg.textContent = '… prüfe';
+    const r = await checkForUpdate();
+    msg.textContent = { aktuell: '✓ Das ist die neueste Version.', neu: 'Neue Version gefunden – sie wird geladen, gleich erscheint unten ein Hinweis.', offline: 'Keine Verbindung – bitte später nochmal versuchen.', lokal: 'Updates gibt es nur in der veröffentlichten App.' }[r];
+  });
   $('#p-belt', m).addEventListener('click', (e) => {
     const b = e.target.closest('[data-belt]'); if (!b) return;
     state.xp = BELTS[Number(b.dataset.belt)].xp;

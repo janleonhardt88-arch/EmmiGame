@@ -38,6 +38,7 @@ self.addEventListener('activate', (e) => {
 self.addEventListener('fetch', (e) => {
   const url = e.request.url;
   if (e.request.method !== 'GET' || new URL(url).origin !== location.origin) return;
+  if (url.includes('/version.json')) return; // Versionsprüfung immer frisch aus dem Netz
 
   if (isMedia(url)) {
     // Audio wird in Teilen angefragt (Range); wir holen immer die ganze Datei, damit sie in den Cache passt

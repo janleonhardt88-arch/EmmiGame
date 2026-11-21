@@ -26,6 +26,7 @@ jobs:
         run: |
           BUILD="$(date -u +%Y-%m-%d)-${GITHUB_RUN_NUMBER}-${GITHUB_SHA::7}"
           sed -i "s/__BUILD__/${BUILD}/" app/sw.js app/js/version.js
+          echo "{\"build\": \"${BUILD}\"}" > app/version.json
           echo "Version: ${BUILD}"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
