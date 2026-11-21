@@ -25,7 +25,7 @@ wo etwas wartet (💧 gießen, 🧺 ernten, 🛎️ Kunden, ⭐ Tagesaufgabe).
 - 🎵 **Hintergrundmusik** – zwei echte Instrumentalstücke (MP3, mit ElevenLabs Music erzeugt), an Lernorten leiser, beim Vorlesen kurz abgesenkt; eigener Aus-Knopf
 - 🎙️ **Eigene Stimmen** – Wörter und Sätze selbst aufnehmen (z. B. Mama auf Portugiesisch)
 - 👗 **Figur gestalten** – Tipp auf den Namen oben links: 8 Frisuren, 9 Haarfarben, 5 Hauttöne, 8 Outfits, 5 Tutu-Farben, 7 Extras (Krone, Brille, Katzenohren …); vieles kostet Sterne
-- 🗣️ **Eingebaute Stimmen** – 440 vorab erzeugte Sprachdateien (Piper, `tools/make-voices.py`) statt der Tablet-Stimme
+- 🗣️ **Eingebaute Stimmen** – 440 vorab erzeugte Sprachdateien statt der Tablet-Stimme: Deutsch und Englisch mit Piper (`tools/make-voices.py`), Portugiesisch mit einer Microsoft-Stimme (`tools/make-voices-edge.py`, inoffizieller Weg, nur für privaten Gebrauch)
 - 🔒 **Elternbereich** – Fortschritt, schwierige Einmaleins-Aufgaben, Schwierigkeiten, tägliches Spielzeit-Limit, Name, Haarfarbe, Aufnahmen
 
 ## Technik

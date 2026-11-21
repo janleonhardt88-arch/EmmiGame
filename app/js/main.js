@@ -171,11 +171,11 @@ initVoices().then((index) => {
   const files = Object.values(index);
   const mark = `voices-${files.length}`;
   let done = null;
-  try { done = localStorage.getItem('emmigame-voices-m2'); } catch (e) { /* egal */ }
+  try { done = localStorage.getItem('emmigame-voices-m3'); } catch (e) { /* egal */ }
   if (!files.length || done === mark || !navigator.serviceWorker?.controller) return;
   (async () => {
     for (const f of files) { try { await fetch('voice/' + f); } catch (e) { return; } }
-    try { localStorage.setItem('emmigame-voices-m2', mark); } catch (e) { /* egal */ }
+    try { localStorage.setItem('emmigame-voices-m3', mark); } catch (e) { /* egal */ }
   })();
 });
 if (!state.welcomed) welcome();
