@@ -479,16 +479,23 @@ h1, h2, h3 { font-weight: 800; }
 .dancer { position: relative; }
 .dancer.big { width: min(26vmin, 220px); height: 100%; max-height: 340px; }
 .dancer.small { width: min(18vmin, 150px); height: min(28vmin, 220px); align-self: flex-end; }
-.dancer svg, .dancer .arm-l, .dancer .arm-r { transition: transform .22s ease-out; }
+.dancer svg, .dancer .arm-l, .dancer .arm-r { transition: transform .2s ease-out; }
 .dancer .arm-l { transform-origin: 35px 70px; }
-.dancer .arm-r { transform-origin: 65px 70px; }
-.dancer.pose-up .arm-l { transform: rotate(125deg); }
-.dancer.pose-up .arm-r { transform: rotate(-25deg); }
-.dancer.pose-left svg { transform: rotate(-12deg) translateX(-8%); }
-.dancer.pose-left .arm-l { transform: rotate(70deg); }
-.dancer.pose-right svg { transform: rotate(12deg) translateX(8%); }
-.dancer.pose-right .arm-r { transform: rotate(20deg); }
-.dancer.pose-spin svg { animation: twirl .55s ease-in-out; }
+.dancer .arm-r { transform-origin: 65px 70px; transform: rotate(100deg); } /* Grundhaltung: beide Arme unten */
+.dancer.pose-up svg { transform: translateY(-16%) scale(1.06); }
+.dancer.pose-up .arm-l { transform: rotate(118deg); }
+.dancer.pose-up .arm-r { transform: rotate(-16deg); }
+.dancer.pose-left svg { transform: translateX(-55%) rotate(-16deg); }
+.dancer.pose-left .arm-l { transform: rotate(71deg); }
+.dancer.pose-right svg { transform: translateX(55%) rotate(16deg); }
+.dancer.pose-right .arm-r { transform: rotate(31deg); }
+.dancer.pose-spin svg { animation: twirl .6s ease-in-out; }
+.dancer.pose-spin .arm-l { transform: rotate(71deg); }
+.dancer.pose-spin .arm-r { transform: rotate(31deg); }
+.dance-mid { position: relative; }
+.pose-ind { position: absolute; top: 4%; left: 50%; width: min(16vmin, 120px); height: min(16vmin, 120px); margin-left: calc(min(16vmin, 120px) / -2); border-radius: 50%; background: #fff; border: 7px solid var(--c, #ccc); display: grid; place-items: center; font-size: min(9vmin, 64px); line-height: 1; opacity: 0; box-shadow: 0 6px 0 rgba(0, 0, 0, .1); z-index: 2; }
+.pose-ind.show { animation: poseind .7s ease-out forwards; }
+@keyframes poseind { 0% { opacity: 0; transform: scale(.4); } 20% { opacity: 1; transform: scale(1.15); } 35% { transform: scale(1); } 80% { opacity: 1; } 100% { opacity: .0; transform: scale(1); } }
 .dance-msg { font-size: 26px; font-weight: 800; margin: 10px 0; min-height: 36px; }
 .moves { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; width: min(100%, 860px); }
 .move { height: 96px; border-radius: 26px; background: #fff; border: 5px solid var(--c); box-shadow: 0 7px 0 var(--c); font-size: 18px; font-weight: 800; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; transition: transform .08s; }
@@ -498,7 +505,7 @@ h1, h2, h3 { font-weight: 800; }
 .move.wrong { animation: shake .4s; }
 .moves.watch .move { pointer-events: none; opacity: .85; }
 @keyframes lit { 0% { background: var(--c); transform: scale(1.08); } 100% { background: #fff; transform: none; } }
-@keyframes twirl { 50% { transform: scaleX(-1) translateY(-6%); } }
+@keyframes twirl { 25% { transform: scaleX(.1) translateY(-8%); } 50% { transform: scaleX(-1) translateY(-10%); } 75% { transform: scaleX(.1) translateY(-8%); } }
 
 .cdots { display: flex; gap: 8px; }
 .cdot { width: 18px; height: 18px; border-radius: 50%; background: #fff; border: 3px solid #ffc2dc; }

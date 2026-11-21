@@ -1,7 +1,7 @@
 // 🔒 Elternbereich – Fortschritt, Einstellungen, eigene Aufnahmen
 import { state, save, resetState } from './state.js';
 import { BELTS, DOJO_BOARDS, HAIR } from './data.js';
-import { speak, setAudioPrefs, voiceInfo } from './audio.js';
+import { speak, setAudioPrefs, voiceInfo, bundledCount } from './audio.js';
 import { parentGate, MATH_LEVELS } from './math.js';
 import { api } from './core.js';
 import { $, esc, belt, openModal, closeModal, toast, addStars, renderTop } from './ui.js';
@@ -113,6 +113,7 @@ export function parentsPanel() {
           <button class="chip ${state.sound ? 'on' : ''}" data-tog="sound">Geräusche</button>
           <button class="chip ${state.speech ? 'on' : ''}" data-tog="speech">Vorlesen</button>
         </div>
+        <p class="note">Eingebaute Sprachdateien: 🇵🇹 ${bundledCount('pt-PT')} · 🇬🇧 ${bundledCount('en-GB')} · 🇩🇪 ${bundledCount('de-DE')}. Nur was dort fehlt, liest die Stimme des Tablets vor:</p>
         <p class="note">Portugiesisch: <b class="${pv.ok ? 'ok' : 'warn'}">${esc(pv.text)}</b> <button class="link" data-act="say" data-lang="pt-PT" data-text="Olá ${esc(state.name)}! Como estás?">▶ testen</button><br>
         Englisch: <b class="${ev.ok ? 'ok' : 'warn'}">${esc(ev.text)}</b> <button class="link" data-act="say" data-lang="en-GB" data-text="Hello ${esc(state.name)}! How are you?">▶ testen</button></p>
         ${pv.ok ? '' : `<p class="note warn-box">Für europäisches Portugiesisch auf Android: Einstellungen → Bedienungshilfen → Text-in-Sprache → Google-Sprachausgabe → Sprachdaten installieren → <b>Português (Portugal)</b>.</p>`}

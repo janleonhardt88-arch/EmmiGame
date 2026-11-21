@@ -84,7 +84,19 @@ export function findVoice(lang) {
   return voices.find((v) => norm(v.lang).startsWith(base)) || null;
 }
 
-// Warteschlange: eigene Aufnahmen und Sprachausgabe nacheinander abspielen
+// Eingebaute Sprachdateien (app/voice/), erzeugt mit tools/make-voices.py
+let voiceIndex = {};
+export async function initVoices() {
+  try { voiceIndex = await (await fetch('voice/index.json')).json(); } catch (e) { voiceIndex = {}; }
+  return voiceIndex;
+}
+function bundledUrl(lang, text) {
+  const f = voiceIndex[`${lang}|${text}`];
+  return f ? 'voice/' + f : null;
+}
+export const bundledCount = (lang) => Object.keys(voiceIndex).filter((k) => k.startsWith(lang + '|')).length;
+
+// Warteschlange: eigene Aufnahmen, eingebaute Sprachdateien und Sprachausgabe nacheinander abspielen
 let chain = Promise.resolve();
 let gen = 0;
 let currentAudio = null;
@@ -125,7 +137,7 @@ export function speak(text, lang = 'de-DE', { queue = false, force = false } = {
   const my = gen;
   chain = chain.then(() => {
     if (my !== gen) return undefined;
-    const url = clipUrl(lang, text);
+    const url = clipUrl(lang, text) || bundledUrl(lang, text);
     music.duck(true);
     return (url ? playClip(url) : playTTS(text, lang)).then(() => { if (my === gen) music.duck(false); });
   });

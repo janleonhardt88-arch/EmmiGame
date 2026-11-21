@@ -1,7 +1,7 @@
 // 🎤 Singbühne – Vokabeln auf Portugiesisch und Englisch
 import { state, save } from '../state.js';
 import * as art from '../art.js';
-import { sfx, speak, voiceInfo, SONG } from '../audio.js';
+import { sfx, speak, voiceInfo, bundledCount, SONG } from '../audio.js';
 import { CATEGORIES, LANGS } from '../vocab.js';
 import { api, $, esc, pick, shuffle } from '../core.js';
 
@@ -11,7 +11,9 @@ let round = null;
 const say = (w, lang) => w[lang].replace('{name}', state.name);
 
 function canListen(lang) {
-  return state.speech && 'speechSynthesis' in window && voiceInfo(LANGS[lang].tts).text !== 'keine Stimme gefunden';
+  if (!state.speech) return false;
+  if (bundledCount(LANGS[lang].tts) > 0) return true;
+  return 'speechSynthesis' in window && voiceInfo(LANGS[lang].tts).text !== 'keine Stimme gefunden';
 }
 
 function render() {

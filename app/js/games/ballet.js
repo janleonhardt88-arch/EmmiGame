@@ -59,6 +59,7 @@ function renderDance() {
       <div class="dance-round">
         <div class="dance-info"><span>Schritte: <b>${g.seq.length}</b></span><span>${'❤️'.repeat(g.lives)}${'🤍'.repeat(2 - g.lives)}</span></div>
         <div class="dance-mid">
+          <div class="pose-ind" id="pose-ind"></div>
           <div class="dancer big" id="dancer">${dancerSvg()}</div>
         </div>
         <div class="dance-msg" id="dmsg">${esc(g.msg)}</div>
@@ -74,6 +75,15 @@ function pose(id) {
   d.className = 'dancer big';
   void d.offsetWidth;
   d.classList.add('pose-' + id);
+  const ind = $('#pose-ind');
+  if (ind) {
+    const mv = MOVES.find((m) => m.id === id);
+    ind.textContent = MOVE_ICONS[id];
+    ind.style.setProperty('--c', mv.color);
+    ind.className = 'pose-ind';
+    void ind.offsetWidth;
+    ind.classList.add('show');
+  }
   const btn = document.querySelector(`.move[data-m="${id}"]`);
   if (btn) { btn.classList.remove('lit'); void btn.offsetWidth; btn.classList.add('lit'); }
   sfx.note(MOVES.find((m) => m.id === id).f);

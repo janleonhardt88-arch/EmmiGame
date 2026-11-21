@@ -2,7 +2,7 @@
 import { state, save } from './state.js';
 import { HAIR } from './data.js';
 import * as art from './art.js';
-import { sfx, speak, setAudioPrefs } from './audio.js';
+import { sfx, speak, setAudioPrefs, initVoices } from './audio.js';
 import { api, $, esc } from './core.js';
 import * as ui from './ui.js';
 import { dailyPill, dailyActions, quest, questPlaces } from './daily.js';
@@ -162,6 +162,18 @@ document.addEventListener('contextmenu', (e) => e.preventDefault());
 
 initClips();
 render();
+// Sprachdateien laden und einmalig für den Offline-Betrieb vormerken
+initVoices().then((index) => {
+  const files = Object.values(index);
+  const mark = `voices-${files.length}`;
+  let done = null;
+  try { done = localStorage.getItem('emmigame-voices'); } catch (e) { /* egal */ }
+  if (!files.length || done === mark || !navigator.serviceWorker?.controller) return;
+  (async () => {
+    for (const f of files) { try { await fetch('voice/' + f); } catch (e) { return; } }
+    try { localStorage.setItem('emmigame-voices', mark); } catch (e) { /* egal */ }
+  })();
+});
 if (!state.welcomed) welcome();
 startPlayTimer();
 

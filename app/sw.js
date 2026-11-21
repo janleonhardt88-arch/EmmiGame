@@ -1,11 +1,11 @@
 // Offline-Unterstützung: Dateien aus dem Cache liefern, im Hintergrund aktualisieren.
-const CACHE = 'emmigame-v5';
+const CACHE = 'emmigame-v6';
 const FILES = [
   './', 'index.html', 'manifest.webmanifest', 'css/style.css',
   'js/main.js', 'js/art.js', 'js/audio.js', 'js/data.js', 'js/math.js', 'js/state.js',
   'js/core.js', 'js/vocab.js', 'js/words.js', 'js/games/stage.js', 'js/games/craft.js', 'js/games/climb.js',
   'js/games/ballet.js', 'js/games/market.js', 'js/recorder.js',
-  'js/music.js', 'music/garten-1.mp3', 'music/garten-2.mp3',
+  'js/music.js', 'voice/index.json', 'music/garten-1.mp3', 'music/garten-2.mp3',
   'js/ui.js', 'js/daily.js', 'js/parents.js', 'js/playtime.js', 'js/games/garden.js', 'js/games/dojo.js', 'js/games/shop.js',
   'fonts/nunito-latin-600-normal.woff2', 'fonts/nunito-latin-800-normal.woff2',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/icon-180.png',
@@ -26,8 +26,10 @@ self.addEventListener('fetch', (e) => {
   e.respondWith(
     caches.open(CACHE).then(async (cache) => {
       const cached = await cache.match(e.request, { ignoreSearch: true });
-      const network = fetch(e.request).then((res) => {
-        if (res.ok) cache.put(e.request, res.clone());
+      // Audio wird in Teilen angefragt (Range); wir holen immer die ganze Datei, damit sie in den Cache passt
+      const req = e.request.headers.has('range') ? new Request(e.request.url) : e.request;
+      const network = fetch(req).then((res) => {
+        if (res.status === 200) cache.put(req, res.clone());
         return res;
       }).catch(() => cached);
       return cached || network;
