@@ -58,7 +58,12 @@ export const sfx = {
     m.forEach(([f, t, d]) => { tone(f, t, d, { type: 'triangle', vol: 0.14 }); tone(f / 2, t, d, { type: 'sine', vol: 0.08 }); });
   }),
   hop: S(() => tone(500, 0, 0.12, { slide: 1100, vol: 0.1 })),
+  note: S((f) => { tone(f, 0, 0.35, { type: 'triangle', vol: 0.16 }); tone(f * 2, 0, 0.2, { type: 'sine', vol: 0.04 }); }),
+  melody: S((notes, step = 0.28) => notes.forEach((f, i) => { tone(f, i * step, step * 1.1, { type: 'triangle', vol: 0.15 }); tone(f / 2, i * step, step, { vol: 0.06 }); })),
+  bell: S(() => [0, 0.35, 0.7].forEach((t) => { tone(1318, t, 0.9, { vol: 0.12 }); tone(1975, t, 0.6, { vol: 0.05 }); })),
+  slip: S(() => tone(600, 0, 0.25, { slide: 180, vol: 0.1, type: 'triangle' })),
 };
+export const SONG = [523, 587, 659, 523, 659, 698, 784, 784, 880, 784];
 
 // ---------- Sprachausgabe ----------
 let voices = [];

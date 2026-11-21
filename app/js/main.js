@@ -6,6 +6,12 @@ import {
 import * as art from './art.js';
 import { sfx, speak, setAudioPrefs, voiceInfo } from './audio.js';
 import { gardenTask, dojoTask, parentGate, MATH_LEVELS } from './math.js';
+import { api } from './core.js';
+import stage from './games/stage.js';
+import craft, { CRAFT_LEVELS } from './games/craft.js';
+import climb from './games/climb.js';
+
+const GAMES = { stage, craft, climb };
 
 const $ = (s, el = document) => el.querySelector(s);
 const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -23,6 +29,7 @@ setAudioPrefs({ sound: state.sound, speech: state.speech });
 // ============ Rahmen ============
 function go(to) {
   if (screen === 'dojo' && to !== 'dojo') dojo = null;
+  if (screen !== to) GAMES[screen]?.leave?.();
   screen = to;
   render();
 }
@@ -30,7 +37,8 @@ function go(to) {
 function render() {
   renderTop();
   renderNav();
-  ({ garden: renderGarden, dojo: renderDojo, shop: renderShop })[screen]();
+  if (GAMES[screen]) GAMES[screen].render();
+  else ({ garden: renderGarden, dojo: renderDojo, shop: renderShop })[screen]();
 }
 
 function renderTop() {
@@ -55,7 +63,8 @@ function renderTop() {
 
 function renderNav() {
   const btn = (id, ico, label) => `<button class="nav-btn ${screen === id ? 'active' : ''}" data-act="goto" data-to="${id}"><span class="ico">${ico}</span>${label}</button>`;
-  $('#nav').innerHTML = btn('garden', art.sproutIcon(), 'Garten') + btn('dojo', art.dojoIcon(), 'Dojo') + btn('shop', art.basket(), 'Laden');
+  $('#nav').innerHTML = btn('garden', art.sproutIcon(), 'Garten') + btn('dojo', art.dojoIcon(), 'Dojo')
+    + Object.values(GAMES).map((g) => btn(g.id, g.icon(), g.label)).join('') + btn('shop', art.basket(), 'Laden');
 }
 
 // ============ Modals, Effekte ============
@@ -610,6 +619,9 @@ function parentsPanel() {
           <div><b>${s.boards}</b><span>Bretter</span></div>
           <div><b>${state.xp}</b><span>Punkte · ${belt().de}</span></div>
           <div><b>${state.dojoBest}/${DOJO_BOARDS}</b><span>Dojo-Rekord</span></div>
+          <div><b>${Object.values(state.vocab).filter((v) => (v.pt || 0) >= 2).length}</b><span>Wörter 🇵🇹 gelernt</span></div>
+          <div><b>${Object.values(state.vocab).filter((v) => (v.en || 0) >= 2).length}</b><span>Wörter 🇬🇧 gelernt</span></div>
+          <div><b>${state.bracelets.length} · ${state.climbTops}</b><span>Armbänder · Gipfel</span></div>
         </div>
       </section>
       <section>
@@ -624,6 +636,14 @@ function parentsPanel() {
           ${[1, 2, 3, 4].map((l) => `<button class="chip ${!state.mathAuto && state.mathLevel === l ? 'on' : ''}" data-lv="${l}">${l}</button>`).join('')}
         </div>
         <p class="note">Aktuell: <b>${MATH_LEVELS[currentMathLevel()].de}</b> – ${MATH_LEVELS[currentMathLevel()].info}</p>
+      </section>
+      <section>
+        <h3>Bastelstube: Muster & Zahlenfolgen</h3>
+        <div class="chips" id="p-craft">
+          <button class="chip ${state.craftAuto ? 'on' : ''}" data-lv="auto">Automatisch</button>
+          ${[1, 2, 3, 4].map((l) => `<button class="chip ${!state.craftAuto && state.craftLevel === l ? 'on' : ''}" data-lv="${l}">${l}</button>`).join('')}
+        </div>
+        <p class="note">Aktuell: <b>${CRAFT_LEVELS[state.craftLevel].de}</b> – ${CRAFT_LEVELS[state.craftLevel].info}</p>
       </section>
       <section>
         <h3>Dojo: Einmaleins-Reihen</h3>
@@ -663,6 +683,12 @@ function parentsPanel() {
     const b = e.target.closest('[data-lv]'); if (!b) return;
     if (b.dataset.lv === 'auto') state.mathAuto = true;
     else { state.mathAuto = false; state.mathLevel = Number(b.dataset.lv); }
+    save(); parentsPanel();
+  });
+  $('#p-craft', m).addEventListener('click', (e) => {
+    const b = e.target.closest('[data-lv]'); if (!b) return;
+    if (b.dataset.lv === 'auto') state.craftAuto = true;
+    else { state.craftAuto = false; state.craftLevel = Number(b.dataset.lv); }
     save(); parentsPanel();
   });
   $('#p-rows', m).addEventListener('click', (e) => {
@@ -712,6 +738,12 @@ const actions = {
   'dojo-quit': () => { dojo = null; renderDojo(); },
   'dojo-again': () => { closeModal(); startDojo(); },
 };
+for (const g of Object.values(GAMES)) Object.assign(actions, g.actions);
+
+Object.assign(api, {
+  openModal, closeModal, toast, confetti, addStars, addXP, renderTop, wordRows,
+  hairColor, belt, go,
+});
 
 document.addEventListener('click', (e) => {
   const el = e.target.closest('[data-act]');

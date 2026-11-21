@@ -1,7 +1,7 @@
 // Alle Grafiken als handgezeichnete SVGs (niedlich & bunt).
 const INK = '#3a2a35';
 
-const svg = (body, { vb = '0 0 100 100', par = 'xMidYMid meet', cls = '' } = {}) =>
+export const svg = (body, { vb = '0 0 100 100', par = 'xMidYMid meet', cls = '' } = {}) =>
   `<svg viewBox="${vb}" preserveAspectRatio="${par}" class="${cls}" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">${body}</svg>`;
 
 // Niedliches Gesicht
@@ -156,29 +156,55 @@ export function avatarHead(hair) {
   return svg(head(hair), { vb: '22 6 56 62' });
 }
 
-export function avatar(hair, beltColor) {
-  const out = '#c9c2d6';
+export function avatar(hair, beltColor = '#ffffff', { outfit = 'gi', mic = false } = {}) {
+  const out = '#c9c2d6', skin = '#ffdcc2', skinO = '#e8b896';
   const beltStroke = beltColor.toLowerCase() === '#ffffff' ? '#d8d0e2' : 'rgba(0,0,0,.18)';
+  const arm = (d, sleeve, sleeveO) => `
+      <path d="${d}" stroke="${sleeveO}" stroke-width="12" fill="none" stroke-linecap="round"/>
+      <path d="${d}" stroke="${sleeve}" stroke-width="8" fill="none" stroke-linecap="round"/>`;
+  const armL = 'M35 70 Q22 80 27 93', armR = 'M65 70 Q80 66 88 56';
+  let legs, torso, sleeve, sleeveO;
+  if (outfit === 'tutu') {
+    sleeve = skin; sleeveO = skinO;
+    legs = `
+      <path d="M44 100 L42 131 M56 100 L58 131" stroke="#f0b4cf" stroke-width="10" stroke-linecap="round"/>
+      <path d="M44 100 L42 131 M56 100 L58 131" stroke="#ffd9ea" stroke-width="6.5" stroke-linecap="round"/>
+      <ellipse cx="40" cy="134" rx="6.5" ry="3.4" fill="#ff8cc6" stroke="#e2559a" stroke-width="1.6"/>
+      <ellipse cx="60" cy="134" rx="6.5" ry="3.4" fill="#ff8cc6" stroke="#e2559a" stroke-width="1.6"/>`;
+    torso = `
+      <path d="M36 67 Q50 60 64 67 L62 99 L38 99Z" fill="#ff8cc6" stroke="#e2559a" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M22 101 Q50 88 78 101 Q74 110 64 107 Q57 113 50 108 Q43 113 36 107 Q26 110 22 101Z" fill="#ffc2dc" stroke="#ff8cc6" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M28 100 Q50 92 72 100" stroke="#fff" stroke-width="2" fill="none" opacity=".7"/>
+      <circle cx="50" cy="72" r="2.4" fill="#fff"/>`;
+  } else if (outfit === 'casual') {
+    sleeve = skin; sleeveO = skinO;
+    legs = `
+      <path d="M37 100 L34 131 L46 131 L50 108 L54 131 L66 131 L63 100Z" fill="#7b5bd6" stroke="#5a3fb0" stroke-width="2.4" stroke-linejoin="round"/>
+      <ellipse cx="39" cy="134" rx="8" ry="4" fill="#fff" stroke="#c9c2d6" stroke-width="1.8"/>
+      <ellipse cx="61" cy="134" rx="8" ry="4" fill="#fff" stroke="#c9c2d6" stroke-width="1.8"/>`;
+    torso = `
+      <path d="M32 67 Q50 59 68 67 L66 102 L34 102Z" fill="#ff7eb6" stroke="#e2559a" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M50 92 C44 86 40 82 43 78 C45 75 49 76 50 79 C51 76 55 75 57 78 C60 82 56 86 50 92Z" fill="#fff"/>`;
+  } else {
+    sleeve = '#fff'; sleeveO = out;
+    legs = `
+      <path d="M37 100 L33 132 L46 132 L50 108 L54 132 L67 132 L63 100Z" fill="#fff" stroke="${out}" stroke-width="2.4" stroke-linejoin="round"/>
+      <ellipse cx="39" cy="134" rx="7" ry="3.4" fill="${skin}" stroke="${skinO}" stroke-width="1.8"/>
+      <ellipse cx="61" cy="134" rx="7" ry="3.4" fill="${skin}" stroke="${skinO}" stroke-width="1.8"/>`;
+    torso = `
+      <path d="M32 67 Q50 59 68 67 L66 102 L34 102Z" fill="#fff" stroke="${out}" stroke-width="2.4" stroke-linejoin="round"/>
+      <path d="M42 64 L55 90 M58 64 L48 84" stroke="${out}" stroke-width="2.4" stroke-linecap="round"/>
+      <rect x="33" y="87" width="34" height="7" rx="2.5" fill="${beltColor}" stroke="${beltStroke}" stroke-width="1.5"/>
+      <path d="M48 94 L44 106 M52 94 L56 106" stroke="${beltColor}" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M48 94 L44 106 M52 94 L56 106" stroke="${beltStroke}" stroke-width="1" stroke-linecap="round" fill="none" opacity=".6"/>`;
+  }
+  const micSvg = mic ? `<g transform="rotate(-25 90 52)"><rect x="87.5" y="50" width="5" height="15" rx="2" fill="#5a4a5e"/><circle cx="90" cy="46" r="6" fill="#d9d2df" stroke="#8a7a96" stroke-width="1.8"/></g>` : '';
   return svg(`
     <ellipse cx="50" cy="136" rx="26" ry="4" fill="rgba(0,0,0,.12)"/>
-    <path d="M37 100 L33 132 L46 132 L50 108 L54 132 L67 132 L63 100Z" fill="#fff" stroke="${out}" stroke-width="2.4" stroke-linejoin="round"/>
-    <ellipse cx="39" cy="134" rx="7" ry="3.4" fill="#ffdcc2" stroke="#e8b896" stroke-width="1.8"/>
-    <ellipse cx="61" cy="134" rx="7" ry="3.4" fill="#ffdcc2" stroke="#e8b896" stroke-width="1.8"/>
-    <g class="arm-l">
-      <path d="M35 70 Q22 80 27 93" stroke="${out}" stroke-width="12" fill="none" stroke-linecap="round"/>
-      <path d="M35 70 Q22 80 27 93" stroke="#fff" stroke-width="8" fill="none" stroke-linecap="round"/>
-      <circle cx="27" cy="95" r="5" fill="#ffdcc2" stroke="#e8b896" stroke-width="1.8"/>
-    </g>
-    <path d="M32 67 Q50 59 68 67 L66 102 L34 102Z" fill="#fff" stroke="${out}" stroke-width="2.4" stroke-linejoin="round"/>
-    <path d="M42 64 L55 90 M58 64 L48 84" stroke="${out}" stroke-width="2.4" stroke-linecap="round"/>
-    <rect x="33" y="87" width="34" height="7" rx="2.5" fill="${beltColor}" stroke="${beltStroke}" stroke-width="1.5"/>
-    <path d="M48 94 L44 106 M52 94 L56 106" stroke="${beltColor}" stroke-width="4.5" stroke-linecap="round"/>
-    <path d="M48 94 L44 106 M52 94 L56 106" stroke="${beltStroke}" stroke-width="1" stroke-linecap="round" fill="none" opacity=".6"/>
-    <g class="arm-r">
-      <path d="M65 70 Q80 66 88 56" stroke="${out}" stroke-width="12" fill="none" stroke-linecap="round"/>
-      <path d="M65 70 Q80 66 88 56" stroke="#fff" stroke-width="8" fill="none" stroke-linecap="round"/>
-      <ellipse cx="90" cy="53" rx="4" ry="6.5" fill="#ffdcc2" stroke="#e8b896" stroke-width="1.8" transform="rotate(35 90 53)"/>
-    </g>
+    ${legs}
+    <g class="arm-l">${arm(armL, sleeve, sleeveO)}<circle cx="27" cy="95" r="5" fill="${skin}" stroke="${skinO}" stroke-width="1.8"/></g>
+    ${torso}
+    <g class="arm-r">${arm(armR, sleeve, sleeveO)}${micSvg}<ellipse cx="90" cy="53" rx="4" ry="6.5" fill="${skin}" stroke="${skinO}" stroke-width="1.8" transform="rotate(35 90 53)"/></g>
     ${head(hair)}`, { vb: '0 0 100 140', par: 'xMidYMax meet' });
 }
 
@@ -256,3 +282,159 @@ export const appIcon = () => svg(`
   <rect width="100" height="100" fill="#bfe8ff"/>
   <path d="M0 70 Q50 56 100 70 L100 100 L0 100Z" fill="#8fd46b"/>
   <g transform="translate(14 6) scale(.72)">${PLANT_ART.sunflower()}</g>`);
+
+// ---------- Vokabel-Bilder ----------
+const O = (c) => `stroke="${c}" stroke-width="2.6" stroke-linejoin="round"`;
+const THINGS = {
+  cat: () => `
+    <path d="M28 44 L26 18 L46 34Z" fill="#ffb066" ${O('#d98a3a')}/><path d="M72 44 L74 18 L54 34Z" fill="#ffb066" ${O('#d98a3a')}/>
+    <path d="M31 38 L30 25 L41 34Z" fill="#ffc2d8"/><path d="M69 38 L70 25 L59 34Z" fill="#ffc2d8"/>
+    <ellipse cx="50" cy="58" rx="30" ry="26" fill="#ffb066" ${O('#d98a3a')}/>
+    <path d="M44 36 L46 44 M50 34 L50 43 M56 36 L54 44" stroke="#e8913f" stroke-width="3" stroke-linecap="round"/>
+    ${face(50, 56, 0.9, { mouth: false })}
+    <path d="M47 62 L53 62 L50 65Z" fill="#ff7aa8"/>
+    <path d="M50 65 Q47 69 44 67 M50 65 Q53 69 56 67" stroke="${INK}" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <path d="M24 60 L10 57 M24 65 L10 67 M76 60 L90 57 M76 65 L90 67" stroke="#d98a3a" stroke-width="1.6" stroke-linecap="round"/>`,
+  dog: () => `
+    <ellipse cx="25" cy="50" rx="10" ry="20" fill="#a8703e" ${O('#7a4a2c')} transform="rotate(15 25 50)"/>
+    <ellipse cx="75" cy="50" rx="10" ry="20" fill="#a8703e" ${O('#7a4a2c')} transform="rotate(-15 75 50)"/>
+    <ellipse cx="50" cy="55" rx="27" ry="27" fill="#ecc89e" ${O('#b98d62')}/>
+    <ellipse cx="62" cy="44" rx="8" ry="7" fill="#d9a974"/>
+    <ellipse cx="50" cy="68" rx="13" ry="10" fill="#fff3e4"/>
+    ${face(50, 52, 0.9, { mouth: false })}
+    <ellipse cx="50" cy="63" rx="4.5" ry="3.2" fill="${INK}"/>
+    <path d="M50 66 L50 70 Q46 74 43 71 M50 70 Q54 74 57 71" stroke="${INK}" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    <path d="M47 72 Q50 80 53 72Z" fill="#ff7aa8"/>`,
+  fish: () => `
+    <path d="M74 52 L94 36 L92 68Z" fill="#ff9a2e" ${O('#d96f12')}/>
+    <path d="M44 34 Q52 20 62 34Z" fill="#ff9a2e" ${O('#d96f12')}/>
+    <ellipse cx="46" cy="52" rx="32" ry="21" fill="#4fb3ff" ${O('#2a86d6')}/>
+    <path d="M56 38 Q62 52 56 66" stroke="#2a86d6" stroke-width="2.4" fill="none"/>
+    <circle cx="30" cy="48" r="4.5" fill="${INK}"/><circle cx="31.5" cy="46.5" r="1.4" fill="#fff"/>
+    <path d="M20 58 Q25 62 30 58" stroke="${INK}" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <ellipse cx="37" cy="57" rx="3.2" ry="1.9" fill="#ff7aa8" opacity=".6"/>
+    <circle cx="12" cy="34" r="3" fill="none" stroke="#7cc8ff" stroke-width="2"/><circle cx="18" cy="24" r="2" fill="none" stroke="#7cc8ff" stroke-width="2"/>`,
+  bird: () => `
+    <path d="M46 34 Q44 22 52 24 Q50 28 54 32" fill="#ffb02e" ${O('#e08a00')}/>
+    <path d="M42 86 L40 94 M58 86 L60 94" stroke="#ff9a2e" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="50" cy="60" r="28" fill="#ffd23b" ${O('#e6a100')}/>
+    <path d="M24 62 Q12 56 16 72 Q24 74 30 68Z" fill="#ffc21a" ${O('#e6a100')}/>
+    <path d="M76 62 Q88 56 84 72 Q76 74 70 68Z" fill="#ffc21a" ${O('#e6a100')}/>
+    ${face(50, 56, 0.85, { mouth: false })}
+    <path d="M45 61 L55 61 L50 67Z" fill="#ff8a2e" ${O('#e06a00')}/>`,
+  apple: () => `
+    <path d="M50 30 Q50 22 54 16" stroke="#7a4a2c" stroke-width="4" fill="none" stroke-linecap="round"/>
+    <path d="M53 26 Q64 14 74 22 Q64 32 53 26Z" ${LEAF}/>
+    <path d="M50 32 C38 24 20 30 22 54 C24 76 38 90 50 84 C62 90 76 76 78 54 C80 30 62 24 50 32Z" fill="#ff4f4f" ${O('#d12f2f')}/>
+    <ellipse cx="34" cy="46" rx="5" ry="8" fill="#fff" opacity=".35" transform="rotate(20 34 46)"/>
+    ${face(50, 58)}`,
+  banana: () => `
+    <path d="M80 18 Q86 54 60 78 Q36 96 16 82 Q14 78 20 78 Q44 82 60 60 Q74 40 72 20Z" fill="#ffe14d" ${O('#e6b400')}/>
+    <path d="M72 20 L74 12 L82 14 L80 18Z" fill="#8a6a2a" ${O('#5e4515')}/>
+    <path d="M16 82 L12 84" stroke="#5e4515" stroke-width="4" stroke-linecap="round"/>
+    ${face(58, 64, 0.8)}`,
+  sun: () => `${Array.from({ length: 12 }, (_, i) => `<path d="M50 4 L55 18 L45 18Z" fill="#ffc93b" transform="rotate(${i * 30} 50 50)"/>`).join('')}
+    <circle cx="50" cy="50" r="28" fill="#ffe14d" ${O('#f5b400')}/>${face(50, 50, 1.2)}`,
+  moon: () => `
+    <path d="M62 12 A38 38 0 1 0 88 66 A30 30 0 1 1 62 12Z" fill="#ffe27a" ${O('#e6b400')}/>
+    <path d="M28 52 Q32 56 36 52 M44 60 Q48 64 52 60" stroke="${INK}" stroke-width="2" fill="none" stroke-linecap="round"/>
+    <path d="M36 66 Q40 70 44 66" stroke="${INK}" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+    <ellipse cx="30" cy="62" rx="3.2" ry="1.9" fill="#ff7aa8" opacity=".55"/>
+    <path d="M80 22 L82 28 L88 30 L82 32 L80 38 L78 32 L72 30 L78 28Z" fill="#ffd23b"/>`,
+  star: () => `<path d="M50 9 L61 36 L90 38 L68 57 L75 86 L50 70 L25 86 L32 57 L10 38 L39 36Z" fill="#ffd23b" stroke="#e6a100" stroke-width="4" stroke-linejoin="round"/>${face(50, 52, 0.8)}`,
+  flower: () => `
+    <path d="M50 94 L50 56" stroke="#3fa34a" stroke-width="5" stroke-linecap="round"/>
+    <path d="M50 82 Q36 70 28 76 Q38 88 50 84Z" ${LEAF}/>
+    ${Array.from({ length: 6 }, (_, i) => `<circle cx="50" cy="20" r="13" fill="#ff8cc6" stroke="#e2559a" stroke-width="2.4" transform="rotate(${i * 60} 50 38)"/>`).join('')}
+    <circle cx="50" cy="38" r="12" fill="#ffd23b" ${O('#e6a100')}/>${face(50, 38, 0.65)}`,
+  tree: () => `
+    <path d="M44 94 L46 60 L54 60 L56 94Z" fill="#a8703e" ${O('#7a4a2c')}/>
+    <circle cx="34" cy="46" r="18" fill="#62cc5c" ${O('#2f8f3a')}/><circle cx="66" cy="46" r="18" fill="#62cc5c" ${O('#2f8f3a')}/>
+    <circle cx="50" cy="32" r="22" fill="#62cc5c" ${O('#2f8f3a')}/><circle cx="50" cy="52" r="18" fill="#62cc5c"/>
+    <circle cx="30" cy="50" r="3.5" fill="#ff4f4f"/><circle cx="68" cy="40" r="3.5" fill="#ff4f4f"/><circle cx="58" cy="58" r="3.5" fill="#ff4f4f"/>
+    ${face(48, 40, 0.8)}`,
+  house: () => `
+    <rect x="22" y="46" width="56" height="44" rx="3" fill="#ffe3b8" ${O('#d9a86a')}/>
+    <path d="M14 50 L50 18 L86 50Z" fill="#ff6b5e" ${O('#c9443a')}/>
+    <rect x="62" y="22" width="9" height="16" fill="#b0806a" ${O('#7a5040')}/>
+    <path d="M42 90 L42 70 Q50 62 58 70 L58 90Z" fill="#a8703e" ${O('#7a4a2c')}/>
+    <rect x="28" y="56" width="11" height="11" rx="2" fill="#8fd0ff" ${O('#3b8fd6')}/>
+    <rect x="61" y="56" width="11" height="11" rx="2" fill="#8fd0ff" ${O('#3b8fd6')}/>
+    <path d="M50 38 C47 35 45 33 46.5 31 C48 30 49.5 30.5 50 32 C50.5 30.5 52 30 53.5 31 C55 33 53 35 50 38Z" fill="#fff"/>`,
+  heart: () => `<path d="M50 88 C20 66 8 48 16 32 C24 16 44 18 50 32 C56 18 76 16 84 32 C92 48 80 66 50 88Z" fill="#ff5a7a" ${O('#d12f4f')}/>
+    <ellipse cx="30" cy="36" rx="6" ry="4" fill="#fff" opacity=".45" transform="rotate(-35 30 36)"/>${face(50, 50, 0.95)}`,
+  ball: () => `
+    <circle cx="50" cy="52" r="34" fill="#fff" ${O('#c9c2d6')}/>
+    <path d="M50 18 A34 34 0 0 1 84 52 L50 52Z" fill="#ff7eb6"/><path d="M16 52 A34 34 0 0 0 50 86 L50 52Z" fill="#4fb3ff"/>
+    <path d="M50 18 A34 34 0 0 0 16 52 L50 52Z" fill="#ffd23b"/>
+    <circle cx="50" cy="52" r="34" fill="none" ${O('#9a8cb8')}/>
+    <ellipse cx="36" cy="34" rx="7" ry="4" fill="#fff" opacity=".6" transform="rotate(-35 36 34)"/>`,
+};
+
+export function thing(id) { return svg((THINGS[id] || THINGS.star)()); }
+
+export function colorBlob(color) {
+  const stroke = color.toLowerCase() === '#ffffff' ? '#c9c2d6' : 'rgba(0,0,0,.22)';
+  return svg(`<path d="M50 12 C66 10 74 22 84 28 C96 36 90 50 88 60 C86 74 92 86 76 90 C62 94 56 84 44 88 C28 92 12 86 12 70 C12 58 4 48 12 36 C20 24 34 14 50 12Z" fill="${color}" stroke="${stroke}" stroke-width="3"/>
+    <ellipse cx="34" cy="34" rx="9" ry="5" fill="#fff" opacity=".45" transform="rotate(-30 34 34)"/>`);
+}
+
+const NUM_COLORS = ['#ff7eb6', '#9b7bff', '#4fb3ff', '#62cc5c', '#ff9a2e', '#ff5a7a', '#3fb8a8', '#e6a100', '#7b5bd6', '#ff6b5e'];
+export function numberCard(n) {
+  const c = NUM_COLORS[(n - 1) % NUM_COLORS.length];
+  return svg(`<circle cx="50" cy="50" r="40" fill="${c}" stroke="rgba(0,0,0,.15)" stroke-width="3"/>
+    <text x="50" y="52" text-anchor="middle" dominant-baseline="central" font-family="Nunito, sans-serif" font-weight="800" font-size="52" fill="#fff">${n}</text>`);
+}
+
+// ---------- Perlen ----------
+export function beadBody(b) {
+  const { color = '#ff7eb6', shape = 'round', label = null } = b || {};
+  const dark = 'rgba(0,0,0,.22)';
+  let body;
+  if (shape === 'heart') body = `<path d="M50 86 C22 66 10 50 18 34 C26 18 44 20 50 34 C56 20 74 18 82 34 C90 50 78 66 50 86Z" fill="${color}" stroke="${dark}" stroke-width="4"/>`;
+  else if (shape === 'star') body = `<path d="M50 8 L61 36 L91 38 L68 57 L76 88 L50 71 L24 88 L32 57 L9 38 L39 36Z" fill="${color}" stroke="${dark}" stroke-width="4" stroke-linejoin="round"/>`;
+  else if (shape === 'flower') body = `${Array.from({ length: 5 }, (_, i) => `<circle cx="50" cy="26" r="17" fill="${color}" stroke="${dark}" stroke-width="3.5" transform="rotate(${i * 72} 50 50)"/>`).join('')}<circle cx="50" cy="50" r="14" fill="#fff6c2" stroke="${dark}" stroke-width="3"/>`;
+  else if (shape === 'cube') body = `<rect x="14" y="14" width="72" height="72" rx="14" fill="${color}" stroke="${dark}" stroke-width="4"/>`;
+  else body = `<circle cx="50" cy="50" r="38" fill="${color}" stroke="${dark}" stroke-width="4"/>`;
+  const shine = `<ellipse cx="36" cy="34" rx="9" ry="6" fill="#fff" opacity=".5" transform="rotate(-30 36 34)"/>`;
+  const txt = label != null ? `<text x="50" y="52" text-anchor="middle" dominant-baseline="central" font-family="Nunito, sans-serif" font-weight="800" font-size="${String(label).length > 2 ? 28 : 36}" fill="#fff" stroke="rgba(0,0,0,.25)" stroke-width="1.5" paint-order="stroke">${label}</text>` : '';
+  return body + shine + txt;
+}
+export const bead = (b) => svg(beadBody(b));
+
+export const box = () => svg(`
+  <path d="M12 44 L88 44 L82 88 Q50 94 18 88Z" fill="#ffb3d6" stroke="#e2559a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M8 34 Q50 22 92 34 L90 46 Q50 36 10 46Z" fill="#ff8cc6" stroke="#e2559a" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M50 28 L50 90" stroke="#ffd23b" stroke-width="6"/>
+  <path d="M50 28 C40 14 30 18 36 26 C40 30 46 30 50 28 C54 30 60 30 64 26 C70 18 60 14 50 28Z" fill="#ffd23b" stroke="#e6a100" stroke-width="2.5"/>`);
+
+export const micIcon = () => svg(`
+  <path d="M30 50 Q30 72 50 72 Q70 72 70 50" stroke="#9b7bff" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M50 72 L50 88 M38 90 L62 90" stroke="#9b7bff" stroke-width="6" stroke-linecap="round"/>
+  <rect x="38" y="10" width="24" height="50" rx="12" fill="#ff8cc6" stroke="#e2559a" stroke-width="4"/>
+  <path d="M42 24 H58 M42 34 H58 M42 44 H58" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".7"/>`);
+
+export const yarnIcon = () => svg(`
+  <circle cx="46" cy="54" r="32" fill="#ff8cc6" stroke="#e2559a" stroke-width="4"/>
+  <path d="M20 40 Q46 30 72 44 M16 56 Q46 44 76 60 M22 72 Q46 60 70 76 M40 24 Q30 54 44 86 M58 24 Q70 54 58 84" stroke="#e2559a" stroke-width="3" fill="none"/>
+  <path d="M76 70 Q90 80 84 94" stroke="#e2559a" stroke-width="4" fill="none" stroke-linecap="round"/>`);
+
+export const climbIcon = () => svg(`
+  <path d="M18 92 L30 8 L82 8 L90 92Z" fill="#b8c7d9" stroke="#7d8fa6" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="44" cy="26" r="7" fill="#ff7eb6"/><circle cx="64" cy="44" r="7" fill="#ffd23b"/><circle cx="42" cy="60" r="7" fill="#62cc5c"/><circle cx="66" cy="76" r="7" fill="#9b7bff"/>
+  <path d="M58 8 L58 0" stroke="#e2453c" stroke-width="3"/>`);
+
+export const bell = () => svg(`
+  <path d="M50 10 L50 18" stroke="#c99257" stroke-width="5" stroke-linecap="round"/>
+  <path d="M26 70 Q26 26 50 20 Q74 26 74 70 L82 78 L18 78Z" fill="#ffd23b" stroke="#e6a100" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="50" cy="84" r="7" fill="#e6a100"/>
+  <ellipse cx="40" cy="40" rx="5" ry="10" fill="#fff" opacity=".5" transform="rotate(15 40 40)"/>`);
+
+export function hold(color, i) {
+  const shapes = [
+    'M20 50 C20 26 40 16 56 22 C78 28 84 52 74 70 C62 88 30 86 20 50Z',
+    'M16 40 C24 18 64 14 80 30 C92 44 82 72 60 80 C38 88 10 64 16 40Z',
+    'M30 18 C52 10 86 30 82 56 C78 80 44 90 26 74 C10 60 12 26 30 18Z',
+  ];
+  return svg(`<path d="${shapes[i % 3]}" fill="${color}" stroke="rgba(0,0,0,.25)" stroke-width="4"/><ellipse cx="40" cy="38" rx="8" ry="5" fill="#fff" opacity=".45" transform="rotate(-25 40 38)"/><circle cx="52" cy="52" r="5" fill="rgba(0,0,0,.25)"/>`);
+}

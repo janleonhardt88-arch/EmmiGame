@@ -24,6 +24,12 @@ export function defaults() {
     speech: true,
     stats: { correct: 0, wrong: 0, harvested: 0, boards: 0 },
     collection: {},
+    stageLang: 'pt',
+    vocab: {},
+    craftLevel: 2,
+    craftAuto: true,
+    bracelets: [],
+    climbTops: 0,
   };
 }
 

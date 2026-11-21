@@ -9,10 +9,13 @@ Englisch und Deutsch.
 
 Ideen & Konzept: [`docs/BRAINSTORMING.md`](docs/BRAINSTORMING.md)
 
-## Was im Prototyp (v0.1) drin ist
+## Was drin ist (v0.2)
 
 - 🌱 **Garten** – säen, gießen (Plus/Minus bis 100, passt sich automatisch an), ernten
 - 🥋 **Karate-Dojo** – 10 Bretter mit dem Einmaleins, Blitz-Bonus fürs schnelle Rechnen
+- 🎤 **Singbühne** – Vokabeln auf Portugiesisch & Englisch: hören, lesen, Bild ↔ Wort (Farben, Zahlen, Tiere, Obst & Gemüse, Rund ums Haus); jede richtige Antwort ist ein Ton im Lied
+- 🧶 **Bastelstube** – Perlen-Armbänder: Muster fortsetzen und Zahlenfolgen (adaptiv), fertige Armbänder landen im Schmuckkästchen
+- 🧗 **Kletterwand** – Deutsch: Nomen/Verb/Adjektiv, Rechtschreibung (ie, ck, tz, Doppelkonsonant, Dehnungs-h …), Silben klatschen, Reime, Groß/klein
 - 🏪 **Hofladen** – Samen, Tiere, neue Beete; manches erst ab einem bestimmten Gürtel
 - 🥋 **Gürtel** von Weiß bis Schwarz als Fortschritt
 - 🇵🇹🇬🇧🇩🇪 Vokabeln zum Antippen und Anhören (Sprachausgabe des Tablets)
