@@ -165,6 +165,9 @@ render();
 if (!state.welcomed) welcome();
 startPlayTimer();
 
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-  navigator.serviceWorker.register('sw.js').catch(() => {});
-}
+// Offline-Unterstützung (wo der Browser sie erlaubt)
+try {
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  }
+} catch (e) { /* z. B. in eingebetteten Ansichten nicht verfügbar */ }
