@@ -8,6 +8,8 @@ export function defaults() {
     v: 1,
     name: 'Emmi',
     hair: 'brown',
+    look: { style: 'bun', skin: 0, acc: 'none', casual: 'heart', tutu: 'pink' },
+    owned: {}, // gekaufte Frisuren, Kleider, Extras
     stars: 12,
     xp: 0,
     seeds: { radish: 1, carrot: 1 },
@@ -49,7 +51,7 @@ function load() {
     const s = JSON.parse(localStorage.getItem(KEY));
     if (s && s.v === 1) {
       const d = defaults();
-      return { ...d, ...s, stats: { ...d.stats, ...(s.stats || {}) } };
+      return { ...d, ...s, stats: { ...d.stats, ...(s.stats || {}) }, look: { ...d.look, ...(s.look || {}) } };
     }
   } catch (e) { /* ignorieren */ }
   return defaults();

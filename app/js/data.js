@@ -87,6 +87,10 @@ export const HAIR = {
   blond: { de: 'Blond', color: '#e3b34c' },
   black: { de: 'Schwarz', color: '#2e2430' },
   red: { de: 'Rot', color: '#c8562a' },
+  pink: { de: 'Pink', color: '#ff6fb0', price: 20 },
+  lila: { de: 'Lila', color: '#9b6bff', price: 20 },
+  blue: { de: 'Blau', color: '#4f9bff', price: 20 },
+  mint: { de: 'Türkis', color: '#3fc7b4', price: 20 },
 };
 
 export const PRAISE = ['Super!', 'Toll!', 'Klasse!', 'Richtig!', 'Spitze!', 'Prima!', 'Wunderbar!'];

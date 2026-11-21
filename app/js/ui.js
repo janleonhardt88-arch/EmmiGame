@@ -6,7 +6,8 @@ import { sfx, speak } from './audio.js';
 import { api, $, esc, pick } from './core.js';
 
 export { $, esc, pick };
-export const hairColor = () => (HAIR[state.hair] || HAIR.brown).color;
+// Aussehen der Figur (Name historisch: früher nur die Haarfarbe)
+export const hairColor = () => ({ hair: (HAIR[state.hair] || HAIR.brown).color, ...state.look });
 export const belt = () => BELTS[beltIndex(state.xp)];
 const pending = []; // Feiern, die nach dem aktuellen Fenster kommen
 
@@ -18,12 +19,14 @@ export function renderTop() {
   $('#topbar').innerHTML = `
     <div class="who">
       ${onMap ? '' : `<button class="map-btn" data-act="goto" data-to="map" aria-label="Zur Karte"><span class="map-ico">${art.mapIcon()}</span>Karte</button>`}
-      <div class="mini-avatar">${art.avatarHead(hairColor())}</div>
-      <div class="who-text">
-        <div class="name">${esc(state.name)}</div>
-        <div class="belt-chip"><span class="belt-ico">${art.beltIcon(b.color)}</span>${b.de}</div>
-        <div class="xpbar" title="Bis zum nächsten Gürtel"><i style="width:${pct}%"></i></div>
-      </div>
+      <button class="who-btn" data-act="wardrobe" aria-label="Figur gestalten">
+        <div class="mini-avatar">${art.avatarHead(hairColor())}<span class="edit-badge">✏️</span></div>
+        <div class="who-text">
+          <div class="name">${esc(state.name)}</div>
+          <div class="belt-chip"><span class="belt-ico">${art.beltIcon(b.color)}</span>${b.de}</div>
+          <div class="xpbar" title="Bis zum nächsten Gürtel"><i style="width:${pct}%"></i></div>
+        </div>
+      </button>
     </div>
     <div class="top-right">
       <div class="stars-pill" id="stars"><span class="star-ico">${art.star()}</span><b>${state.stars}</b></div>

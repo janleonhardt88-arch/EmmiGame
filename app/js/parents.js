@@ -72,7 +72,7 @@ export function parentsPanel() {
       <section>
         <h3>Name & Aussehen</h3>
         <label class="field">Name <input id="p-name" value="${esc(state.name)}" maxlength="14"></label>
-        <div class="chips" id="p-hair">${Object.entries(HAIR).map(([k, h]) => `<button class="chip ${state.hair === k ? 'on' : ''}" data-hair="${k}"><i style="background:${h.color}"></i>${h.de}</button>`).join('')}</div>
+        <div class="chips" id="p-hair">${Object.entries(HAIR).filter(([k, h]) => !h.price || state.hair === k).map(([k, h]) => `<button class="chip ${state.hair === k ? 'on' : ''}" data-hair="${k}"><i style="background:${h.color}"></i>${h.de}</button>`).join('')}</div>
       </section>
       <section>
         <h3>Garten-Mathe</h3>

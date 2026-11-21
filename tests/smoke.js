@@ -71,6 +71,17 @@ async function typeNumber(n) {
   await page.click('#w-go', f); await sleep(600);
   await shot('02-map');
 
+  step('Figur gestalten');
+  await page.click('[data-act="wardrobe"]', f); await sleep(300);
+  await page.click('[data-w="pigtails"]', f); await sleep(150);
+  await page.click('[data-w-tab="acc"]', f); await sleep(150);
+  await page.click('[data-w="bow"]', f); await sleep(150);
+  await page.click('[data-w-buy]', f); await sleep(200);
+  await shot('02b-wardrobe');
+  await page.click('[data-act="wardrobe-done"]', f); await sleep(300);
+  const look = await page.evaluate(() => JSON.parse(localStorage.getItem('emmigame-v1')).look);
+  if (look.style !== 'pigtails' || look.acc !== 'bow') errors.push('Figur wurde nicht gespeichert: ' + JSON.stringify(look));
+
   step('Garten: pflanzen, gießen, ernten');
   await goto('garden');
   await page.click('.bed[data-i="0"]', f); await sleep(300);

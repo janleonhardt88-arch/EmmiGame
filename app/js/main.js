@@ -18,6 +18,7 @@ import { parentsGate } from './parents.js';
 import { initClips } from './recorder.js';
 import { startPlayTimer } from './playtime.js';
 import { music } from './music.js';
+import { openWardrobe, wardrobeActions } from './wardrobe.js';
 
 // Orte auf der Karte: Position [x, y] in Prozent für Quer- und Hochformat
 const PLACES = [
@@ -110,7 +111,7 @@ function welcome() {
     <p>Wie heißt du?</p>
     <input id="w-name" class="big-input" value="${esc(state.name)}" maxlength="14" autocomplete="off">
     <p>Welche Haarfarbe hast du?</p>
-    <div class="chips center" id="w-hair">${Object.entries(HAIR).map(([k, h]) => `<button class="chip ${state.hair === k ? 'on' : ''}" data-hair="${k}"><i style="background:${h.color}"></i>${h.de}</button>`).join('')}</div>
+    <div class="chips center" id="w-hair">${Object.entries(HAIR).filter(([, h]) => !h.price).map(([k, h]) => `<button class="chip ${state.hair === k ? 'on' : ''}" data-hair="${k}"><i style="background:${h.color}"></i>${h.de}</button>`).join('')}</div>
     <button class="btn primary big" id="w-go" style="margin-top:16px">Los geht's!</button>`, { closable: false });
   $('#w-hair', m).addEventListener('click', (e) => {
     const b = e.target.closest('[data-hair]'); if (!b) return;
@@ -138,9 +139,11 @@ const actions = {
   sound: () => { state.sound = !state.sound; setAudioPrefs({ sound: state.sound }); save(); ui.renderTop(); sfx.pop(); },
   music: () => { state.music = !state.music; music.setEnabled(state.music); save(); ui.renderTop(); sfx.tick(); },
   parents: () => parentsGate(),
+  wardrobe: () => { sfx.tick(); openWardrobe(); },
   say: (el) => speak(el.dataset.text, el.dataset.lang),
   'emmi-hi': (el) => emmiHi(el),
   ...dailyActions,
+  ...wardrobeActions,
 };
 for (const p of PLACES) Object.assign(actions, p.mod.actions);
 
