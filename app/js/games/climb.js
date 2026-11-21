@@ -169,6 +169,7 @@ function top() {
   $('#bell')?.classList.add('ring');
   sfx.bell();
   state.climbTops = (state.climbTops || 0) + 1;
+  api.quest('climb');
   state.stats.correct += first;
   save();
   setTimeout(() => {

@@ -19,6 +19,45 @@ const pick = (a) => a[Math.floor(Math.random() * a.length)];
 const hairColor = () => (HAIR[state.hair] || HAIR.brown).color;
 const belt = () => BELTS[beltIndex(state.xp)];
 
+// ============ Tagesaufgaben ============
+const QUESTS = {
+  water: { goal: 3, text: (g) => `${g} Pflanzen gießen`, ico: '💧' },
+  harvest: { goal: 2, text: (g) => `${g} Pflanzen ernten`, ico: '🧺' },
+  dojo: { goal: 1, text: () => 'Eine Runde im Dojo', ico: '🥋' },
+  stage: { goal: 1, text: () => 'Ein Lied auf der Bühne', ico: '🎤' },
+  craft: { goal: 1, text: () => 'Ein Armband basteln', ico: '📿' },
+  climb: { goal: 1, text: () => 'Einmal bis zur Glocke klettern', ico: '🧗' },
+};
+const DAILY_REWARD = 10;
+const today = () => { const d = new Date(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
+function daily() {
+  if (!state.daily || state.daily.date !== today()) {
+    const ids = Object.keys(QUESTS).sort(() => Math.random() - 0.5);
+    const chosen = ['water', ...ids.filter((x) => x !== 'water').slice(0, 2)];
+    state.daily = { date: today(), quests: chosen.map((id) => ({ id, n: 0 })), claimed: false };
+    save();
+  }
+  return state.daily;
+}
+function quest(id) {
+  const d = daily();
+  const q = d.quests.find((x) => x.id === id);
+  if (!q || q.n >= QUESTS[id].goal) return;
+  q.n++;
+  save();
+  if (q.n === QUESTS[id].goal) setTimeout(() => toast(`✅ Tagesaufgabe geschafft: ${QUESTS[id].text(QUESTS[id].goal)}`), 900);
+}
+function dailyHTML() {
+  const d = daily();
+  const all = d.quests.every((q) => q.n >= QUESTS[q.id].goal);
+  if (d.claimed) return `<div class="daily done"><b>Heute alles geschafft! 🌟</b><small>Morgen gibt's neue Aufgaben.</small></div>`;
+  return `<div class="daily">
+    <b>Heute</b>
+    ${d.quests.map((q) => { const Q = QUESTS[q.id], ok = q.n >= Q.goal; return `<div class="dq ${ok ? 'ok' : ''}"><span>${ok ? '✅' : Q.ico}</span>${Q.text(Q.goal)}${Q.goal > 1 && !ok ? ` <small>${q.n}/${Q.goal}</small>` : ''}</div>`; }).join('')}
+    ${all ? `<button class="btn primary claim" data-act="daily-claim">+${DAILY_REWARD} <span class="bi">${art.star()}</span> abholen</button>` : ''}
+  </div>`;
+}
+
 let screen = 'garden';
 let shopTab = 'seeds';
 let dojo = null;
@@ -235,6 +274,7 @@ function renderGarden() {
     <div class="garden">
       <div class="garden-top">
         <div class="sun">${art.sun()}</div>
+        ${dailyHTML()}
         <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
         <div class="hills">${art.hills()}</div>
         <div class="fence">${art.fence()}</div>
@@ -307,6 +347,7 @@ function waterTask(i) {
     task: gardenTask(currentMathLevel()),
     onFinish: ({ correct, tries }) => {
       state.beds[i].water++;
+      quest('water');
       if (correct) {
         state.stats.correct++;
         adaptMath(tries === 1);
@@ -353,6 +394,7 @@ function harvest(i) {
   const k = state.beds[i].plant, p = PLANTS[k];
   state.beds[i] = { plant: null, water: 0 };
   state.stats.harvested++;
+  quest('harvest');
   state.collection[k] = (state.collection[k] || 0) + 1;
   save();
   sfx.harvest();
@@ -559,6 +601,7 @@ function finishDojo() {
   const { first, fast } = dojo;
   dojo = null;
   const stars = first + Math.floor(fast / 2);
+  quest('dojo');
   const isBest = first > state.dojoBest;
   if (isBest) state.dojoBest = first;
   state.stats.correct += first;
@@ -737,12 +780,21 @@ const actions = {
   'dojo-pick': (el) => dojoPick(el),
   'dojo-quit': () => { dojo = null; renderDojo(); },
   'dojo-again': () => { closeModal(); startDojo(); },
+  'daily-claim': () => {
+    if (state.daily.claimed) return;
+    state.daily.claimed = true;
+    save();
+    confetti(80);
+    sfx.fanfare();
+    addStars(DAILY_REWARD);
+    renderGarden();
+  },
 };
 for (const g of Object.values(GAMES)) Object.assign(actions, g.actions);
 
 Object.assign(api, {
   openModal, closeModal, toast, confetti, addStars, addXP, renderTop, wordRows,
-  hairColor, belt, go,
+  hairColor, belt, go, quest,
 });
 
 document.addEventListener('click', (e) => {

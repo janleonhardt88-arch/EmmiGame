@@ -19,6 +19,7 @@ Ideen & Konzept: [`docs/BRAINSTORMING.md`](docs/BRAINSTORMING.md)
 - 🏪 **Hofladen** – Samen, Tiere, neue Beete; manches erst ab einem bestimmten Gürtel
 - 🥋 **Gürtel** von Weiß bis Schwarz als Fortschritt
 - 🇵🇹🇬🇧🇩🇪 Vokabeln zum Antippen und Anhören (Sprachausgabe des Tablets)
+- ✅ **Tagesaufgaben** – drei kleine Ziele pro Tag mit Bonus-Sternen
 - 🔒 **Elternbereich** (Rechenaufgabe als Sperre): Fortschritt, Schwierigkeit, Einmaleins-Reihen, Name, Haarfarbe
 
 ## Technik

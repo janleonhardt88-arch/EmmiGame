@@ -138,6 +138,7 @@ function finish() {
   const song = SONG.slice(0, ROUND).filter((_, k) => round.results[k]);
   round = null;
   state.stats.words = (state.stats.words || 0) + first;
+  api.quest('stage');
   save();
   render();
   api.confetti(first >= 6 ? 80 : 30);

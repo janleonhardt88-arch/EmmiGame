@@ -174,6 +174,7 @@ function finish() {
   const { first, made } = round;
   round = null;
   state.bracelets = [...(state.bracelets || []), made].slice(-30);
+  api.quest('craft');
   save();
   render();
   api.confetti(70);

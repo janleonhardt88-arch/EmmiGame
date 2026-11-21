@@ -49,3 +49,16 @@ Pflanzen brauchen Pflege, die Welt wächst sichtbar mit ihrem Lernfortschritt.
 - Portugiesisch: brasilianisch oder europäisch? Spricht sie es schon etwas?
 - Stil: niedlich-bunt gezeichnet oder eher Emoji-/Bastel-Look?
 - Mit welchem Ort starten wir als erstem spielbaren Prototyp?
+
+## Stand (v0.2)
+Umgesetzt: Garten, Karate-Dojo, Singbühne, Bastelstube (Perlen-Armbänder), Kletterwand, Hofladen,
+Gürtelsystem, Tagesaufgaben, Elternbereich.
+
+## Ideen für später
+- 🩰 Ballettbühne: Tanzschritte merken (Memory) + Uhrzeit lernen
+- 🏪 Hofladen verkaufen: Ernte verkaufen, Wechselgeld geben (Euro/Cent)
+- 🐔 Tierhof: Tiere füttern und pflegen, kurze Sätze auf PT/EN
+- 🧶 Bastelstube: Symmetrie-Bilder, Häkel-Muster
+- Sätze statt Einzelwörter auf der Singbühne (z. B. „Eu gosto de …")
+- Eigene Stimmen aufnehmen (Mama auf Portugiesisch)
+- Deko für den Garten, Kostüme für Emmi
