@@ -10,6 +10,7 @@ export function defaults() {
     hair: 'brown',
     look: { style: 'bun', skin: 0, acc: 'none', casual: 'heart', tutu: 'pink', eyes: 'dark', cheek: 'none', shoes: 'white', pet: 'none' },
     owned: {}, // gekaufte Frisuren, Kleider, Extras
+    ship: { port: 0, trips: 0, shells: 0, album: {}, knots: {}, cabin: {}, owned: {}, hull: 'red', funnel: 'yellow', seen: {} },
     stars: 12,
     xp: 0,
     seeds: { radish: 1, carrot: 1 },

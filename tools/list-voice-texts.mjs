@@ -7,6 +7,7 @@ import { NATURE_QUESTIONS, FINDS } from '../app/js/sachkunde.js';
 import { COUNTRIES, allGeoTasks, GREETINGS } from '../app/js/erdkunde.js';
 import { FURNITURE } from '../app/js/house-data.js';
 import { JOKES, FACTS } from '../app/js/fun.js';
+import { seaVoiceTexts } from '../app/js/seefahrt.js';
 
 const NAME = 'Emmi';
 const out = new Map();
@@ -51,5 +52,12 @@ for (const f of Object.values(FURNITURE)) { add('pt-PT', f.pt); add('en-GB', f.e
 for (const g of Object.values(GREETINGS)) for (const k of ['hi', 'bye', 'thanks']) add(g.tts, g[k].say);
 for (const [q, a] of JOKES) { add('de-DE', q); add('de-DE', a); }
 for (const f of FACTS) add('de-DE', f);
+
+// Schiffsreise
+const sea = seaVoiceTexts();
+for (const t of sea.de) add('de-DE', t);
+for (const t of sea.pt) add('pt-PT', t);
+for (const t of sea.en) add('en-GB', t);
+for (const t of ['Was kommt zuerst?', 'Rundreise geschafft!']) add('de-DE', t);
 
 console.log(JSON.stringify([...out.values()]));

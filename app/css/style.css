@@ -694,14 +694,14 @@ h1, h2, h3 { font-weight: 800; }
 .daily-pill { left: auto; right: 14px; transform: none; top: 8px; }
 .daily-pill.ready { animation: pillpulse2 1.2s ease-in-out infinite; }
 @keyframes pillpulse2 { 50% { transform: scale(1.07); } }
-.map-emmi { top: 83%; }
+.map-emmi { top: 85%; left: 35.5%; }
 .map-hills { top: 8%; height: 20%; }
 .map-path { inset: 30% 0 0 0; }
 .map-deco.t1 { top: 36%; } .map-deco.t2 { top: 36%; }
 .map-deco.f1 { left: 24%; top: 70%; } .map-deco.f2 { right: 22%; top: 70%; }
 @media (orientation: portrait) {
   .place { width: min(27vw, 200px); }
-  .map-emmi { left: 65%; top: 85%; }
+  .map-emmi { left: 83%; top: 86%; }
   .map-deco.t1 { top: 26%; } .map-deco.t2 { top: 49%; }
   .map-deco.f1 { left: 34%; top: 72%; } .map-deco.f2 { right: 4%; top: 80%; }
 }
@@ -921,4 +921,117 @@ h1, h2, h3 { font-weight: 800; }
 @media (orientation: landscape) and (max-height: 460px) {
   .rotate-hint { display: grid; position: fixed; inset: 0; z-index: 200; place-items: center; background: #bfe8ff; text-align: center; padding: 20px; font-size: 22px; font-weight: 800; color: var(--ink); }
   .rotate-hint span { display: block; font-size: 64px; animation: spin 2.5s ease-in-out infinite; }
+}
+
+
+/* ---------- ⛴️ Hafen & Schiffsreise ---------- */
+.harbor { position: absolute; inset: 0; overflow: hidden; background: linear-gradient(#bfe8ff, #e3f5ff 52%); }
+.sea-bg { position: absolute; inset: 0; pointer-events: none; }
+.sea-sun { position: absolute; top: 6%; right: 8%; width: 70px; height: 70px; border-radius: 50%; background: radial-gradient(#fff6a0, #ffd23b 70%); box-shadow: 0 0 40px #ffe27a; }
+.sea-cloud { position: absolute; width: 120px; height: 34px; border-radius: 30px; background: #fff; opacity: .9; }
+.sea-cloud::before { content: ''; position: absolute; left: 22px; top: -20px; width: 56px; height: 46px; border-radius: 50%; background: #fff; }
+.sea-cloud.c1 { top: 10%; left: 8%; } .sea-cloud.c2 { top: 20%; left: 46%; transform: scale(.7); }
+.sea-water { position: absolute; left: 0; right: 0; bottom: 0; height: 42%; background: linear-gradient(#5fc0f0, #2f8fd6); }
+.wave { position: absolute; left: -50%; width: 200%; height: 26px; background: radial-gradient(circle at 25px -8px, transparent 22px, rgba(255, 255, 255, .55) 23px, rgba(255, 255, 255, .55) 26px, transparent 27px) 0 0 / 50px 26px repeat-x; animation: wave 6s linear infinite; }
+.wave.w1 { top: -4px; } .wave.w2 { top: 30%; opacity: .6; animation-duration: 9s; animation-direction: reverse; } .wave.w3 { top: 62%; opacity: .45; animation-duration: 12s; }
+@keyframes wave { to { transform: translateX(50px); } }
+.sea-ship { position: absolute; bottom: 30%; left: 4%; width: min(34vmin, 260px); animation: bob 3s ease-in-out infinite; }
+.sea-bg.moving .sea-ship { animation: bob 3s ease-in-out infinite, drift 30s linear infinite; }
+@keyframes bob { 50% { transform: translateY(6px) rotate(1.5deg); } }
+@keyframes drift { from { left: -30%; } to { left: 100%; } }
+.harbor .stage-start, .harbor-round, .harbor .quiz-round { z-index: 2; }
+.harbor .quit { z-index: 6; }
+.harbor-left { position: relative; width: min(40vmin, 340px); height: min(44vmin, 360px); flex: none; }
+.harbor-ship { position: absolute; left: 0; right: 0; bottom: 6%; height: 62%; animation: bob 3s ease-in-out infinite; }
+.harbor-emmi { position: absolute; left: -8%; bottom: 0; width: 30%; height: 56%; }
+.harbor-card { max-width: 560px; }
+.harbor-card h1 { margin-bottom: 4px; }
+.chart { width: 100%; aspect-ratio: 100 / 70; border-radius: 14px; overflow: hidden; box-shadow: 0 3px 0 #c9b8a0; margin: 6px 0 4px; background: #9fd8ff; }
+.chart svg { width: 100%; height: 100%; display: block; }
+.harbor-card p { margin: 6px 0 10px; }
+.harbor-card .chart { width: min(100%, calc((100vh - 330px) * 1.43)); margin-left: auto; margin-right: auto; }
+.citem.ci-tank { background: rgba(159, 216, 255, .6); border: 4px solid #8fc3de; border-radius: 10px; box-shadow: inset 0 -14px 0 #f3e3b6; }
+.ship-words { width: min(680px, 84vw); }
+.sw-row .word .w { white-space: nowrap; }
+.harbor-tiles, .knot-list { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 12px 0 4px; }
+.harbor-tiles { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.harbor-tiles .htile { min-width: 0; font-size: 12.5px; padding: 6px 4px; }
+.htile { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 92px; padding: 8px 10px; background: #f1f9ff; border-radius: 16px; box-shadow: 0 3px 0 #cfe2f2; font-weight: 800; font-size: 14px; }
+.htile span { font-size: 28px; line-height: 1.1; }
+.htile small { font-weight: 600; color: #7a6a80; font-size: 12px; }
+.qflag { position: absolute; right: -6px; bottom: -4px; font-size: .5em; }
+.quiz-ico { position: relative; }
+.harbor.sailing { display: grid; place-items: center; }
+.sail-box { position: relative; z-index: 2; width: min(92vw, 860px); background: rgba(255, 255, 255, .92); border-radius: 26px; padding: 14px; box-shadow: var(--shadow); text-align: center; }
+.chart.big { margin: 0; }
+.sail-note { font-size: 22px; font-weight: 800; margin: 10px 0 2px; }
+.sea-jump { position: fixed; left: 70%; bottom: 18%; font-size: 64px; z-index: 50; pointer-events: none; animation: seajump 2.1s ease-in-out forwards; }
+@keyframes seajump { 0% { transform: translate(0, 80px) rotate(-30deg); opacity: 0; } 15% { opacity: 1; } 50% { transform: translate(-90px, -120px) rotate(10deg); } 85% { opacity: 1; } 100% { transform: translate(-180px, 60px) rotate(60deg); opacity: 0; } }
+.postcard { text-align: center; }
+.pc-pic { position: relative; width: 150px; height: 100px; margin: 0 auto 8px; border-radius: 14px; background: linear-gradient(#bfe8ff 55%, #4fa8e0 55%); border: 5px solid #fff; box-shadow: 0 4px 0 rgba(0, 0, 0, .1); display: grid; place-items: center; transform: rotate(-3deg); }
+.pc-sight { font-size: 54px; }
+.pc-flag { position: absolute; right: -14px; top: -14px; font-size: 34px; transform: rotate(12deg); }
+.pc-fact { font-size: 18px; max-width: 520px; margin: 6px auto 10px; }
+.album-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 10px; margin-top: 10px; max-height: 56vh; overflow-y: auto; padding: 4px; }
+.album-card { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 96px; background: #eaf6ff; border-radius: 18px; box-shadow: 0 3px 0 #c6e0f4; }
+.album-card span { font-size: 46px; line-height: 1.1; }
+.album-card small { font-weight: 800; font-size: 13px; }
+.album-card.missing { background: #f1eef4; box-shadow: none; color: #c9b8d6; }
+.album-card.missing span { font-size: 34px; }
+.ship-words { max-height: 58vh; overflow-y: auto; text-align: left; }
+.ship-words h3 { margin: 14px 0 6px; }
+.sw-row { display: grid; grid-template-columns: 34px 1fr 1fr 1fr; align-items: center; gap: 8px; margin-bottom: 6px; }
+.sw-ico { font-size: 26px; text-align: center; }
+.sw-de { font-weight: 800; }
+.sw-row .word { margin: 0; padding: 6px 10px; }
+.knot-card { max-width: 640px; }
+.knot-done { text-align: left; margin: 10px auto; padding-left: 28px; max-width: 520px; }
+.knot-done li { padding: 5px 8px; margin: 4px 0; border-radius: 10px; background: #f1eef4; color: #a99bb4; font-weight: 700; }
+.knot-done li.ok { background: #e4f8e1; color: var(--ink, #3a2a35); }
+.knot-opts { display: flex; flex-direction: column; gap: 8px; margin: 10px 0 14px; }
+.kopt { background: #fff7d6; border-radius: 14px; padding: 10px 14px; font-weight: 800; font-size: 17px; box-shadow: 0 3px 0 #ecd89a; text-align: left; }
+.kopt.wrong { animation: shake .4s; background: #ffe0e6; }
+.cabin-scene { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 56px 12px 10px; background: #f3e7d4; }
+.cabin { position: relative; width: min(94vw, calc((100vh - 220px) * 1.6), 1000px); aspect-ratio: 16 / 10; border-radius: 22px; overflow: hidden; box-shadow: 0 6px 0 #c9a878; }
+.cabin-wall { position: absolute; inset: 0 0 32% 0; background: repeating-linear-gradient(90deg, #9fcfe8 0 46px, #8fc3de 46px 48px); }
+.cabin-floor { position: absolute; inset: 68% 0 0 0; background: repeating-linear-gradient(90deg, #c99257 0 70px, #b47e45 70px 72px); }
+.cabin-shelf { position: absolute; left: 64%; width: 32%; top: 55%; height: 2.4%; background: #a8703e; border-radius: 4px; }
+.porthole { position: absolute; left: 12%; top: 12%; width: 15%; aspect-ratio: 1; border-radius: 50%; border: 8px solid #d9a86a; box-shadow: inset 0 0 0 3px #a8703e, 0 3px 0 rgba(0, 0, 0, .15); overflow: hidden; }
+.ph-sea { position: absolute; inset: 0; background: linear-gradient(#bfe8ff 50%, #4fa8e0 50%); }
+.ph-fish { position: absolute; top: 58%; font-size: 22px; animation: phfish 9s linear infinite; }
+@keyframes phfish { from { left: -30%; } to { left: 110%; } }
+.citem { position: absolute; transform: translate(-50%, -50%); aspect-ratio: 1; background: none; padding: 0; }
+.citem svg { width: 100%; height: 100%; }
+.cabin-bubble { position: absolute; transform: translate(-50%, -100%); background: #fff; border-radius: 14px; padding: 6px 12px; font-weight: 800; box-shadow: var(--shadow); opacity: 0; transition: opacity .2s; pointer-events: none; white-space: nowrap; z-index: 30; }
+.cabin-bubble.show { opacity: 1; }
+.cabin-shop { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; align-items: center; }
+.cshop { display: flex; flex-direction: column; align-items: center; min-width: 62px; padding: 4px 6px; background: #fff; border-radius: 14px; box-shadow: 0 3px 0 #e2cfae; }
+.cshop span { font-size: 28px; line-height: 1.1; }
+.cshop small { font-weight: 800; font-size: 12px; }
+.cshop.own { background: #e4f8e1; }
+.cshop.poor { opacity: .55; }
+.paint-ship { width: min(70vw, 320px); height: 170px; margin: 0 auto; }
+.paint-row { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.paint-opt { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px; background: #fff; box-shadow: 0 3px 0 #e2d6ec; font-weight: 800; border: 3px solid transparent; }
+.paint-opt.sel { border-color: var(--purple); }
+.paint-opt small { color: #7a6a80; }
+.swatch { width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(0, 0, 0, .15); }
+@media (orientation: portrait), (max-width: 560px) {
+  .harbor .stage-start { flex-direction: column; justify-content: flex-start; overflow-y: auto; padding: 50px 10px 14px; gap: 4px; }
+  .harbor-left { width: min(70vw, 340px); height: 22vh; }
+  .sea-water { height: 30%; }
+}
+@media (max-width: 560px) {
+  .htile { min-width: 76px; font-size: 12px; padding: 6px; }
+  .harbor-tiles { grid-template-columns: repeat(3, 1fr); }
+  .htile span { font-size: 22px; }
+  .sw-row { grid-template-columns: 26px 1fr 1fr; gap: 4px 6px; }
+  .sw-de { grid-column: 2 / 4; }
+  .sw-row .word.pt { grid-column: 2; }
+  .sw-row .word .w { white-space: normal; font-size: 14px; }
+  .harbor-card .chart { width: 100%; }
+  .sail-note { font-size: 17px; }
+  .cabin { width: 96vw; }
+  .cshop { min-width: 50px; }
+  .cshop span { font-size: 22px; }
 }

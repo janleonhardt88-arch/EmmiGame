@@ -193,6 +193,27 @@ async function typeNumber(n) {
   const wood = await page.evaluate(() => JSON.parse(localStorage.getItem('emmigame-v1')).wood);
   if (!(wood >= 8)) errors.push('Kein Holz gesammelt: ' + wood);
 
+  step('Hafen & Schiffsreise');
+  await goto('harbor');
+  await page.click('[data-act="harbor-sail"]', f); await sleep(300);
+  await bruteForce('.qopt', 6, 1400);
+  await sleep(7000);
+  const ship = await page.evaluate(() => JSON.parse(localStorage.getItem('emmigame-v1')).ship);
+  if (!ship || ship.port !== 1) errors.push('Schiff ist nicht in Amsterdam angekommen: ' + JSON.stringify(ship && ship.port));
+  if (!(await page.$('.postcard'))) errors.push('Keine Postkarte nach der Ankunft');
+  await shot('12a-harbor-postcard');
+  await closeModals();
+  await page.click('[data-act="harbor-knots"]', f); await sleep(200);
+  await page.click('[data-act="harbor-knot"][data-k="reef"]', f); await sleep(200);
+  for (let i = 0; i < 4; i++) { await page.click(`.kopt[data-i="${i}"]`, f); await sleep(250); }
+  if (!(await page.$('.modal.celebrate'))) errors.push('Knoten-Schule nicht abgeschlossen');
+  await closeModals();
+  await page.click('[data-act="harbor-knots"]', f); await sleep(200);
+  await page.click('[data-act="harbor-home"]', f); await sleep(200);
+  await page.click('[data-act="harbor-cabin"]', f); await sleep(200);
+  await page.click('[data-act="harbor-buy"][data-k="anchor"]', f); await sleep(300);
+  if (!(await page.$('.citem.ci-anchor'))) errors.push('Anker nicht in der Kabine');
+
   step('Häuschen bauen und einrichten');
   await page.evaluate(() => { const s = JSON.parse(localStorage.getItem('emmigame-v1')); s.wood = 100; s.stars = 200; localStorage.setItem('emmigame-v1', JSON.stringify(s)); });
   await page.reload(); await sleep(500);

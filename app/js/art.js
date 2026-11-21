@@ -235,6 +235,7 @@ function cheek(L) {
 
 function accessory(L) {
   switch (L.acc) {
+    case 'captain': return '<path d="M26 30 Q26 12 50 11 Q74 12 74 30Z" fill="#fff" stroke="#c9c2d6" stroke-width="1.8"/><rect x="26" y="26" width="48" height="6" rx="2" fill="#2f4a8a"/><path d="M30 31 Q50 40 70 31 Q50 35 30 31Z" fill="#213566"/><circle cx="50" cy="20" r="4.5" fill="#ffd23b" stroke="#e6a100" stroke-width="1"/><path d="M50 17.5 V22.5 M47.8 19 Q50 23 52.2 19" stroke="#2f4a8a" stroke-width="1" fill="none"/>';
     case 'sunglasses': return '<path d="M35 40 H65" stroke="#3a2a35" stroke-width="2"/><rect x="35" y="39" width="12" height="8" rx="3.5" fill="#3a2a35"/><rect x="53" y="39" width="12" height="8" rx="3.5" fill="#3a2a35"/><path d="M37 41 L40 41" stroke="#fff" stroke-width="1.2" opacity=".7"/><path d="M55 41 L58 41" stroke="#fff" stroke-width="1.2" opacity=".7"/>';
     case 'headphones': return '<path d="M26 40 Q26 12 50 12 Q74 12 74 40" stroke="#9b7bff" stroke-width="4" fill="none"/><rect x="21" y="36" width="9" height="14" rx="4" fill="#ff7eb6" stroke="#e2559a" stroke-width="1.6"/><rect x="70" y="36" width="9" height="14" rx="4" fill="#ff7eb6" stroke="#e2559a" stroke-width="1.6"/>';
     case 'flowercrown': return [[30, 24, '#ff8cc6'], [38, 18, '#ffd23b'], [46, 15, '#9b7bff'], [54, 15, '#ff8cc6'], [62, 18, '#ffd23b'], [70, 24, '#9b7bff']].map(([x, y, c]) => `<circle cx="${x}" cy="${y}" r="3.6" fill="${c}" stroke="#fff" stroke-width="1"/><circle cx="${x}" cy="${y}" r="1.2" fill="#fff6c2"/>`).join('') + '<path d="M28 27 Q50 9 72 27" stroke="#62cc5c" stroke-width="1.6" fill="none"/>';
@@ -646,6 +647,16 @@ function house({ wall, wallO, roof, roofO, roofPath = 'M10 52 L60 12 L110 52Z', 
 }
 
 const PLACE_ART = {
+  harbor: () => `
+    <ellipse cx="60" cy="92" rx="58" ry="16" fill="#7cc8ff" stroke="#3b8fd6" stroke-width="3"/>
+    <path d="M18 92 q6 -4 12 0 t12 0 M70 98 q6 -4 12 0 t12 0" stroke="#fff" stroke-width="2.4" fill="none" opacity=".8"/>
+    <rect x="4" y="76" width="34" height="8" rx="2" fill="#c99257" stroke="#8a5a2e" stroke-width="2"/>
+    <path d="M10 84 V96 M32 84 V96" stroke="#8a5a2e" stroke-width="3"/>
+    <path d="M100 82 L104 36 L114 36 L118 82Z" fill="#fff" stroke="#c9c2d6" stroke-width="2"/>
+    <path d="M102.6 54 L115.4 54 L116.4 66 L101.6 66Z M103.7 40 L114.3 40 L114.9 46 L103.1 46Z" fill="#ff5a5a"/>
+    <rect x="102" y="28" width="14" height="9" rx="2" fill="#ffd23b" stroke="#e6a100" stroke-width="2"/>
+    <path d="M100 28 L109 20 L118 28Z" fill="#ff5a5a" stroke="#c9443a" stroke-width="2" stroke-linejoin="round"/>
+    <g transform="translate(26 44) scale(.46)">${shipInner({ flags: false, name: '' })}</g>`,
   garden: () => `
     <ellipse cx="60" cy="96" rx="56" ry="11" fill="#7cc35a"/>
     <path d="M12 92 Q60 80 108 92 L108 98 Q60 106 12 98Z" fill="#9b6a45"/>
@@ -795,10 +806,44 @@ export const tvStand = () => svg(`
   <path d="M22 54 Q38 40 50 50 T78 46 V62 H22Z" fill="#62cc5c"/><circle cx="66" cy="38" r="5" fill="#ffd23b"/>
   <path d="M44 68 H56 V74 H44Z" fill="#241a22"/>`);
 
+// ⛴️ Emmis Schiff – Rumpf- und Schornsteinfarbe frei wählbar
+export function shipInner({ hull = '#ff5a5a', hullO = '#c9443a', funnel = '#ffd23b', name = 'EMMI', flags = true } = {}) {
+  const fun = funnel === 'rainbow'
+    ? ['#ff5a5a', '#ffb02e', '#ffd23b', '#62cc5c', '#4fb3ff', '#9b7bff'].map((c, i) => `<rect x="99" y="${14 + i * 4}" width="16" height="4" fill="${c}"/>`).join('')
+    : `<rect x="99" y="14" width="16" height="24" fill="${funnel}"/>`;
+  return `
+    <ellipse cx="80" cy="93" rx="70" ry="5" fill="rgba(0,60,120,.18)"/>
+    <path d="M112 6 Q120 0 128 4 Q122 8 116 6" fill="#fff" opacity=".8"/>
+    ${fun}<rect x="99" y="14" width="16" height="24" fill="none" stroke="${INK}" stroke-opacity=".25" stroke-width="2"/>
+    <rect x="97" y="10" width="20" height="6" rx="2" fill="#3a2a35"/>
+    <rect x="52" y="24" width="56" height="18" rx="5" fill="#fff" stroke="#c9c2d6" stroke-width="2.2"/>
+    ${[60, 72, 84, 96].map((x) => `<rect x="${x - 4}" y="29" width="8" height="7" rx="2" fill="#7cc8ff" stroke="#3b8fd6" stroke-width="1.4"/>`).join('')}
+    <rect x="34" y="40" width="96" height="20" rx="5" fill="#fff" stroke="#c9c2d6" stroke-width="2.2"/>
+    ${[44, 56, 68, 80, 92, 104, 116].map((x) => `<circle cx="${x}" cy="50" r="3.6" fill="#7cc8ff" stroke="#3b8fd6" stroke-width="1.4"/>`).join('')}
+    <path d="M30 40 V22 M30 22 L44 26 L30 30" stroke="${INK}" stroke-width="1.8" fill="#ff7eb6" stroke-linejoin="round"/>
+    ${flags ? `<path d="M10 58 Q40 30 54 24 M108 24 Q132 36 150 58" stroke="#8a7a90" stroke-width="1" fill="none"/>
+      ${[[16, 50, '#ff5a5a'], [24, 43, '#ffd23b'], [33, 36, '#4fb3ff'], [42, 30, '#62cc5c'], [118, 30, '#ff7eb6'], [127, 36, '#9b7bff'], [136, 43, '#ffd23b'], [144, 51, '#4fb3ff']].map(([x, y, c]) => `<path d="M${x - 3} ${y} L${x + 3} ${y} L${x} ${y + 6}Z" fill="${c}"/>`).join('')}` : ''}
+    <path d="M6 58 L154 58 L140 86 Q80 94 20 86Z" fill="${hull}" stroke="${hullO}" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M12 66 L148 66" stroke="#fff" stroke-width="3" opacity=".85"/>
+    <text x="80" y="81" text-anchor="middle" font-size="11" font-weight="800" fill="#fff" font-family="Nunito, sans-serif" letter-spacing="2">${name}</text>
+    <circle cx="26" cy="74" r="3" fill="#fff" opacity=".8"/><circle cx="134" cy="74" r="3" fill="#fff" opacity=".8"/>`;
+}
+export const ship = (o) => svg(shipInner(o), { vb: '0 0 160 100', par: 'xMidYMax meet' });
+
+// Möwe (Begleiter)
+const gull = () => `
+  <ellipse cx="50" cy="66" rx="22" ry="15" fill="#fff" stroke="#c9c2d6" stroke-width="2.4"/>
+  <path d="M34 60 Q22 46 10 54 Q24 58 34 70Z" fill="#c3c7d4" stroke="#9aa0b0" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="66" cy="50" r="12" fill="#fff" stroke="#c9c2d6" stroke-width="2.4"/>
+  <path d="M76 50 L90 53 L76 56Z" fill="#ffb02e" stroke="#e6a100" stroke-width="1.4" stroke-linejoin="round"/>
+  <circle cx="69" cy="47" r="2.2" fill="${INK}"/><circle cx="69.7" cy="46.3" r=".7" fill="#fff"/>
+  <path d="M44 80 V88 M56 80 V88" stroke="#ffb02e" stroke-width="2.6" stroke-linecap="round"/>`;
+
 // 🐾 Begleiter an Emmis Seite
 const PET_ART = {
   kitten: () => thing('cat'), puppy: () => thing('dog'), bunny: () => animal('bunny'), chick: () => animal('chicken'),
   hedgehog: () => animal('hedgehog'), bird: () => thing('bird'),
+  gull: () => svg(gull()), dolphin: () => emoji('🐬', 80, 56), seal: () => emoji('🦭', 80, 56),
   panda: () => emoji('🐼', 80, 56), unicorn: () => emoji('🦄', 80, 56), dragon: () => emoji('🐉', 80, 56), fox: () => emoji('🦊', 80, 56),
 };
 export function pet(id) { return PET_ART[id] ? PET_ART[id]() : ''; }

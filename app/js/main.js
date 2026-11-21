@@ -17,6 +17,7 @@ import shop from './games/shop.js';
 import forest from './games/forest.js';
 import house, { HOUSE_STAGES } from './games/house.js';
 import globe from './games/globe.js';
+import harbor from './games/harbor.js';
 import { parentsGate } from './parents.js';
 import { initClips } from './recorder.js';
 import { startPlayTimer } from './playtime.js';
@@ -34,8 +35,9 @@ const PLACES = [
   { mod: forest, label: 'Wald', pos: [37, 52], ppos: [82, 38] },
   { mod: globe, label: 'Weltreise', pos: [63, 52], ppos: [18, 61] },
   { mod: house, label: 'Häuschen', pos: [88, 54], ppos: [50, 61] },
-  { mod: garden, label: 'Garten', pos: [30, 83], ppos: [82, 61] },
-  { mod: shop, label: 'Hofladen', pos: [70, 83], ppos: [35, 85] },
+  { mod: garden, label: 'Garten', pos: [21, 83], ppos: [82, 61] },
+  { mod: harbor, label: 'Hafen', pos: [50, 86], ppos: [50, 85] },
+  { mod: shop, label: 'Hofladen', pos: [79, 83], ppos: [18, 85] },
 ];
 const BY_ID = Object.fromEntries(PLACES.map((p) => [p.mod.id, p.mod]));
 

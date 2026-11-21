@@ -52,13 +52,13 @@ const TABS = [
       catears: { de: 'Katzenohren', price: 30 }, crown: { de: 'Krone', price: 50 },
       sunglasses: { de: 'Sonnenbrille', price: 20 }, cap: { de: 'Kappe', price: 20 }, headphones: { de: 'Kopfhörer', price: 25 },
       flowercrown: { de: 'Blumenkranz', price: 30 }, bunnyears: { de: 'Hasenohren', price: 30 }, witchhat: { de: 'Zauberhut', price: 40 },
-      unicorn: { de: 'Einhorn-Horn', price: 45 },
+      unicorn: { de: 'Einhorn-Horn', price: 45 }, captain: { de: 'Kapitänsmütze', price: 30 },
     },
   },
   {
     id: 'pet', de: 'Begleiter', preview: 'pet',
     items: {
-      none: { de: 'Keiner' }, chick: { de: 'Küken', price: 30 }, kitten: { de: 'Kätzchen', price: 40 }, puppy: { de: 'Hündchen', price: 40 },
+      none: { de: 'Keiner' }, chick: { de: 'Küken', price: 30 }, gull: { de: 'Möwe', price: 35 }, seal: { de: 'Robbe', price: 55 }, dolphin: { de: 'Delfin', price: 65 }, kitten: { de: 'Kätzchen', price: 40 }, puppy: { de: 'Hündchen', price: 40 },
       bunny: { de: 'Häschen', price: 40 }, hedgehog: { de: 'Igel', price: 45 }, bird: { de: 'Vögelchen', price: 45 },
       fox: { de: 'Fuchs', price: 60 }, panda: { de: 'Panda', price: 70 }, unicorn: { de: 'Einhorn', price: 90 }, dragon: { de: 'Drache', price: 100 },
     },
