@@ -178,7 +178,11 @@ initVoices().then((index) => {
     try { localStorage.setItem('emmigame-voices-m3', mark); } catch (e) { /* egal */ }
   })();
 });
+// Ältere Spielstände (vor der Begrüßung) nicht noch einmal begrüßen
+if (!state.welcomed && (state.xp > 0 || state.stats.correct > 0)) { state.welcomed = true; save(); }
 if (!state.welcomed) welcome();
+// Den Browser bitten, den Spielstand dauerhaft zu behalten (nicht bei Speicherknappheit zu löschen)
+try { navigator.storage?.persist?.().catch(() => {}); } catch (e) { /* nicht überall verfügbar */ }
 startPlayTimer();
 
 initUpdates();

@@ -63,6 +63,14 @@ export function save() {
   try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* ignorieren */ }
 }
 
+// Spielstand aus einer Sicherungsdatei übernehmen
+export function importState(data) {
+  const d = defaults();
+  for (const k of Object.keys(state)) delete state[k];
+  Object.assign(state, d, data, { stats: { ...d.stats, ...(data.stats || {}) }, look: { ...d.look, ...(data.look || {}) } });
+  save();
+}
+
 export function resetState() {
   const d = defaults();
   for (const k of Object.keys(state)) delete state[k];

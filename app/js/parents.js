@@ -1,5 +1,5 @@
 // 🔒 Elternbereich – Fortschritt, Einstellungen, eigene Aufnahmen
-import { state, save, resetState } from './state.js';
+import { state, save, resetState, importState } from './state.js';
 import { BELTS, DOJO_BOARDS, HAIR } from './data.js';
 import { speak, setAudioPrefs, voiceInfo, bundledCount } from './audio.js';
 import { parentGate, MATH_LEVELS } from './math.js';
@@ -125,6 +125,21 @@ export function parentsPanel() {
         <button class="btn" id="p-rec">Aufnahmen verwalten</button>
       </section>
       <section>
+        <h3>Spielstand sichern</h3>
+        <p class="note">Der Spielstand liegt nur auf diesem Gerät, im Speicher des Browsers. Er geht verloren, wenn die App mit ihren Daten gelöscht wird. Sichert ihn ab und zu als Datei.</p>
+        <div class="btn-row">
+          <button class="btn" id="p-export">Als Datei sichern</button>
+          <label class="btn" for="p-import">Aus Datei laden</label>
+          <input type="file" id="p-import" accept=".json,application/json" hidden>
+        </div>
+        <p class="note" id="p-backup-msg">${state.lastBackup ? `Letzte Sicherung: ${esc(state.lastBackup)}` : 'Noch keine Sicherung.'}</p>
+      </section>
+      <section>
+        <h3>Gürtel setzen</h3>
+        <p class="note">Falls ein Spielstand verloren ging: Hier lässt sich der erreichte Gürtel wiederherstellen.</p>
+        <div class="chips" id="p-belt">${BELTS.map((b, i) => `<button class="chip ${belt() === b ? 'on' : ''}" data-belt="${i}"><i style="background:${b.color}"></i>${b.de.replace(' Gürtel', '')}</button>`).join('')}</div>
+      </section>
+      <section>
         <h3>Sonstiges</h3>
         <div class="btn-row">
           <button class="btn" id="p-stars">+20 Sterne geben</button>
@@ -186,6 +201,41 @@ export function parentsPanel() {
     save(); renderTop(); parentsPanel();
   }));
   $('#p-stars', m).addEventListener('click', () => { addStars(20); });
+  $('#p-belt', m).addEventListener('click', (e) => {
+    const b = e.target.closest('[data-belt]'); if (!b) return;
+    state.xp = BELTS[Number(b.dataset.belt)].xp;
+    save(); api.render(); parentsPanel();
+  });
+  $('#p-export', m).addEventListener('click', () => {
+    const d = new Date();
+    const stamp = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    state.lastBackup = d.toLocaleString('de-DE');
+    save();
+    const url = URL.createObjectURL(new Blob([JSON.stringify(state, null, 1)], { type: 'application/json' }));
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `emmis-tierwelt-spielstand-${stamp}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    $('#p-backup-msg', m).textContent = `Gesichert: ${state.lastBackup} – die Datei liegt im Download-Ordner.`;
+  });
+  $('#p-import', m).addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      const data = JSON.parse(await file.text());
+      if (!data || data.v !== 1 || !Array.isArray(data.beds)) throw new Error('kein Spielstand');
+      importState(data);
+      setAudioPrefs({ sound: state.sound, speech: state.speech });
+      closeModal();
+      api.go('map');
+      toast('Spielstand geladen ✓');
+    } catch (err) {
+      $('#p-backup-msg', m).innerHTML = '<b class="warn">Das ist keine gültige Spielstand-Datei.</b>';
+    }
+  });
   $('#p-reset', m).addEventListener('click', (e) => {
     if (e.target.dataset.confirm) {
       resetState(); setAudioPrefs({ sound: state.sound, speech: state.speech });
