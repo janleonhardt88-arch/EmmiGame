@@ -7,10 +7,12 @@ export const svg = (body, { vb = '0 0 100 100', par = 'xMidYMid meet', cls = '' 
 // Niedliches Gesicht
 export function face(x, y, s = 1, { mouth = true, eye = INK } = {}) {
   return `<g transform="translate(${x} ${y}) scale(${s})">
+    <g class="eyes">
     <ellipse cx="-7" cy="0" rx="2.7" ry="3.3" fill="${eye}"/>
     <ellipse cx="7" cy="0" rx="2.7" ry="3.3" fill="${eye}"/>
     <circle cx="-6.1" cy="-1.3" r="1.05" fill="#fff"/>
     <circle cx="7.9" cy="-1.3" r="1.05" fill="#fff"/>
+    <circle cx="-7.8" cy="1" r=".5" fill="#fff" opacity=".7"/><circle cx="6.2" cy="1" r=".5" fill="#fff" opacity=".7"/></g>
     ${mouth ? `<path d="M-3 4.2 Q0 7.4 3 4.2" stroke="${eye}" stroke-width="1.7" fill="none" stroke-linecap="round"/>` : ''}
     <ellipse cx="-11.5" cy="4.5" rx="3.2" ry="1.9" fill="#ff7aa8" opacity=".55"/>
     <ellipse cx="11.5" cy="4.5" rx="3.2" ry="1.9" fill="#ff7aa8" opacity=".55"/>
@@ -202,7 +204,9 @@ function hairBack(L) {
 // Haare vor dem Gesicht (Pony) und über den Schultern
 function hairFront(L) {
   const h = L.hair;
-  let s = `<path d="M27 42 Q25 15 50 15 Q75 15 73 42 Q68 29 58 28 Q52 23 46 29 Q35 29 27 42Z" fill="${h}"/>`;
+  let s = `<path d="M27 42 Q25 15 50 15 Q75 15 73 42 Q68 29 58 28 Q52 23 46 29 Q35 29 27 42Z" fill="${h}"/>
+    <path d="M36 22 Q44 17.5 52 18" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" opacity=".38"/>
+    <path d="M56 18.6 Q59 19 61 20" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" opacity=".3"/>`;
   if (L.style === 'bob') s += `<path d="M27 38 Q21 56 30 66 Q37 56 33 38Z" fill="${h}" ${HO}/><path d="M73 38 Q79 56 70 66 Q63 56 67 38Z" fill="${h}" ${HO}/>`;
   if (L.style === 'pigtails') s += `<circle cx="27" cy="39" r="3.4" fill="#ff5a9a"/><circle cx="73" cy="39" r="3.4" fill="#ff5a9a"/>`;
   if (L.style === 'ponytail') s += `<circle cx="70" cy="23" r="3.4" fill="#ff5a9a"/>`;
@@ -349,6 +353,8 @@ export function avatar(look, beltColor = '#ffffff', { outfit = 'gi', mic = false
     <g class="arm-l">${arm(armL, sleeve, sleeveO)}<circle cx="27" cy="95" r="5" fill="${skin}" stroke="${skinO}" stroke-width="1.8"/></g>
     ${torso}
     <g class="arm-r">${arm(armR, sleeve, sleeveO)}${micSvg}<ellipse cx="90" cy="53" rx="4" ry="6.5" fill="${skin}" stroke="${skinO}" stroke-width="1.8" transform="rotate(35 90 53)"/></g>
+    <path d="M58 66 Q67 68 67 80 L66 102 L60 102 Q63 84 58 66Z" fill="rgba(0,0,0,.07)"/>
+    <path d="M38 68 Q36 76 37 84" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".28"/>
     ${headFront(L)}
     ${outfit === 'casual' && (OUTFITS[L.casual] || {}).scarf ? `<path d="M36 62 Q50 70 64 62 L64 68 Q50 76 36 68Z M56 66 L60 84 L54 84 L52 68Z" fill="${OUTFITS[L.casual].scarf}" stroke="#2a86d6" stroke-width="1.4" stroke-linejoin="round"/>` : ''}`, { vb: '0 -8 100 148', par: 'xMidYMax meet' });
 }
@@ -402,8 +408,11 @@ export const sun = () => svg(`
   ${face(50, 50, 1.3)}`);
 
 export const hills = () => svg(`
-  <path d="M0 70 Q15 30 35 52 Q55 20 75 48 Q90 32 100 46 L100 100 L0 100Z" fill="#b7e79a"/>
-  <path d="M0 82 Q25 50 50 72 Q75 52 100 70 L100 100 L0 100Z" fill="#9edb7c"/>
+  <defs><linearGradient id="h1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cdeeb4"/><stop offset="1" stop-color="#a9df8c"/></linearGradient>
+  <linearGradient id="h2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b3e597"/><stop offset="1" stop-color="#94d673"/></linearGradient></defs>
+  <path d="M0 64 Q12 40 24 50 Q36 28 52 46 Q66 22 82 42 Q92 30 100 40 L100 100 L0 100Z" fill="#d6ecf5" opacity=".7"/>
+  <path d="M0 70 Q15 30 35 52 Q55 20 75 48 Q90 32 100 46 L100 100 L0 100Z" fill="url(#h1)"/>
+  <path d="M0 82 Q25 50 50 72 Q75 52 100 70 L100 100 L0 100Z" fill="url(#h2)"/>
   <path d="M0 92 Q50 74 100 90 L100 100 L0 100Z" fill="#8fd46b"/>`, { par: 'none' });
 
 export const fence = () => {
@@ -496,6 +505,9 @@ const THINGS = {
     <path d="M44 94 L46 60 L54 60 L56 94Z" fill="#a8703e" ${O('#7a4a2c')}/>
     <circle cx="34" cy="46" r="18" fill="#62cc5c" ${O('#2f8f3a')}/><circle cx="66" cy="46" r="18" fill="#62cc5c" ${O('#2f8f3a')}/>
     <circle cx="50" cy="32" r="22" fill="#62cc5c" ${O('#2f8f3a')}/><circle cx="50" cy="52" r="18" fill="#62cc5c"/>
+    <path d="M24 54 Q50 70 76 54 Q66 62 50 63 Q34 62 24 54Z" fill="#3fa34a" opacity=".45"/>
+    <path d="M36 22 Q44 13 56 14" stroke="#a6ef94" stroke-width="4" fill="none" stroke-linecap="round" opacity=".8"/>
+    <circle cx="24" cy="40" r="3" fill="#a6ef94" opacity=".7"/>
     <circle cx="30" cy="50" r="3.5" fill="#ff4f4f"/><circle cx="68" cy="40" r="3.5" fill="#ff4f4f"/><circle cx="58" cy="58" r="3.5" fill="#ff4f4f"/>
     ${face(48, 40, 0.8)}`,
   house: () => `
@@ -648,8 +660,7 @@ function house({ wall, wallO, roof, roofO, roofPath = 'M10 52 L60 12 L110 52Z', 
 
 const PLACE_ART = {
   harbor: () => `
-    <ellipse cx="60" cy="92" rx="58" ry="16" fill="#7cc8ff" stroke="#3b8fd6" stroke-width="3"/>
-    <path d="M18 92 q6 -4 12 0 t12 0 M70 98 q6 -4 12 0 t12 0" stroke="#fff" stroke-width="2.4" fill="none" opacity=".8"/>
+    <path d="M14 94 q6 -4 12 0 t12 0 M70 100 q6 -4 12 0 t12 0" stroke="#fff" stroke-width="2.4" fill="none" opacity=".8"/>
     <rect x="4" y="76" width="34" height="8" rx="2" fill="#c99257" stroke="#8a5a2e" stroke-width="2"/>
     <path d="M10 84 V96 M32 84 V96" stroke="#8a5a2e" stroke-width="3"/>
     <path d="M100 82 L104 36 L114 36 L118 82Z" fill="#fff" stroke="#c9c2d6" stroke-width="2"/>
@@ -721,7 +732,7 @@ export const mapIcon = () => svg(`
 export const mapPath = () => svg(`
   <path d="M-2 62 C14 40 30 76 50 58 S 82 34 102 52" fill="none" stroke="#f3dfb8" stroke-width="7" stroke-linecap="round"/>
   <path d="M-2 62 C14 40 30 76 50 58 S 82 34 102 52" fill="none" stroke="#e6cc9a" stroke-width="7" stroke-linecap="round" stroke-dasharray="0.5 5" opacity=".7"/>
-  <path d="M50 58 C46 74 54 86 50 102" fill="none" stroke="#f3dfb8" stroke-width="6" stroke-linecap="round"/>`, { par: 'none' });
+  <path d="M50 58 C47 62 53 66 50 70" fill="none" stroke="#f3dfb8" stroke-width="6" stroke-linecap="round"/>`, { par: 'none' });
 
 // ---------- Garten-Deko ----------
 const DECO_ART = {

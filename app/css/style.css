@@ -936,9 +936,9 @@ h1, h2, h3 { font-weight: 800; }
 .wave.w1 { top: -4px; } .wave.w2 { top: 30%; opacity: .6; animation-duration: 9s; animation-direction: reverse; } .wave.w3 { top: 62%; opacity: .45; animation-duration: 12s; }
 @keyframes wave { to { transform: translateX(50px); } }
 .sea-ship { position: absolute; bottom: 30%; left: 4%; width: min(34vmin, 260px); animation: bob 3s ease-in-out infinite; }
-.sea-bg.moving .sea-ship { animation: bob 3s ease-in-out infinite, drift 30s linear infinite; }
+.sea-bg.moving .sea-ship { animation: bob 3s ease-in-out infinite, shipdrift 30s linear infinite; }
 @keyframes bob { 50% { transform: translateY(6px) rotate(1.5deg); } }
-@keyframes drift { from { left: -30%; } to { left: 100%; } }
+@keyframes shipdrift { from { left: -30%; } to { left: 100%; } }
 .harbor .stage-start, .harbor-round, .harbor .quiz-round { z-index: 2; }
 .harbor .quit { z-index: 6; }
 .harbor-left { position: relative; width: min(40vmin, 340px); height: min(44vmin, 360px); flex: none; }
@@ -1100,3 +1100,55 @@ h1, h2, h3 { font-weight: 800; }
   .ctile span { font-size: 32px; }
   .ctile b { display: block; }
 }
+
+/* ---------- Karte: Bucht und Details ---------- */
+.map { background: radial-gradient(ellipse at 30% 70%, #9fdc7c, transparent 60%), radial-gradient(ellipse at 80% 60%, #98d877, transparent 55%), var(--grass); }
+.map-ground { position: absolute; inset: 40% 0 0 0; pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 255, 255, .22) 0 2px, transparent 3px) 0 0 / 38px 34px,
+              radial-gradient(circle, rgba(60, 140, 40, .16) 0 2px, transparent 3px) 19px 17px / 38px 34px; }
+.map-bay { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+.map-bay svg { width: 100%; height: 100%; display: block; }
+.map-bay.p { display: none; }
+.map-detail { position: absolute; left: calc(var(--x) * 1%); top: calc(var(--y) * 1%); width: calc(var(--w) * 1vmin); aspect-ratio: 1; transform: translate(-50%, -100%); pointer-events: none; z-index: 1; }
+.map-detail svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.map-detail.no-l { display: none; }
+.mill-blades { animation: spin 9s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.map-detail.floaty svg { animation: floaty 6s ease-in-out infinite; }
+@keyframes floaty { 50% { transform: translate(-14px, -10px); } }
+.map-detail.glide svg { animation: glide 7s ease-in-out infinite; }
+.map-detail.g2 svg { animation-duration: 5s; animation-delay: -2s; }
+@keyframes glide { 25% { transform: translate(12px, -6px); } 50% { transform: translate(24px, 0); } 75% { transform: translate(12px, 5px); } }
+.map-detail.flutter svg { animation: flutter 5s ease-in-out infinite; }
+.map-detail.flutter .bfly-wings { animation: wings .25s ease-in-out infinite alternate; transform-origin: 50px 52px; }
+@keyframes flutter { 25% { transform: translate(-16px, -10px) rotate(-8deg); } 50% { transform: translate(-6px, -20px); } 75% { transform: translate(10px, -8px) rotate(8deg); } }
+@keyframes wings { to { transform: scaleX(.55); } }
+.map-detail.bob svg { animation: bob 3s ease-in-out infinite; }
+.map .place-art svg { filter: drop-shadow(0 4px 0 rgba(40, 90, 30, .18)); }
+.map-deco.f2 { display: none; }
+@media (orientation: portrait) {
+  .map-bay.l { display: none; } .map-bay.p { display: block; }
+  .map-detail { left: calc(var(--px) * 1%); top: calc(var(--py) * 1%); width: calc(var(--pw) * 1vmin); }
+  .map-detail.no-l { display: block; }
+  .map-detail.no-p { display: none; }
+  .map-deco.f1, .map-deco.t2 { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .mill-blades, .map-detail svg, .bfly-wings { animation: none !important; } }
+
+.map-sky { inset: 0 0 72% 0; }
+.map { background-color: #8fd46b; }
+.map-ground { inset: 28% 0 0 0; }
+
+/* ---------- Feinschliff: Blinzeln, Licht und Tiefe ---------- */
+.eyes { transform-box: fill-box; transform-origin: center; animation: blink 5.2s infinite; }
+.place:nth-of-type(3n) .eyes, .map-emmi .eyes { animation-delay: -2.1s; }
+.place:nth-of-type(3n+1) .eyes { animation-delay: -3.7s; }
+@keyframes blink { 0%, 95%, 100% { transform: scaleY(1); } 97% { transform: scaleY(.1); } }
+.btn { background-image: linear-gradient(rgba(255, 255, 255, .35), rgba(255, 255, 255, 0) 55%); }
+.btn.primary { background-image: linear-gradient(#ff9fca, var(--pink) 60%); text-shadow: 0 1px 0 rgba(180, 40, 100, .25); }
+.game-card, .modal { background-image: linear-gradient(rgba(255, 255, 255, .6), rgba(255, 255, 255, 0) 40%); }
+.avatar-big svg, .harbor-emmi svg, .map-emmi svg { filter: drop-shadow(0 5px 3px rgba(60, 40, 80, .15)); }
+.place-sign { background-image: linear-gradient(rgba(255, 255, 255, .35), rgba(255, 255, 255, 0)); }
+.sun .rays { transform-origin: 50% 50%; animation: spin 40s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .eyes, .sun .rays { animation: none !important; } }
+@media (orientation: landscape) { .map-pet { left: auto; right: 78%; } }

@@ -2,6 +2,7 @@
 import { state, save } from './state.js';
 import { HAIR } from './data.js';
 import * as art from './art.js';
+import { bayLayer, detail } from './mapart.js';
 import { sfx, speak, setAudioPrefs, initVoices } from './audio.js';
 import { api, $, esc } from './core.js';
 import * as ui from './ui.js';
@@ -40,6 +41,24 @@ const PLACES = [
   { mod: shop, label: 'Hofladen', pos: [79, 83], ppos: [18, 85] },
 ];
 const BY_ID = Object.fromEntries(PLACES.map((p) => [p.mod.id, p.mod]));
+
+// Kleine Details auf der Karte: [x, y, Breite in vmin] für Quer- und Hochformat (null = ausgeblendet); y ist die Unterkante
+const DETAILS = [
+  { id: 'pines', pos: [24.5, 35, 10], ppos: [34, 29, 12] },
+  { id: 'windmill', pos: [50, 35, 12], ppos: [66, 29, 12] },
+  { id: 'balloon', pos: [75.5, 22, 7], ppos: null, cls: 'floaty' },
+  { id: 'gull', pos: [22, 13, 4], ppos: [48, 5, 6], cls: 'glide' },
+  { id: 'sheep', pos: [24.5, 64, 7], ppos: [34, 52, 9] },
+  { id: 'pond', pos: [50, 64, 11], ppos: [66, 52, 11] },
+  { id: 'bush', pos: [75.5, 64, 8], ppos: null },
+  { id: 'butterfly', pos: [77, 46, 4], ppos: [36, 74, 5], cls: 'flutter' },
+  { id: 'flowers', pos: [6, 99, 9], ppos: [66, 76, 10] },
+  { id: 'mushrooms', pos: [94, 99, 7], ppos: null },
+  { id: 'rocks', pos: [66, 99, 6], ppos: [74, 99, 8] },
+  { id: 'sailboat', pos: [41, 98, 6], ppos: [36, 99, 9], cls: 'bob' },
+  { id: 'gull', pos: [57, 75, 3.5], ppos: [58, 83, 5], cls: 'glide g2' },
+];
+const detailHtml = (d) => `<div class="map-detail d-${d.id} ${d.cls || ''} ${d.pos ? '' : 'no-l'} ${d.ppos ? '' : 'no-p'}" style="${d.pos ? `--x:${d.pos[0]};--y:${d.pos[1]};--w:${d.pos[2]};` : ''}${d.ppos ? `--px:${d.ppos[0]};--py:${d.ppos[1]};--pw:${d.ppos[2]}` : ''}">${detail(d.id)}</div>`;
 
 let screen = 'map';
 
@@ -83,7 +102,10 @@ function renderMap() {
         <div class="cloud c1"></div><div class="cloud c2"></div><div class="cloud c3"></div>
       </div>
       <div class="map-hills">${art.hills()}</div>
+      <div class="map-ground"></div>
+      <div class="map-bay l">${bayLayer(false)}</div><div class="map-bay p">${bayLayer(true)}</div>
       <div class="map-path">${art.mapPath()}</div>
+      ${DETAILS.map(detailHtml).join('')}
       <div class="map-deco t1">${art.thing('tree')}</div><div class="map-deco t2">${art.thing('tree')}</div>
       <div class="map-deco f1">${art.thing('flower')}</div><div class="map-deco f2">${art.thing('flower')}</div>
       ${dailyPill()}
