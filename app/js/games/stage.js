@@ -41,7 +41,9 @@ function render() {
 function start(cat) {
   const lang = state.stageLang || 'pt';
   const words = CATEGORIES[cat].words;
-  let targets = shuffle(words);
+  // Wörter, die noch nicht so gut sitzen, kommen zuerst dran
+  const known = (w) => (state.vocab[w.id]?.[lang] || 0) + Math.random() * 1.5;
+  let targets = [...words].sort((a, b) => known(a) - known(b));
   while (targets.length < ROUND) targets = targets.concat(shuffle(words));
   targets = targets.slice(0, ROUND);
   const listen = canListen(lang);

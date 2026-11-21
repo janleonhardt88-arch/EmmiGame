@@ -3,7 +3,7 @@ import { state, save } from '../state.js';
 import { PLANTS, ANIMALS } from '../data.js';
 import * as art from '../art.js';
 import { sfx, speak } from '../audio.js';
-import { api, $, esc, pick, rnd, shuffle } from '../core.js';
+import { api, $, pick, rnd, shuffle } from '../core.js';
 
 // Preise in Cent
 export const PRICES = { radish: 50, carrot: 80, tomato: 120, strawberry: 150, sunflower: 200, pumpkin: 350 };

@@ -1,6 +1,5 @@
 // Aufgaben-Generator (Lehrplan 2. Klasse)
 const r = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
-const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 const shuffle = (arr) => {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -109,8 +108,26 @@ export function gardenTask(level) {
   }
 }
 
-export function dojoTask(rows, withDivision) {
-  const a = pick(rows), b = r(1, 10);
+// Wählt bevorzugt Aufgaben, die noch neu sind oder öfter falsch waren
+export const factKey = (a, b) => `${Math.min(a, b)}x${Math.max(a, b)}`;
+function pickFact(rows, facts) {
+  const pool = [];
+  let total = 0;
+  for (const a of rows) {
+    for (let b = 1; b <= 10; b++) {
+      const f = facts[factKey(a, b)];
+      const w = f ? Math.min(6, Math.max(0.3, 1 + 2 * f.bad - 0.4 * f.ok)) : 2;
+      total += w;
+      pool.push([a, b, w]);
+    }
+  }
+  let x = Math.random() * total;
+  for (const [a, b, w] of pool) { x -= w; if (x <= 0) return [a, b]; }
+  return [pool[0][0], pool[0][1]];
+}
+
+export function dojoTask(rows, withDivision, facts = {}) {
+  const [a, b] = pickFact(rows, facts);
   const product = a * b;
   let text, answer, distract;
   if (withDivision && Math.random() < 0.35) {
@@ -126,7 +143,7 @@ export function dojoTask(rows, withDivision) {
   }
   const uniq = [...new Set(distract)].filter((n) => n > 0 && n !== answer);
   const choices = shuffle([answer, ...shuffle(uniq).slice(0, 3)]);
-  return { text, answer, choices };
+  return { text, answer, choices, key: factKey(a, b) };
 }
 
 export function parentGate() {

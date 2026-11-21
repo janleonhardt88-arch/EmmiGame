@@ -100,6 +100,7 @@ async function showSeq() {
 
 async function onMove(el) {
   if (!g || !g.input) return;
+  const my = g; // falls zwischendurch „Aufhören" getippt wird
   const id = el.dataset.m;
   pose(id);
   if (id === g.seq[g.pos]) {
@@ -109,8 +110,10 @@ async function onMove(el) {
       g.best = g.seq.length;
       $('#dmsg').textContent = pick(['Wunderschön! ✨', 'Bravo! 👏', 'Super getanzt!']);
       await sleep(500);
+      if (g !== my) return;
       sfx.correct();
       await sleep(700);
+      if (g !== my) return;
       g.seq.push(pick(MOVES).id);
       g.msg = 'Ein Schritt mehr!';
       renderDance();
@@ -125,10 +128,12 @@ async function onMove(el) {
     if (g.lives > 0) {
       g.msg = 'Hoppla! Ich zeige es dir nochmal.';
       await sleep(900);
+      if (g !== my) return;
       renderDance();
       setTimeout(showSeq, 500);
     } else {
       await sleep(700);
+      if (g !== my) return;
       finishDance();
     }
   }

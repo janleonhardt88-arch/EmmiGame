@@ -34,6 +34,12 @@ export function defaults() {
     clockLevel: 1,
     clockAuto: true,
     danceBest: 0,
+    deco: {},
+    facts: {}, // Einmaleins: wie oft richtig/falsch je Aufgabe
+    welcomed: false,
+    limitMin: 0, // Spielzeit-Limit pro Tag in Minuten (0 = aus)
+    play: null,
+    daily: null,
   };
 }
 

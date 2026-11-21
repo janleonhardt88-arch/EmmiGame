@@ -58,6 +58,14 @@ export function beltIndex(xp) {
   return i;
 }
 
+export const DECOS = {
+  bench: { name: 'Gartenbank', de: 'die Bank', en: 'bench', pt: 'o banco', price: 20 },
+  balloons: { name: 'Luftballons', de: 'die Luftballons', en: 'balloons', pt: 'os balões', price: 25 },
+  birdhouse: { name: 'Vogelhaus', de: 'das Vogelhaus', en: 'birdhouse', pt: 'a casa dos pássaros', price: 30 },
+  pond: { name: 'Ententeich', de: 'der Teich', en: 'pond', pt: 'o lago', price: 45 },
+  rainbow: { name: 'Regenbogen', de: 'der Regenbogen', en: 'rainbow', pt: 'o arco-íris', price: 60 },
+};
+
 export const START_BEDS = 4;
 export const MAX_BEDS = 8;
 export const BED_PRICES = [15, 25, 35, 50];

@@ -3,7 +3,7 @@ import { state, save } from '../state.js';
 import * as art from '../art.js';
 import { sfx, speak } from '../audio.js';
 import { NOUNS, VERBS, ADJECTIVES, SPELLING, SYLLABLE_WORDS, RHYMES } from '../words.js';
-import { api, $, esc, pick, rnd, shuffle } from '../core.js';
+import { api, $, esc, pick, shuffle } from '../core.js';
 
 const HOLDS = 8;
 const HOLD_COLORS = ['#ff7eb6', '#ffd23b', '#62cc5c', '#4fb3ff', '#9b7bff', '#ff9a2e', '#ff5a7a', '#3fb8a8'];

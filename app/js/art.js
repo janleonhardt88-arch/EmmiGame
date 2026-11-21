@@ -484,3 +484,94 @@ export const balletIcon = () => svg(`
 export const bubbleIcon = () => svg(`
   <path d="M14 22 Q14 12 26 12 L74 12 Q86 12 86 22 L86 56 Q86 66 74 66 L44 66 L26 84 L30 66 L26 66 Q14 66 14 56Z" fill="#fff" stroke="#9b7bff" stroke-width="4" stroke-linejoin="round"/>
   <text x="50" y="40" text-anchor="middle" dominant-baseline="central" font-family="Nunito, sans-serif" font-weight="800" font-size="24" fill="#9b7bff">Olá!</text>`);
+
+// ---------- Weltkarte: Gebäude ----------
+const inner = (s) => s.replace(/^<svg[^>]*>/, '').replace(/<\/svg>$/, '');
+const put = (s, x, y, k) => `<g transform="translate(${x} ${y}) scale(${k})">${inner(s)}</g>`;
+const SHADOW = '<ellipse cx="60" cy="101" rx="50" ry="7" fill="rgba(0,0,0,.13)"/>';
+
+function house({ wall, wallO, roof, roofO, roofPath = 'M10 52 L60 12 L110 52Z', door = '#a8703e', emblem }) {
+  return `${SHADOW}
+    <rect x="22" y="48" width="76" height="52" rx="4" fill="${wall}" stroke="${wallO}" stroke-width="3"/>
+    <path d="${roofPath}" fill="${roof}" stroke="${roofO}" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M50 100 L50 80 Q60 70 70 80 L70 100Z" fill="${door}" stroke="rgba(0,0,0,.2)" stroke-width="2"/>
+    <rect x="29" y="62" width="14" height="14" rx="3" fill="#bfe8ff" stroke="${wallO}" stroke-width="2.5"/>
+    <rect x="77" y="62" width="14" height="14" rx="3" fill="#bfe8ff" stroke="${wallO}" stroke-width="2.5"/>
+    <circle cx="60" cy="40" r="15" fill="#fff" stroke="${roofO}" stroke-width="3"/>
+    ${put(emblem, 48, 28, 0.24)}`;
+}
+
+const PLACE_ART = {
+  garden: () => `
+    <ellipse cx="60" cy="96" rx="56" ry="11" fill="#7cc35a"/>
+    <path d="M12 92 Q60 80 108 92 L108 98 Q60 106 12 98Z" fill="#9b6a45"/>
+    ${put(plant('sunflower'), -6, 14, 0.82)}
+    ${put(plant('carrot'), 58, 40, 0.56)}
+    ${put(plant('tomato'), 38, 62, 0.36)}
+    ${Array.from({ length: 8 }, (_, i) => { const x = 6 + i * 14; return `<path d="M${x} 104 L${x} 90 L${x + 4.5} 85 L${x + 9} 90 L${x + 9} 104Z" fill="#fff6e8" stroke="#d9b98f" stroke-width="2" stroke-linejoin="round"/>`; }).join('')}`,
+  dojo: () => `${SHADOW}${put(dojoIcon(), 6, 4, 1.08)}`,
+  ballet: () => house({ wall: '#ffe6f0', wallO: '#f0a8c8', roof: '#ff8cc6', roofO: '#e2559a', roofPath: 'M12 52 Q60 -8 108 52Z', door: '#e2559a', emblem: balletIcon() }),
+  stage: () => `${SHADOW}
+    <path d="M34 32 Q60 4 86 32Z" fill="#ffd23b" stroke="#e6a100" stroke-width="3" stroke-linejoin="round"/>
+    <text x="60" y="27" text-anchor="middle" font-size="14" font-weight="800" fill="#8a5a00">♪</text>
+    <rect x="14" y="30" width="92" height="70" rx="6" fill="#7b5bd6" stroke="#5a3fb0" stroke-width="3"/>
+    <rect x="24" y="42" width="72" height="50" fill="#2d1f4a"/>
+    <rect x="24" y="90" width="72" height="10" fill="#c98a4c"/>
+    ${put(micIcon(), 44, 48, 0.32)}
+    <path d="M24 42 L50 42 Q44 74 24 88Z" fill="#d6334a"/><path d="M96 42 L70 42 Q76 74 96 88Z" fill="#d6334a"/>
+    <path d="M20 36 H100 V46 Q92 54 84 46 Q76 54 68 46 Q60 54 52 46 Q44 54 36 46 Q28 54 20 46Z" fill="#e8485f" stroke="#b52238" stroke-width="2" stroke-linejoin="round"/>`,
+  craft: () => `<rect x="78" y="18" width="10" height="22" fill="#c9a074" stroke="#9a744a" stroke-width="2.5"/>${house({ wall: '#fff3d6', wallO: '#e0c08a', roof: '#9b7bff', roofO: '#7356e0', emblem: yarnIcon() })}`,
+  climb: () => `${SHADOW}${put(climbIcon(), 10, 8, 1)}
+    <path d="M68 16 L68 2" stroke="#8a6a52" stroke-width="3" stroke-linecap="round"/><path d="M68 2 L86 7 L68 12Z" fill="#ff5a7a" stroke="#d12f4f" stroke-width="1.5" stroke-linejoin="round"/>`,
+  shop: () => `${SHADOW}
+    <rect x="20" y="40" width="6" height="60" fill="#c99257"/><rect x="94" y="40" width="6" height="60" fill="#c99257"/>
+    <rect x="16" y="74" width="88" height="26" rx="4" fill="#f0c48a" stroke="#c99257" stroke-width="3"/>
+    ${put(basket(), 36, 40, 0.48)}
+    <path d="M8 46 L20 18 L100 18 L112 46Z" fill="#fff" stroke="#d6566a" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M20 18 L36 18 L29 46 L8 46Z M52 18 L68 18 L70 46 L50 46Z M84 18 L100 18 L112 46 L91 46Z" fill="#ff7e8a"/>
+    <path d="M8 46 Q18.4 58 28.8 46 Q39.2 58 49.6 46 Q60 58 70.4 46 Q80.8 58 91.2 46 Q101.6 58 112 46Z" fill="#ff7e8a" stroke="#d6566a" stroke-width="2.5" stroke-linejoin="round"/>`,
+};
+export function place(id) {
+  return svg((PLACE_ART[id] || PLACE_ART.garden)(), { vb: '0 0 120 110', par: 'xMidYMax meet' });
+}
+
+export const mapIcon = () => svg(`
+  <path d="M10 26 L36 16 L64 26 L90 16 L90 78 L64 88 L36 78 L10 88Z" fill="#fff3d6" stroke="#c99257" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M36 16 V78 M64 26 V88" stroke="#e0c08a" stroke-width="4"/>
+  <path d="M50 28 C38 28 34 42 50 62 C66 42 62 28 50 28Z" fill="#ff5a7a" stroke="#d12f4f" stroke-width="3"/><circle cx="50" cy="40" r="4.5" fill="#fff"/>`);
+
+export const mapPath = () => svg(`
+  <path d="M-2 62 C14 40 30 76 50 58 S 82 34 102 52" fill="none" stroke="#f3dfb8" stroke-width="7" stroke-linecap="round"/>
+  <path d="M-2 62 C14 40 30 76 50 58 S 82 34 102 52" fill="none" stroke="#e6cc9a" stroke-width="7" stroke-linecap="round" stroke-dasharray="0.5 5" opacity=".7"/>
+  <path d="M50 58 C46 74 54 86 50 102" fill="none" stroke="#f3dfb8" stroke-width="6" stroke-linecap="round"/>`, { par: 'none' });
+
+// ---------- Garten-Deko ----------
+const DECO_ART = {
+  rainbow: () => ['#ff5a5a', '#ff9a2e', '#ffd23b', '#62cc5c', '#4fb3ff', '#9b7bff'].map((c, i) => `<path d="M${8 + i * 5} 80 A${42 - i * 5} ${42 - i * 5} 0 0 1 ${92 - i * 5} 80" fill="none" stroke="${c}" stroke-width="5.4"/>`).join('')
+    + `<g fill="#fff"><circle cx="10" cy="80" r="9"/><circle cx="22" cy="82" r="8"/><circle cx="90" cy="80" r="9"/><circle cx="78" cy="82" r="8"/></g>`,
+  pond: () => `
+    <ellipse cx="50" cy="72" rx="46" ry="18" fill="#7cc8ff" stroke="#3b8fd6" stroke-width="3"/>
+    <ellipse cx="36" cy="68" rx="14" ry="4" fill="#fff" opacity=".4"/>
+    <ellipse cx="72" cy="78" rx="10" ry="4.5" fill="#62cc5c" stroke="#2f8f3a" stroke-width="2"/><circle cx="74" cy="75" r="3.5" fill="#ff8cc6"/>
+    <ellipse cx="42" cy="66" rx="13" ry="10" fill="#ffd23b" stroke="#e6a100" stroke-width="2.5"/><circle cx="52" cy="56" r="8" fill="#ffd23b" stroke="#e6a100" stroke-width="2.5"/>
+    <path d="M59 56 L66 58 L59 60Z" fill="#ff8a2e"/><circle cx="54" cy="54" r="1.6" fill="${INK}"/>`,
+  bench: () => `
+    <path d="M22 92 L22 62 M78 92 L78 62" stroke="#8a5a2e" stroke-width="6" stroke-linecap="round"/>
+    <rect x="14" y="44" width="72" height="9" rx="4" fill="#d9a86a" stroke="#a8703e" stroke-width="2.5"/>
+    <rect x="14" y="56" width="72" height="9" rx="4" fill="#d9a86a" stroke="#a8703e" stroke-width="2.5"/>
+    <rect x="10" y="72" width="80" height="10" rx="4" fill="#e8b97a" stroke="#a8703e" stroke-width="2.5"/>
+    <path d="M50 50 C47 47 45 45 46.5 43 C48 42 49.5 42.5 50 44 C50.5 42.5 52 42 53.5 43 C55 45 53 47 50 50Z" fill="#ff5a7a"/>`,
+  birdhouse: () => `
+    <path d="M50 96 L50 52" stroke="#8a5a2e" stroke-width="6" stroke-linecap="round"/>
+    <rect x="32" y="26" width="36" height="30" rx="3" fill="#ffe3b8" stroke="#d9a86a" stroke-width="2.5"/>
+    <path d="M26 30 L50 8 L74 30Z" fill="#ff6b5e" stroke="#c9443a" stroke-width="2.5" stroke-linejoin="round"/>
+    <circle cx="50" cy="38" r="6.5" fill="#5a3d2b"/><path d="M44 50 L56 50" stroke="#8a5a2e" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="70" cy="18" r="6" fill="#4fb3ff" stroke="#2a86d6" stroke-width="2"/><path d="M75 18 L80 19.5 L75 21Z" fill="#ff8a2e"/><circle cx="71.5" cy="16.5" r="1.2" fill="${INK}"/>`,
+  balloons: () => `
+    <path d="M36 44 Q44 70 50 94 M64 40 Q56 70 50 94 M50 34 L50 94" stroke="#9a8cb8" stroke-width="1.6" fill="none"/>
+    <ellipse cx="34" cy="28" rx="13" ry="16" fill="#ff7eb6" stroke="#e2559a" stroke-width="2.5"/>
+    <ellipse cx="66" cy="24" rx="13" ry="16" fill="#4fb3ff" stroke="#2a86d6" stroke-width="2.5"/>
+    <ellipse cx="50" cy="18" rx="13" ry="16" fill="#ffd23b" stroke="#e6a100" stroke-width="2.5"/>
+    <ellipse cx="45" cy="12" rx="3" ry="5" fill="#fff" opacity=".5" transform="rotate(20 45 12)"/>`,
+};
+export function deco(id) { return svg((DECO_ART[id] || DECO_ART.bench)(), { par: 'xMidYMax meet' }); }
