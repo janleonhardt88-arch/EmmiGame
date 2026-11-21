@@ -828,3 +828,90 @@ h1, h2, h3 { font-weight: 800; }
   .room { aspect-ratio: 1; width: min(100cqw, 100cqh); }
   .room-window { width: 24%; }
 }
+
+/* =========================================================
+   📱 Handy (wird über die Bildschirmgröße erkannt)
+   ========================================================= */
+#app { width: 100%; max-width: 100vw; overflow: hidden; }
+#topbar, .who, .who-btn, .who-text { min-width: 0; }
+.rotate-hint { display: none; }
+
+@media (max-width: 560px) {
+  #topbar { padding: max(6px, env(safe-area-inset-top)) 8px 6px; gap: 6px; }
+  .who-btn { gap: 6px; padding-right: 4px; }
+  .mini-avatar { width: 40px; height: 40px; }
+  .name { font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90px; }
+  .belt-chip { font-size: 0; }
+  .belt-ico { width: 26px; height: 13px; }
+  .xpbar { width: 64px; height: 7px; }
+  .map-btn { padding: 4px 7px 3px; font-size: 11px; border-radius: 14px; }
+  .map-ico { width: 28px; height: 24px; }
+  .top-right { gap: 5px; }
+  .stars-pill { font-size: 18px; padding: 4px 10px 4px 5px; }
+  .star-ico { width: 24px; height: 24px; }
+  .icon-btn { width: 38px; height: 38px; padding: 8px; }
+  .icon-btn.small { width: 30px; height: 30px; padding: 6px; }
+
+  .modal { padding: 18px 14px; border-radius: 26px; }
+  .modal h2 { font-size: 22px; }
+  .modal-x { width: 38px; height: 38px; top: 8px; right: 8px; }
+  .task-q { font-size: 38px; }
+  .numpad button { height: 58px; font-size: 28px; }
+
+  .stage-start, .dojo-start { flex-direction: column; gap: 6px; padding: 10px 10px 14px; justify-content: flex-start; overflow-y: auto; }
+  .stage-start .avatar-big, .dojo-start .avatar-big { width: auto; height: 20vh; flex: none; }
+  .game-card, .dojo-card { padding: 14px; border-radius: 24px; width: 100%; max-width: none; }
+  .game-card h1, .dojo-card h1 { font-size: 24px; }
+  .game-card p, .dojo-card p { font-size: 15px; }
+  .cat-grid { grid-template-columns: repeat(2, 1fr); }
+  .mode-grid { grid-template-columns: 1fr 1fr; }
+
+  .place { width: 29vw; }
+  .place-sign { font-size: 11px; padding: 1px 6px; border-width: 2px; }
+  .place-badge { width: 30px; height: 30px; font-size: 16px; }
+  .daily-pill { font-size: 14px; padding: 5px 10px; top: 6px; right: 6px; gap: 4px; }
+  .daily-pill span { font-size: 18px; }
+  .map-emmi { width: 16vw; height: 22vw; }
+
+  .beds { grid-template-columns: repeat(3, 1fr) !important; gap: 14px 8px; padding: 10px 8px 18px; }
+  .beds[data-n="4"] { grid-template-columns: repeat(2, 1fr) !important; }
+  .bed-label { font-size: 13px; padding: 2px 10px; }
+  .animal { width: 15vw; height: 15vw; margin-left: -7.5vw; }
+
+  .choices, .opts, .moves, .time-opts { grid-template-columns: repeat(2, 1fr) !important; gap: 8px; }
+  .choice { height: 64px; font-size: 32px; }
+  .stage-round { padding-left: 12%; padding-right: 12%; }
+  .pic-opt { height: 17vh; }
+  .word-opt { font-size: 18px; height: 64px; }
+  .quiz-opts { grid-template-columns: 1fr; }
+  .quiz-card { padding: 14px; }
+  .quiz-q { font-size: 18px; }
+  .qopt { min-height: 54px; font-size: 17px; }
+  .climb-round { padding: 8px; gap: 8px; }
+  .q-card { padding: 14px; }
+  .q-title { font-size: 18px; }
+  .copt { min-width: 100px; min-height: 60px; font-size: 22px; padding: 6px 12px; }
+  .move { height: 72px; font-size: 15px; }
+  .move span { font-size: 26px; }
+  .pb { width: 9vw; height: 9vw; }
+  .bead-opt { width: 20vw; height: 20vw; padding: 8px; }
+  .wood-bar span { font-size: 15px; padding: 4px 10px; }
+  .tabs { gap: 6px; margin: 10px 8px; }
+  .tab { padding: 8px 14px; font-size: 16px; }
+  .shop-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 4px 10px; }
+  .card .art { width: 80px; height: 80px; }
+  .card h3 { font-size: 18px; }
+  .sale { flex-direction: column; gap: 10px; align-items: stretch; }
+  .customer { flex-direction: row; }
+  .cust-art { width: 22vw; height: 22vw; }
+  #market { padding: 0 10px 16px; }
+  .furn-card { width: 86px; }
+  .wardrobe-modal { padding: 14px 10px; }
+  .w-grid { grid-template-columns: repeat(3, 1fr); max-height: 38vh; }
+}
+
+/* Handy quer: zu wenig Höhe – freundlich ums Drehen bitten */
+@media (orientation: landscape) and (max-height: 460px) {
+  .rotate-hint { display: grid; position: fixed; inset: 0; z-index: 200; place-items: center; background: #bfe8ff; text-align: center; padding: 20px; font-size: 22px; font-weight: 800; color: var(--ink); }
+  .rotate-hint span { display: block; font-size: 64px; animation: spin 2.5s ease-in-out infinite; }
+}
