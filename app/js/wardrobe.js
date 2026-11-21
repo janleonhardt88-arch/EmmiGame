@@ -14,9 +14,16 @@ const TABS = [
       bun: { de: 'Dutt' }, pigtails: { de: 'Zöpfe' }, ponytail: { de: 'Pferdeschwanz' },
       short: { de: 'Kurz', price: 10 }, bob: { de: 'Bob', price: 15 }, long: { de: 'Lang', price: 15 },
       buns2: { de: 'Zwei Dutts', price: 20 }, braid: { de: 'Flechtzopf', price: 25 },
+      sidepony: { de: 'Seitenzopf', price: 20 }, wavy: { de: 'Wellen', price: 25 }, curly: { de: 'Locken', price: 25 },
+      twobraids: { de: 'Zwei Flechtzöpfe', price: 30 }, afro: { de: 'Afro', price: 30 },
     },
   },
   { id: 'hair', de: 'Haarfarbe', preview: 'head', items: Object.fromEntries(Object.entries(HAIR).map(([k, h]) => [k, { de: h.de, price: h.price }])) },
+  { id: 'eyes', de: 'Augen', preview: 'head', items: { dark: { de: 'Dunkel' }, brown: { de: 'Braun' }, blue: { de: 'Blau' }, green: { de: 'Grün' }, grey: { de: 'Grau' }, violet: { de: 'Lila', price: 20 } } },
+  {
+    id: 'cheek', de: 'Gesicht', preview: 'head',
+    items: { none: { de: 'Nichts' }, rosy: { de: 'Rote Bäckchen' }, freckles: { de: 'Sommersprossen' }, heart: { de: 'Herz-Tattoo', price: 10 }, star: { de: 'Stern-Tattoo', price: 10 }, glitter: { de: 'Glitzer', price: 15 } },
+  },
   { id: 'skin', de: 'Haut', preview: 'head', items: { 0: { de: 'Hell' }, 1: { de: 'Sand' }, 2: { de: 'Honig' }, 3: { de: 'Braun' }, 4: { de: 'Dunkel' } } },
   {
     id: 'casual', de: 'Kleidung', preview: 'casual',
@@ -24,7 +31,14 @@ const TABS = [
       heart: { de: 'Herz-Shirt' }, star: { de: 'Sternen-Shirt', price: 20 }, stripes: { de: 'Ringelshirt', price: 20 },
       sport: { de: 'Sport', price: 25 }, flower: { de: 'Blumenrock', price: 30 }, overalls: { de: 'Latzhose', price: 30 },
       rainbow: { de: 'Regenbogen', price: 45 }, princess: { de: 'Prinzessin', price: 60 },
+      pajama: { de: 'Schlafanzug', price: 20 }, raincoat: { de: 'Regenjacke', price: 25 }, dino: { de: 'Dino-Shirt', price: 30 },
+      sailor: { de: 'Matrosin', price: 35 }, winter: { de: 'Winter mit Schal', price: 35 }, hero: { de: 'Superheldin', price: 50 },
+      mermaid: { de: 'Meerjungfrau', price: 60 }, unicorn: { de: 'Einhorn-Kleid', price: 70 },
     },
+  },
+  {
+    id: 'shoes', de: 'Schuhe', preview: 'casual',
+    items: { white: { de: 'Weiß' }, pink: { de: 'Rosa', price: 10 }, red: { de: 'Rot', price: 10 }, purple: { de: 'Glitzer-Lila', price: 20 }, boots: { de: 'Gummistiefel', price: 20 }, gold: { de: 'Gold', price: 40 } },
   },
   {
     id: 'tutu', de: 'Tutu', preview: 'tutu',
@@ -36,6 +50,17 @@ const TABS = [
       none: { de: 'Nichts' }, bow: { de: 'Schleife', price: 10 }, flower: { de: 'Blume', price: 10 },
       headband: { de: 'Haarreif', price: 15 }, star: { de: 'Sternspange', price: 15 }, glasses: { de: 'Brille', price: 20 },
       catears: { de: 'Katzenohren', price: 30 }, crown: { de: 'Krone', price: 50 },
+      sunglasses: { de: 'Sonnenbrille', price: 20 }, cap: { de: 'Kappe', price: 20 }, headphones: { de: 'Kopfhörer', price: 25 },
+      flowercrown: { de: 'Blumenkranz', price: 30 }, bunnyears: { de: 'Hasenohren', price: 30 }, witchhat: { de: 'Zauberhut', price: 40 },
+      unicorn: { de: 'Einhorn-Horn', price: 45 },
+    },
+  },
+  {
+    id: 'pet', de: 'Begleiter', preview: 'pet',
+    items: {
+      none: { de: 'Keiner' }, chick: { de: 'Küken', price: 30 }, kitten: { de: 'Kätzchen', price: 40 }, puppy: { de: 'Hündchen', price: 40 },
+      bunny: { de: 'Häschen', price: 40 }, hedgehog: { de: 'Igel', price: 45 }, bird: { de: 'Vögelchen', price: 45 },
+      fox: { de: 'Fuchs', price: 60 }, panda: { de: 'Panda', price: 70 }, unicorn: { de: 'Einhorn', price: 90 }, dragon: { de: 'Drache', price: 100 },
     },
   },
 ];
@@ -57,10 +82,12 @@ function lookWith(field, id) {
 
 function tile(t, id, item) {
   const look = lookWith(t.id, id);
-  const pic = t.preview === 'head' ? art.avatarHead(look) : art.avatar(look, belt().color, { outfit: t.preview });
+  const pic = t.preview === 'head' ? art.avatarHead(look)
+    : t.preview === 'pet' ? (id === 'none' ? '<span class="w-none">–</span>' : art.pet(id))
+      : art.avatar(look, belt().color, { outfit: t.preview });
   const selected = pending ? (pending.field === t.id && pending.id === id) : String(cur(t.id)) === String(id);
   const owned = isOwned(t.id, id, item);
-  return `<button class="w-tile ${selected ? 'sel' : ''} ${t.preview === 'head' ? 'head' : 'body'}" data-w="${id}">
+  return `<button class="w-tile ${selected ? 'sel' : ''} ${t.preview === 'head' ? 'head' : t.preview === 'pet' ? 'pet' : 'body'}" data-w="${id}">
     <span class="w-pic">${pic}</span>
     <span class="w-name">${item.de}</span>
     ${owned ? (selected ? '<span class="w-tag ok">✓</span>' : '') : `<span class="w-tag price">${item.price} <i>${art.star()}</i></span>`}
@@ -81,7 +108,7 @@ function render(m) {
   }
   $('.w-body', m).innerHTML = `
     <div class="w-left">
-      <div class="w-preview">${art.avatar(look, belt().color, { outfit })}</div>
+      <div class="w-preview">${art.avatar(look, belt().color, { outfit })}${look.pet && look.pet !== 'none' ? `<span class="w-pet">${art.pet(look.pet)}</span>` : ''}</div>
       <input id="w-name" class="big-input" value="${esc(state.name)}" maxlength="14" autocomplete="off" aria-label="Name">
       <div class="w-stars"><span class="star-ico">${art.star()}</span><b>${state.stars}</b></div>
     </div>

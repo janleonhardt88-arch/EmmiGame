@@ -8,7 +8,7 @@ export function defaults() {
     v: 1,
     name: 'Emmi',
     hair: 'brown',
-    look: { style: 'bun', skin: 0, acc: 'none', casual: 'heart', tutu: 'pink' },
+    look: { style: 'bun', skin: 0, acc: 'none', casual: 'heart', tutu: 'pink', eyes: 'dark', cheek: 'none', shoes: 'white', pet: 'none' },
     owned: {}, // gekaufte Frisuren, Kleider, Extras
     stars: 12,
     xp: 0,

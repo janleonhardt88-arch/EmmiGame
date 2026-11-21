@@ -96,6 +96,7 @@ function renderMap() {
       <button class="map-emmi" data-act="emmi-hi">
         <span class="bubble" id="emmi-bubble"></span>
         ${art.avatar(ui.hairColor(), ui.belt().color, { outfit: 'casual' })}
+        ${state.look.pet && state.look.pet !== 'none' ? `<span class="map-pet">${art.pet(state.look.pet)}</span>` : ''}
       </button>
     </div>`;
 }

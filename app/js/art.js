@@ -155,6 +155,19 @@ export const OUTFITS = {
   overalls: { shirt: '#ffd23b', shirtO: '#e6a100', legs: '#4f8fd6', legsO: '#2f66a8', overall: true },
   rainbow: { shirt: '#9b7bff', shirtO: '#7356e0', skirt: '#ff8cc6', skirtO: '#e2559a', rainbow: true, emblem: 'star' },
   princess: { shirt: '#c9a7ff', shirtO: '#9b7bff', skirt: '#b38cff', skirtO: '#8a63e0', long: true, emblem: 'gem' },
+  dino: { shirt: '#62cc5c', shirtO: '#3fa34a', legs: '#4f8fd6', legsO: '#2f66a8', emblem: 'dino' },
+  unicorn: { shirt: '#fff0f8', shirtO: '#f0a8c8', skirt: '#d9ccff', skirtO: '#a98bff', long: true, rainbow: true, emblem: 'horn' },
+  pajama: { shirt: '#bfe0ff', shirtO: '#7fb3e6', legs: '#bfe0ff', legsO: '#7fb3e6', emblem: 'moon', dots: '#fff6a0' },
+  hero: { shirt: '#ff5a5a', shirtO: '#c9443a', legs: '#3b6fd6', legsO: '#2a4fa8', emblem: 'bolt', cape: '#e2453c' },
+  mermaid: { shirt: '#5fd3c0', shirtO: '#2a9f8c', skirt: '#3fb8a8', skirtO: '#2a8f82', long: true, emblem: 'shell', fin: true },
+  raincoat: { shirt: '#ffd23b', shirtO: '#e6a100', legs: '#4f8fd6', legsO: '#2f66a8', coat: true },
+  winter: { shirt: '#ff8cc6', shirtO: '#e2559a', legs: '#5a4a5e', legsO: '#3a2a35', emblem: 'snow', scarf: '#4fb3ff' },
+  sailor: { shirt: '#ffffff', shirtO: '#c9c2d6', skirt: '#2f4a8a', skirtO: '#213566', sailor: true },
+};
+export const EYES = { dark: '#3a2a35', brown: '#7a4a2c', blue: '#2f7fd6', green: '#2f8f3a', violet: '#7356e0', grey: '#6f7a88' };
+export const SHOES = {
+  white: ['#ffffff', '#c9c2d6'], pink: ['#ff8cc6', '#e2559a'], purple: ['#9b7bff', '#7356e0'], red: ['#ff5a5a', '#c9443a'],
+  boots: ['#ffd23b', '#e6a100'], gold: ['#f4c430', '#c99a00'],
 };
 
 export const TUTUS = {
@@ -166,7 +179,7 @@ export const TUTUS = {
 };
 
 const HO = 'stroke="rgba(0,0,0,.16)" stroke-width="1.6" stroke-linejoin="round"';
-const normLook = (x) => ({ hair: '#7a4a2c', style: 'bun', skin: 0, acc: 'none', casual: 'heart', tutu: 'pink', ...(typeof x === 'string' ? { hair: x } : (x || {})) });
+const normLook = (x) => ({ hair: '#7a4a2c', style: 'bun', skin: 0, acc: 'none', casual: 'heart', tutu: 'pink', eyes: 'dark', cheek: 'none', shoes: 'white', ...(typeof x === 'string' ? { hair: x } : (x || {})) });
 
 // Haare hinter dem Kopf / Körper
 function hairBack(L) {
@@ -177,6 +190,11 @@ function hairBack(L) {
     case 'pigtails': return `<path d="M29 36 Q12 42 16 66 Q24 72 30 58Z" fill="${h}" ${HO}/><path d="M71 36 Q88 42 84 66 Q76 72 70 58Z" fill="${h}" ${HO}/>`;
     case 'ponytail': return `<path d="M66 20 Q94 16 91 50 Q89 68 78 72 Q85 52 75 38Z" fill="${h}" ${HO}/>`;
     case 'long': return `<path d="M26 36 Q18 70 26 90 L74 90 Q82 70 74 36Z" fill="${h}" ${HO}/>`;
+    case 'wavy': return `<path d="M26 36 Q16 60 24 72 Q18 82 28 92 Q38 86 44 94 Q50 88 56 94 Q62 86 72 92 Q82 82 76 72 Q84 60 74 36Z" fill="${h}" ${HO}/>`;
+    case 'curly': return [[28, 30], [24, 44], [26, 58], [32, 68], [72, 30], [76, 44], [74, 58], [68, 68], [36, 18], [50, 13], [64, 18]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="10" fill="${h}" ${HO}/>`).join('');
+    case 'afro': return `<circle cx="50" cy="34" r="31" fill="${h}" ${HO}/>${[[22, 22], [30, 9], [50, 4], [70, 9], [78, 22], [82, 40], [18, 40]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="9" fill="${h}"/>`).join('')}`;
+    case 'sidepony': return `<path d="M28 30 Q8 34 10 58 Q12 74 22 80 Q16 60 30 44Z" fill="${h}" ${HO}/>`;
+    case 'twobraids': return '';
     default: return '';
   }
 }
@@ -188,6 +206,14 @@ function hairFront(L) {
   if (L.style === 'bob') s += `<path d="M27 38 Q21 56 30 66 Q37 56 33 38Z" fill="${h}" ${HO}/><path d="M73 38 Q79 56 70 66 Q63 56 67 38Z" fill="${h}" ${HO}/>`;
   if (L.style === 'pigtails') s += `<circle cx="27" cy="39" r="3.4" fill="#ff5a9a"/><circle cx="73" cy="39" r="3.4" fill="#ff5a9a"/>`;
   if (L.style === 'ponytail') s += `<circle cx="70" cy="23" r="3.4" fill="#ff5a9a"/>`;
+  if (L.style === 'curly') s += [[32, 22], [42, 18], [54, 18], [66, 22]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="6" fill="${h}"/>`).join('');
+  if (L.style === 'sidepony') s += `<circle cx="27" cy="30" r="3.4" fill="#ffd23b"/>`;
+  if (L.style === 'twobraids') {
+    for (const side of [-1, 1]) {
+      s += [[50 + side * 23, 46], [50 + side * 26, 55], [50 + side * 27, 64], [50 + side * 26, 73]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="4.8" ry="5.2" fill="${h}" ${HO}/>`).join('')
+        + `<circle cx="${50 + side * 26}" cy="79" r="2.6" fill="#ff5a9a"/>`;
+    }
+  }
   if (L.style === 'braid') {
     s += [[73, 46], [76, 55], [77, 64], [76, 73], [75, 82]].map(([x, y]) => `<ellipse cx="${x}" cy="${y}" rx="5.2" ry="5.6" fill="${h}" ${HO}/>`).join('')
       + `<circle cx="75" cy="88" r="2.8" fill="#ff5a9a"/><path d="M73 90 L75 97 L77 90Z" fill="${h}"/>`;
@@ -195,8 +221,27 @@ function hairFront(L) {
   return s;
 }
 
+// Gesicht: Sommersprossen, Glitzer, Aufkleber
+function cheek(L) {
+  switch (L.cheek) {
+    case 'freckles': return [[37, 47], [40, 49], [35, 50], [63, 47], [60, 49], [65, 50]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="0.9" fill="#b8754a"/>`).join('');
+    case 'heart': return '<path d="M38 52 C36.5 50.5 35.5 49.5 36.2 48.5 C37 47.8 37.8 48.2 38 49 C38.2 48.2 39 47.8 39.8 48.5 C40.5 49.5 39.5 50.5 38 52Z" fill="#ff5a7a"/>';
+    case 'star': return '<path d="M62 46.5 L62.9 48.8 L65.3 49 L63.5 50.5 L64.1 52.9 L62 51.6 L59.9 52.9 L60.5 50.5 L58.7 49 L61.1 48.8Z" fill="#ffd23b" stroke="#e6a100" stroke-width=".5"/>';
+    case 'glitter': return [[36, 46], [64, 46], [39, 50], [61, 50]].map(([x, y]) => `<path d="M${x} ${y - 1.6} L${x + 0.5} ${y - 0.5} L${x + 1.6} ${y} L${x + 0.5} ${y + 0.5} L${x} ${y + 1.6} L${x - 0.5} ${y + 0.5} L${x - 1.6} ${y} L${x - 0.5} ${y - 0.5}Z" fill="#c9a7ff"/>`).join('');
+    case 'rosy': return '<ellipse cx="38" cy="49" rx="4.5" ry="2.6" fill="#ff5a9a" opacity=".45"/><ellipse cx="62" cy="49" rx="4.5" ry="2.6" fill="#ff5a9a" opacity=".45"/>';
+    default: return '';
+  }
+}
+
 function accessory(L) {
   switch (L.acc) {
+    case 'sunglasses': return '<path d="M35 40 H65" stroke="#3a2a35" stroke-width="2"/><rect x="35" y="39" width="12" height="8" rx="3.5" fill="#3a2a35"/><rect x="53" y="39" width="12" height="8" rx="3.5" fill="#3a2a35"/><path d="M37 41 L40 41" stroke="#fff" stroke-width="1.2" opacity=".7"/><path d="M55 41 L58 41" stroke="#fff" stroke-width="1.2" opacity=".7"/>';
+    case 'headphones': return '<path d="M26 40 Q26 12 50 12 Q74 12 74 40" stroke="#9b7bff" stroke-width="4" fill="none"/><rect x="21" y="36" width="9" height="14" rx="4" fill="#ff7eb6" stroke="#e2559a" stroke-width="1.6"/><rect x="70" y="36" width="9" height="14" rx="4" fill="#ff7eb6" stroke="#e2559a" stroke-width="1.6"/>';
+    case 'flowercrown': return [[30, 24, '#ff8cc6'], [38, 18, '#ffd23b'], [46, 15, '#9b7bff'], [54, 15, '#ff8cc6'], [62, 18, '#ffd23b'], [70, 24, '#9b7bff']].map(([x, y, c]) => `<circle cx="${x}" cy="${y}" r="3.6" fill="${c}" stroke="#fff" stroke-width="1"/><circle cx="${x}" cy="${y}" r="1.2" fill="#fff6c2"/>`).join('') + '<path d="M28 27 Q50 9 72 27" stroke="#62cc5c" stroke-width="1.6" fill="none"/>';
+    case 'bunnyears': return '<ellipse cx="40" cy="8" rx="5" ry="13" fill="#fff" stroke="#cbc2d6" stroke-width="1.6" transform="rotate(-12 40 8)"/><ellipse cx="40" cy="9" rx="2.4" ry="8" fill="#ffc2d8" transform="rotate(-12 40 9)"/><ellipse cx="60" cy="8" rx="5" ry="13" fill="#fff" stroke="#cbc2d6" stroke-width="1.6" transform="rotate(12 60 8)"/><ellipse cx="60" cy="9" rx="2.4" ry="8" fill="#ffc2d8" transform="rotate(12 60 9)"/><path d="M33 18 Q50 10 67 18" stroke="#ff8cc6" stroke-width="3" fill="none"/>';
+    case 'unicorn': return '<path d="M46 18 L50 -4 L54 18Z" fill="#ffe27a" stroke="#e6b400" stroke-width="1.4" stroke-linejoin="round"/><path d="M47 13 L53 11 M48 7 L52 5" stroke="#e6b400" stroke-width="1.2"/><circle cx="38" cy="20" r="3" fill="#ff8cc6"/><circle cx="62" cy="20" r="3" fill="#9b7bff"/>';
+    case 'cap': return '<path d="M27 30 Q28 14 50 14 Q72 14 73 30Z" fill="#4fb3ff" stroke="#2a86d6" stroke-width="1.8"/><path d="M60 29 Q78 28 86 33 Q74 35 60 33Z" fill="#2a86d6"/><circle cx="50" cy="15" r="2.4" fill="#2a86d6"/>';
+    case 'witchhat': return '<path d="M24 26 Q50 20 76 26 Q50 32 24 26Z" fill="#7b5bd6" stroke="#5a3fb0" stroke-width="1.6"/><path d="M36 25 L54 -6 Q58 6 64 25Z" fill="#9b7bff" stroke="#5a3fb0" stroke-width="1.6" stroke-linejoin="round"/><path d="M38 22 H62" stroke="#ffd23b" stroke-width="3"/><path d="M50 8 L51 11 L54 11 L51.6 13 L52.5 16 L50 14.2 L47.5 16 L48.4 13 L46 11 L49 11Z" fill="#ffd23b"/>';
     case 'bow': return `<path d="M67 21 L56 13 L57 28Z M67 21 L78 13 L77 28Z" fill="#ff5a9a" stroke="#d12f78" stroke-width="1.6" stroke-linejoin="round"/><circle cx="67" cy="21" r="3.6" fill="#ff8cc6" stroke="#d12f78" stroke-width="1.4"/>`;
     case 'flower': return `${Array.from({ length: 5 }, (_, i) => `<circle cx="31" cy="20.5" r="3.6" fill="#fff" stroke="#f0a8c8" stroke-width="1" transform="rotate(${i * 72} 31 25)"/>`).join('')}<circle cx="31" cy="25" r="3" fill="#ffd23b"/>`;
     case 'headband': return `<path d="M28 33 Q50 11 72 33" stroke="#ff5a9a" stroke-width="4.5" fill="none" stroke-linecap="round"/><circle cx="62" cy="21" r="3.5" fill="#ffd23b"/>`;
@@ -210,15 +255,20 @@ function accessory(L) {
 
 function headFront(L) {
   const [skin, skinO] = SKINS[L.skin] || SKINS[0];
-  return `<circle cx="50" cy="40" r="23" fill="${skin}" stroke="${skinO}" stroke-width="2.4"/>${hairFront(L)}${face(50, 44, 0.95)}${accessory(L)}`;
+  return `<circle cx="50" cy="40" r="23" fill="${skin}" stroke="${skinO}" stroke-width="2.4"/>${hairFront(L)}${face(50, 44, 0.95, { eye: EYES[L.eyes] || EYES.dark })}${cheek(L)}${accessory(L)}`;
 }
 
 export function avatarHead(look) {
   const L = normLook(look);
-  return svg(hairBack(L) + headFront(L), { vb: '12 0 76 72' });
+  return svg(hairBack(L) + headFront(L), { vb: '10 -8 80 80' });
 }
 
 const EMBLEMS = {
+  dino: '<path d="M40 92 Q40 82 48 80 Q52 74 58 76 Q62 78 60 82 L56 82 Q60 86 58 92 L55 92 L54 88 L48 88 L47 92Z" fill="#fff" opacity=".9"/><circle cx="57" cy="78.5" r=".9" fill="#3fa34a"/>',
+  horn: '<path d="M47 92 L50 74 L53 92Z" fill="#ffe27a" stroke="#e6b400" stroke-width="1"/><circle cx="43" cy="80" r="1.6" fill="#ff8cc6"/><circle cx="57" cy="80" r="1.6" fill="#9b7bff"/>',
+  moon: '<path d="M54 76 A8 8 0 1 0 54 92 A6 6 0 1 1 54 76Z" fill="#fff6a0"/>',
+  shell: '<path d="M42 90 Q50 72 58 90Z" fill="#ffc2dc" stroke="#e2559a" stroke-width="1"/><path d="M50 76 V90 M46 80 L48 90 M54 80 L52 90" stroke="#e2559a" stroke-width=".8"/>',
+  snow: '<path d="M50 76 V92 M43 80 L57 88 M57 80 L43 88" stroke="#fff" stroke-width="2" stroke-linecap="round"/>',
   heart: '<path d="M50 92 C44 86 40 82 43 78 C45 75 49 76 50 79 C51 76 55 75 57 78 C60 82 56 86 50 92Z" fill="#fff"/>',
   star: '<path d="M50 75 L52.6 81.4 L59.5 81.9 L54.2 86.3 L55.9 93 L50 89.3 L44.1 93 L45.8 86.3 L40.5 81.9 L47.4 81.4Z" fill="#fff"/>',
   flower: `${Array.from({ length: 5 }, (_, i) => `<circle cx="50" cy="79" r="3.6" fill="#fff" transform="rotate(${i * 72} 50 84)"/>`).join('')}<circle cx="50" cy="84" r="3" fill="#ff8cc6"/>`,
@@ -238,9 +288,13 @@ export function avatar(look, beltColor = '#ffffff', { outfit = 'gi', mic = false
   const bareLegs = (c, cO) => `
       <path d="M44 100 L42 131 M56 100 L58 131" stroke="${cO}" stroke-width="10" stroke-linecap="round"/>
       <path d="M44 100 L42 131 M56 100 L58 131" stroke="${c}" stroke-width="6.5" stroke-linecap="round"/>`;
-  const sneakers = `
-      <ellipse cx="39" cy="134" rx="8" ry="4" fill="#fff" stroke="#c9c2d6" stroke-width="1.8"/>
-      <ellipse cx="61" cy="134" rx="8" ry="4" fill="#fff" stroke="#c9c2d6" stroke-width="1.8"/>`;
+  const [shoeC, shoeO] = SHOES[L.shoes] || SHOES.white;
+  const sneakers = L.shoes === 'boots'
+    ? `<path d="M33 124 H45 V134 Q45 137 41 137 H31 Q30 133 33 131Z M55 124 H67 V131 Q70 133 69 137 H59 Q55 137 55 134Z" fill="${shoeC}" stroke="${shoeO}" stroke-width="1.8" stroke-linejoin="round"/>`
+    : `<ellipse cx="39" cy="134" rx="8" ry="4" fill="${shoeC}" stroke="${shoeO}" stroke-width="1.8"/>
+      <ellipse cx="61" cy="134" rx="8" ry="4" fill="${shoeC}" stroke="${shoeO}" stroke-width="1.8"/>
+      ${L.shoes === 'gold' || L.shoes === 'purple' ? '<circle cx="36" cy="133" r=".9" fill="#fff"/><circle cx="64" cy="133" r=".9" fill="#fff"/>' : ''}`;
+  let cape = '';
   let legs, torso, sleeve = skin, sleeveO = skinO;
   if (outfit === 'tutu') {
     const T = TUTUS[L.tutu] || TUTUS.pink;
@@ -254,10 +308,14 @@ export function avatar(look, beltColor = '#ffffff', { outfit = 'gi', mic = false
       <circle cx="50" cy="72" r="2.4" fill="#fff"/>`;
   } else if (outfit === 'casual') {
     const O = OUTFITS[L.casual] || OUTFITS.heart;
+    if (O.cape) cape = `<path d="M34 66 Q22 100 26 126 Q50 132 74 126 Q78 100 66 66Z" fill="${O.cape}" stroke="#a82a24" stroke-width="2" stroke-linejoin="round"/>`;
     legs = O.skirt
       ? bareLegs(skin, skinO) + sneakers
       : `<path d="M37 100 L34 131 L46 131 L50 108 L54 131 L66 131 L63 100Z" fill="${O.legs}" stroke="${O.legsO}" stroke-width="2.4" stroke-linejoin="round"/>${sneakers}`;
     torso = `<path d="M32 67 Q50 59 68 67 L66 102 L34 102Z" fill="${O.shirt}" stroke="${O.shirtO}" stroke-width="2.4" stroke-linejoin="round"/>`;
+    if (O.dots) torso += [[40, 72], [58, 70], [46, 96], [62, 94], [38, 88]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="1.6" fill="${O.dots}"/>`).join('');
+    if (O.coat) torso += `<path d="M32 67 Q50 59 68 67 L70 116 L30 116Z" fill="${O.shirt}" stroke="${O.shirtO}" stroke-width="2.4" stroke-linejoin="round"/><path d="M50 66 V116" stroke="${O.shirtO}" stroke-width="2"/>${[76, 88, 100].map((y) => `<circle cx="54" cy="${y}" r="1.8" fill="${O.shirtO}"/>`).join('')}`;
+    if (O.sailor) torso += '<path d="M36 66 L50 84 L64 66 L60 64 L50 76 L40 64Z" fill="#2f4a8a"/><path d="M47 82 L50 92 L53 82Z" fill="#ff5a5a"/>';
     if (O.stripes) torso += `<path d="M34 73 H66 M34 81 H66 M35 89 H65 M35 97 H65" stroke="${O.stripes}" stroke-width="3.2"/>`;
     if (O.overall) torso += `<path d="M42 78 L40 65 M58 78 L60 65" stroke="${O.legs}" stroke-width="4" stroke-linecap="round"/><rect x="40" y="76" width="20" height="18" rx="3" fill="${O.legs}" stroke="${O.legsO}" stroke-width="2"/><path d="M34 92 H66 L66 102 H34Z" fill="${O.legs}" stroke="${O.legsO}" stroke-width="2" stroke-linejoin="round"/><circle cx="50" cy="84" r="2.6" fill="#ffd23b"/>`;
     else if (O.emblem) torso += EMBLEMS[O.emblem];
@@ -265,6 +323,7 @@ export function avatar(look, beltColor = '#ffffff', { outfit = 'gi', mic = false
       torso += O.long
         ? `<path d="M33 96 Q50 90 67 96 L80 127 Q50 137 20 127Z" fill="${O.skirt}" stroke="${O.skirtO}" stroke-width="2.4" stroke-linejoin="round"/><path d="M24 121 Q50 130 76 121" stroke="#fff" stroke-width="2" fill="none" opacity=".6"/>`
         : `<path d="M31 97 Q50 91 69 97 L76 116 Q50 125 24 116Z" fill="${O.skirt}" stroke="${O.skirtO}" stroke-width="2.4" stroke-linejoin="round"/>`;
+      if (O.fin) torso += `<path d="M20 127 Q10 138 22 138 L36 131 M80 127 Q90 138 78 138 L64 131" fill="${O.skirt}" stroke="${O.skirtO}" stroke-width="2"/>${[[38, 108], [50, 112], [62, 108], [44, 120], [56, 120]].map(([x, y]) => `<path d="M${x - 4} ${y} Q${x} ${y + 5} ${x + 4} ${y}" stroke="${O.skirtO}" stroke-width="1.4" fill="none"/>`).join('')}`;
       if (O.rainbow) torso += `<path d="M27 107 Q50 115 73 107" stroke="#ffd23b" stroke-width="3" fill="none"/><path d="M26 111.5 Q50 119.5 74 111.5" stroke="#4fb3ff" stroke-width="3" fill="none"/>`;
     }
   } else {
@@ -283,12 +342,14 @@ export function avatar(look, beltColor = '#ffffff', { outfit = 'gi', mic = false
   const micSvg = mic ? `<g transform="rotate(-25 90 52)"><rect x="87.5" y="50" width="5" height="15" rx="2" fill="#5a4a5e"/><circle cx="90" cy="46" r="6" fill="#d9d2df" stroke="#8a7a96" stroke-width="1.8"/></g>` : '';
   return svg(`
     <ellipse cx="50" cy="136" rx="26" ry="4" fill="rgba(0,0,0,.12)"/>
+    ${cape}
     ${hairBack(L)}
     ${legs}
     <g class="arm-l">${arm(armL, sleeve, sleeveO)}<circle cx="27" cy="95" r="5" fill="${skin}" stroke="${skinO}" stroke-width="1.8"/></g>
     ${torso}
     <g class="arm-r">${arm(armR, sleeve, sleeveO)}${micSvg}<ellipse cx="90" cy="53" rx="4" ry="6.5" fill="${skin}" stroke="${skinO}" stroke-width="1.8" transform="rotate(35 90 53)"/></g>
-    ${headFront(L)}`, { vb: '0 0 100 140', par: 'xMidYMax meet' });
+    ${headFront(L)}
+    ${outfit === 'casual' && (OUTFITS[L.casual] || {}).scarf ? `<path d="M36 62 Q50 70 64 62 L64 68 Q50 76 36 68Z M56 66 L60 84 L54 84 L52 68Z" fill="${OUTFITS[L.casual].scarf}" stroke="#2a86d6" stroke-width="1.4" stroke-linejoin="round"/>` : ''}`, { vb: '0 -8 100 148', par: 'xMidYMax meet' });
 }
 
 // ---------- Kleinteile & Icons ----------
@@ -733,3 +794,11 @@ export const tvStand = () => svg(`
   <rect x="22" y="28" width="56" height="34" rx="3" fill="#8fd0ff"/>
   <path d="M22 54 Q38 40 50 50 T78 46 V62 H22Z" fill="#62cc5c"/><circle cx="66" cy="38" r="5" fill="#ffd23b"/>
   <path d="M44 68 H56 V74 H44Z" fill="#241a22"/>`);
+
+// 🐾 Begleiter an Emmis Seite
+const PET_ART = {
+  kitten: () => thing('cat'), puppy: () => thing('dog'), bunny: () => animal('bunny'), chick: () => animal('chicken'),
+  hedgehog: () => animal('hedgehog'), bird: () => thing('bird'),
+  panda: () => emoji('🐼', 80, 56), unicorn: () => emoji('🦄', 80, 56), dragon: () => emoji('🐉', 80, 56), fox: () => emoji('🦊', 80, 56),
+};
+export function pet(id) { return PET_ART[id] ? PET_ART[id]() : ''; }

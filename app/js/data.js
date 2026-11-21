@@ -99,6 +99,11 @@ export const HAIR = {
   lila: { de: 'Lila', color: '#9b6bff', price: 20 },
   blue: { de: 'Blau', color: '#4f9bff', price: 20 },
   mint: { de: 'Türkis', color: '#3fc7b4', price: 20 },
+  strawberry: { de: 'Erdbeerblond', color: '#e8996a', price: 15 },
+  orange: { de: 'Orange', color: '#ff8a2a', price: 20 },
+  green: { de: 'Grün', color: '#4fbf5a', price: 25 },
+  silver: { de: 'Silber', color: '#c3c7d4', price: 30 },
+  gold: { de: 'Gold', color: '#f4c430', price: 35 },
 };
 
 export const PRAISE = ['Super!', 'Toll!', 'Klasse!', 'Richtig!', 'Spitze!', 'Prima!', 'Wunderbar!', 'Genial!', 'Fantastisch!', 'Megastark!', 'Weiter so!', 'Bombastisch!', 'Du bist ein Profi!', 'Hammer!', 'Sensationell!'];
