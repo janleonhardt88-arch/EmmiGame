@@ -77,6 +77,8 @@ function lookWith(field, id) {
   const base = { ...hairColor() };
   if (field === 'hair') base.hair = HAIR[id].color;
   else if (field) base[field] = field === 'skin' ? Number(id) : id;
+  // Hüte verdecken die Frisur – bei Frisur/Haarfarbe lieber ohne zeigen
+  if ((field === 'style' || field === 'hair') && ['cap', 'witchhat'].includes(base.acc)) base.acc = 'none';
   return base;
 }
 
@@ -110,6 +112,7 @@ function render(m) {
     <div class="w-left">
       <div class="w-preview">${art.avatar(look, belt().color, { outfit })}${look.pet && look.pet !== 'none' ? `<span class="w-pet">${art.pet(look.pet)}</span>` : ''}</div>
       <input id="w-name" class="big-input" value="${esc(state.name)}" maxlength="14" autocomplete="off" aria-label="Name">
+      <button class="btn w-dice" data-w-dice="1">🎲 Überrasch mich!</button>
       <div class="w-stars"><span class="star-ico">${art.star()}</span><b>${state.stars}</b></div>
     </div>
     <div class="w-right">
@@ -133,6 +136,19 @@ export function openWardrobe() {
   m.addEventListener('click', (e) => {
     const tb = e.target.closest('[data-w-tab]');
     if (tb) { tab = tb.dataset.wTab; pending = null; sfx.tick(); render(m); return; }
+    if (e.target.closest('[data-w-dice]')) {
+      // Zufälliges Aussehen – nur aus Sachen, die Emmi schon hat
+      for (const t of TABS) {
+        if (t.id === 'skin' || t.id === 'eyes' || t.id === 'tutu') continue;
+        const mine = Object.entries(t.items).filter(([id, item]) => isOwned(t.id, id, item)).map(([id]) => id);
+        apply(t.id, mine[Math.floor(Math.random() * mine.length)]);
+      }
+      pending = null;
+      sfx.pop();
+      confetti(14);
+      render(m);
+      return;
+    }
     if (e.target.closest('[data-w-buy]') && pending) {
       const t = TABS.find((x) => x.id === pending.field);
       const item = t.items[pending.id];
