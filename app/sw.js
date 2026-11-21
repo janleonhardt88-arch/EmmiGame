@@ -6,7 +6,7 @@ const BUILD = '__BUILD__';
 const CACHE = 'emmigame-app-' + BUILD;
 // Musik und Sprachdateien bleiben über Versionen hinweg gespeichert.
 // Die Zahl erhöhen, wenn vorhandene Audiodateien durch neue ersetzt werden.
-const MEDIA = 'emmigame-media-1';
+const MEDIA = 'emmigame-media-2';
 
 const FILES = [
   './', 'index.html', 'manifest.webmanifest', 'css/style.css',
