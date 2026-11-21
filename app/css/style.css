@@ -1167,3 +1167,52 @@ h1, h2, h3 { font-weight: 800; }
 @media (orientation: portrait) {
   .wmap-scroll { height: clamp(260px, 52vh, 620px); }
 }
+
+/* ---------- 🎹 Klavier ---------- */
+.piano-modal { width: min(980px, 98vw); padding: 18px 18px 22px; }
+.piano-modal h2 { margin: 0 0 8px; }
+.ptabs { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 10px; }
+.ptabs .tab { min-height: 40px; }
+.psongs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin: 4px 0 12px; }
+.psong { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 10px 6px; background: #f6f1ff; border-radius: 16px; box-shadow: 0 3px 0 #e2d6ec; font-weight: 800; font-size: 15px; }
+.psong span { font-size: 30px; line-height: 1.1; }
+.psong small { color: #e6a100; font-size: 12px; }
+.psong-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin: 2px 0 8px; font-size: 18px; }
+.pstrip { display: flex; gap: 6px; justify-content: center; flex-wrap: nowrap; overflow: hidden; margin: 6px 0; min-height: 58px; }
+.pnote { display: flex; flex-direction: column; align-items: center; min-width: 46px; padding: 4px 4px; border-radius: 12px; background: #fff; border: 3px solid var(--c); opacity: .75; }
+.pnote b { font-size: 18px; color: var(--c); filter: brightness(.8); }
+.pnote small { font-size: 12px; color: #6b5a74; white-space: nowrap; }
+.pnote.done { opacity: .3; }
+.pnote.now { opacity: 1; background: var(--c); transform: scale(1.12); box-shadow: 0 4px 0 rgba(0, 0, 0, .12); }
+.pnote.now b, .pnote.now small { color: #fff; filter: none; }
+.pprog { height: 8px; border-radius: 4px; background: #efe6f5; margin: 0 auto 10px; max-width: 520px; overflow: hidden; }
+.pprog i { display: block; height: 100%; background: linear-gradient(90deg, #ff7eb6, #9b7bff); transition: width .2s; }
+.pecho { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 20px; font-weight: 800; margin: 4px 0 10px; }
+.pecho small { font-size: 13px; color: #7a6a80; font-weight: 600; }
+.pecho-dots { display: flex; gap: 6px; }
+.pecho-dots i { width: 14px; height: 14px; border-radius: 50%; background: #e2d6ec; }
+.pecho-dots i.ok { background: #62cc5c; }
+.pkeys { position: relative; display: flex; height: clamp(150px, 34vh, 260px); background: #3a2a35; padding: 10px 8px 8px; border-radius: 18px; box-shadow: inset 0 6px 0 #5a4a5e, 0 6px 0 rgba(0, 0, 0, .15); touch-action: none; user-select: none; }
+.pkey.white { position: relative; flex: 1; margin: 0 2px; background: linear-gradient(#fff 70%, #f1ecf5); border-radius: 0 0 12px 12px; border-bottom: 7px solid var(--c); display: flex; align-items: flex-end; justify-content: center; padding-bottom: 6px; transition: transform .05s; }
+.pkey.white span { font-weight: 800; font-size: clamp(14px, 2.4vmin, 22px); color: var(--c); filter: brightness(.85); }
+.pkey.black { position: relative; z-index: 2; width: 0; margin: 0; padding: 0; }
+.pkey.black::before { content: ''; position: absolute; top: 0; left: -1.9vmin; width: 3.8vmin; max-width: 42px; height: 60%; min-height: 80px; background: linear-gradient(#5a4a5e, #2a1e28); border-radius: 0 0 8px 8px; box-shadow: 0 3px 0 rgba(0, 0, 0, .3); }
+.pkey.black { height: 62%; width: 3.8vmin; max-width: 42px; margin: 0 -1.9vmin; background: linear-gradient(#5a4a5e, #2a1e28); border-radius: 0 0 8px 8px; box-shadow: 0 3px 0 rgba(0, 0, 0, .3); }
+.pkey.black::before { display: none; }
+.pkey.down.white, .pkey.demo.white { background: var(--c); transform: translateY(3px); }
+.pkey.down.white span, .pkey.demo.white span { color: #fff; filter: none; }
+.pkey.down.black, .pkey.demo.black { background: #9b7bff; }
+.pkey.hint.white { animation: keyglow .9s ease-in-out infinite; }
+@keyframes keyglow { 50% { background: color-mix(in srgb, var(--c) 45%, #fff); box-shadow: 0 0 0 4px var(--c) inset; } }
+.pkey.wrongkey.white { background: #ffe0e6; }
+.popts { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 12px; }
+.popt { padding: 6px 12px; min-height: 38px; border-radius: 999px; background: #fff; box-shadow: 0 3px 0 #e2d6ec; font-weight: 800; font-size: 14px; border: 3px solid transparent; }
+.popt.sel { border-color: var(--purple); background: #f6f1ff; }
+@media (max-width: 560px) {
+  .pkeys { padding: 8px 4px 6px; height: 170px; }
+  .pkey.white { margin: 0 1px; }
+  .pnote { min-width: 36px; }
+  .psongs { grid-template-columns: 1fr 1fr; }
+}
+#screen { isolation: isolate; } /* Inhalte der Orte bleiben unter Fenstern, Hinweisen und Konfetti */
+.toast { pointer-events: none; }

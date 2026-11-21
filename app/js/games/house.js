@@ -4,6 +4,7 @@ import * as art from '../art.js';
 import { sfx, speak } from '../audio.js';
 import { api, $, esc } from '../core.js';
 import { HOUSE_STAGES, FURNITURE } from '../house-data.js';
+import { openPiano } from '../piano.js';
 
 export { HOUSE_STAGES, FURNITURE };
 
@@ -141,6 +142,6 @@ export default {
     'house-enter': () => { inside = true; sfx.pop(); render(); },
     'house-leave': () => { inside = false; render(); },
     'house-buy': (el) => buy(el.dataset.k),
-    'house-say': (el) => { const k = el.dataset.k; speak(FURNITURE[k].pt, 'pt-PT'); speak(FURNITURE[k].en, 'en-GB', { queue: true }); say(k); },
+    'house-say': (el) => { const k = el.dataset.k; if (k === 'piano') { say(k); return openPiano(); } speak(FURNITURE[k].pt, 'pt-PT'); speak(FURNITURE[k].en, 'en-GB', { queue: true }); say(k); },
   },
 };

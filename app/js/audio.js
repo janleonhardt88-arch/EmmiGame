@@ -15,6 +15,8 @@ function ac() {
   return ctx;
 }
 
+export const audioCtx = () => ac();
+
 function tone(f, t0, dur, { type = 'sine', vol = 0.16, slide = null } = {}) {
   const c = ac(); if (!c) return;
   const t = c.currentTime + t0;

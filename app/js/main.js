@@ -24,6 +24,7 @@ import { initClips } from './recorder.js';
 import { startPlayTimer } from './playtime.js';
 import { music } from './music.js';
 import { openWardrobe, wardrobeActions } from './wardrobe.js';
+import { pianoActions } from './piano.js';
 import { initUpdates } from './update.js';
 
 // Orte auf der Karte: Position [x, y] in Prozent für Quer- und Hochformat
@@ -191,6 +192,7 @@ const actions = {
   'quiz-quit': () => BY_ID[screen]?.quit?.(),
   ...dailyActions,
   ...wardrobeActions,
+  ...pianoActions,
 };
 for (const p of PLACES) Object.assign(actions, p.mod.actions);
 
