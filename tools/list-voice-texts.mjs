@@ -6,6 +6,7 @@ import { NOUNS, VERBS, ADJECTIVES, SPELLING, SYLLABLE_WORDS, RHYMES } from '../a
 import { NATURE_QUESTIONS, FINDS } from '../app/js/sachkunde.js';
 import { COUNTRIES, allGeoTasks } from '../app/js/erdkunde.js';
 import { FURNITURE } from '../app/js/house-data.js';
+import { JOKES, FACTS } from '../app/js/fun.js';
 
 const NAME = 'Emmi';
 const out = new Map();
@@ -46,5 +47,8 @@ for (const f of Object.values(FINDS)) { add('pt-PT', f.pt); add('en-GB', f.en); 
 for (const t of allGeoTasks()) add('de-DE', t.q);
 for (const c of COUNTRIES) { add('pt-PT', c.pt); add('en-GB', c.en); }
 for (const f of Object.values(FURNITURE)) { add('pt-PT', f.pt); add('en-GB', f.en); add('de-DE', f.de); }
+
+for (const [q, a] of JOKES) { add('de-DE', q); add('de-DE', a); }
+for (const f of FACTS) add('de-DE', f);
 
 console.log(JSON.stringify([...out.values()]));

@@ -153,6 +153,14 @@ const actions = {
   wardrobe: () => { sfx.tick(); openWardrobe(); },
   say: (el) => speak(el.dataset.text, el.dataset.lang),
   'emmi-hi': (el) => emmiHi(el),
+  'fun-reveal': (el) => {
+    const box = el.closest('.fun-box');
+    box.querySelector('.fun-answer').hidden = false;
+    el.remove();
+    sfx.correct();
+    speak(el.dataset.q, 'de-DE');
+    speak(el.dataset.a, 'de-DE', { queue: true });
+  },
   'quiz-pick': (el) => BY_ID[screen]?.quiz?.()?.pick(el),
   'quiz-say': () => BY_ID[screen]?.quiz?.()?.say(),
   'quiz-quit': () => BY_ID[screen]?.quit?.(),

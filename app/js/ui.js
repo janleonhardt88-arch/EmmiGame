@@ -4,6 +4,7 @@ import { PLANTS, ANIMALS, BELTS, beltIndex, HAIR, PRAISE } from './data.js';
 import * as art from './art.js';
 import { sfx, speak } from './audio.js';
 import { api, $, esc, pick } from './core.js';
+import { funBox } from './fun.js';
 
 export { $, esc, pick };
 // Aussehen der Figur (Name historisch: früher nur die Haarfarbe)
@@ -38,6 +39,10 @@ export function renderTop() {
 
 // ============ Modals, Effekte ============
 export function openModal(html, { cls = '', closable = true } = {}) {
+  // Am Ende einer Runde gibt es einen Witz oder einen „Wusstest du?"-Fakt
+  if (cls.includes('celebrate') && !html.includes('belt-up') && !html.includes('data-act="collect"')) {
+    html = html.includes('<div class="btn-row">') ? html.replace('<div class="btn-row">', funBox() + '<div class="btn-row">') : html + funBox();
+  }
   const layer = $('#modal-layer');
   layer.hidden = false;
   layer.innerHTML = `<div class="modal-backdrop"></div><div class="modal ${cls}" role="dialog">${closable ? '<button class="modal-x" data-act="close" aria-label="Schließen">✕</button>' : ''}${html}</div>`;

@@ -47,20 +47,20 @@ export const RIVERS = [
 
 // Weitere Fragen (mit Bild)
 export const GEO_QUESTIONS = [
-  { ico: '🌅', q: 'Wo geht die Sonne auf?', a: 'im Osten', w: ['im Westen', 'im Norden'], level: 1, tip: 'O wie Osten, O wie „Oh, guten Morgen!".' },
+  { ico: '🌅', q: 'Wo geht die Sonne auf?', a: 'im Osten', w: ['im Westen', 'im Norden'], fun: 'hinter dem Kühlschrank', level: 1, tip: 'O wie Osten, O wie „Oh, guten Morgen!".' },
   { ico: '🌇', q: 'Wo geht die Sonne unter?', a: 'im Westen', w: ['im Osten', 'im Süden'], level: 1, tip: 'Gegenüber von dort, wo sie aufgeht.' },
-  { ico: '🧭', q: 'Wohin zeigt die Kompassnadel?', a: 'nach Norden', w: ['nach Süden', 'nach Osten'], level: 1, tip: 'Oben auf der Landkarte ist …' },
+  { ico: '🧭', q: 'Wohin zeigt die Kompassnadel?', a: 'nach Norden', w: ['nach Süden', 'nach Osten'], fun: 'zum Eisladen', level: 1, tip: 'Oben auf der Landkarte ist …' },
   { ico: '🗺️', q: 'Was ist auf einer Landkarte meistens oben?', a: 'Norden', w: ['Süden', 'Westen'], level: 1, tip: 'Dorthin zeigt auch die Kompassnadel.' },
   { ico: '🏔️', q: 'Wie heißt der höchste Berg Deutschlands?', a: 'die Zugspitze', w: ['der Brocken', 'der Feldberg'], level: 3, tip: 'Er liegt in den Alpen.' },
   { ico: '🌊', q: 'An welchem Meer liegt Portugal?', a: 'am Atlantik', w: ['an der Ostsee', 'am Schwarzen Meer'], level: 1, tip: 'Ein riesiger Ozean zwischen Europa und Amerika.' },
   { ico: '⛵', q: 'Welche Meere liegen im Norden Deutschlands?', a: 'Nordsee und Ostsee', w: ['Mittelmeer und Atlantik', 'Rotes Meer und Totes Meer'], level: 2, tip: 'Eines heißt wie eine Himmelsrichtung.' },
-  { ico: '🦘', q: 'Wo leben Kängurus?', a: 'in Australien', w: ['in Europa', 'in Südamerika'], level: 1, tip: 'Ein Kontinent und ein Land mit demselben Namen.' },
-  { ico: '🐻‍❄️', q: 'Wo leben Eisbären?', a: 'am Nordpol', w: ['am Südpol', 'in der Wüste'], level: 1, tip: 'Pinguine leben am anderen Ende der Welt.' },
+  { ico: '🦘', q: 'Wo leben Kängurus?', a: 'in Australien', w: ['in Europa', 'in Südamerika'], fun: 'in der Badewanne', level: 1, tip: 'Ein Kontinent und ein Land mit demselben Namen.' },
+  { ico: '🐻‍❄️', q: 'Wo leben Eisbären?', a: 'am Nordpol', w: ['am Südpol', 'in der Wüste'], fun: 'im Freibad', level: 1, tip: 'Pinguine leben am anderen Ende der Welt.' },
   { ico: '🐧', q: 'Wo leben Pinguine im Eis?', a: 'am Südpol', w: ['am Nordpol', 'in Deutschland'], level: 1, tip: 'Eisbären leben am anderen Ende der Welt.' },
-  { ico: '🐫', q: 'Wo ist es sehr heiß und trocken?', a: 'in der Wüste', w: ['am Nordpol', 'im Wald'], level: 1, tip: 'Dort gibt es viel Sand und Kamele.' },
-  { ico: '🌍', q: 'Wie heißt unser Planet?', a: 'die Erde', w: ['der Mars', 'der Mond'], level: 1, tip: 'Auf ihr wachsen auch Erdbeeren.' },
-  { ico: '🌐', q: 'Was ist ein Globus?', a: 'eine Weltkugel', w: ['ein Fernrohr', 'ein Kompass'], level: 1, tip: 'Man kann ihn drehen und alle Länder sehen.' },
-  { ico: '🏝️', q: 'Was ist eine Insel?', a: 'Land mit Wasser rundherum', w: ['ein hoher Berg', 'ein großer Fluss'], level: 1, tip: 'Madeira und die Azoren sind Inseln von Portugal.' },
+  { ico: '🐫', q: 'Wo ist es sehr heiß und trocken?', a: 'in der Wüste', w: ['am Nordpol', 'im Wald'], fun: 'im Kühlschrank', level: 1, tip: 'Dort gibt es viel Sand und Kamele.' },
+  { ico: '🌍', q: 'Wie heißt unser Planet?', a: 'die Erde', w: ['der Mars', 'der Mond'], fun: 'der Pfannkuchen', level: 1, tip: 'Auf ihr wachsen auch Erdbeeren.' },
+  { ico: '🌐', q: 'Was ist ein Globus?', a: 'eine Weltkugel', w: ['ein Fernrohr', 'ein Kompass'], fun: 'ein Riesen-Fußball', level: 1, tip: 'Man kann ihn drehen und alle Länder sehen.' },
+  { ico: '🏝️', q: 'Was ist eine Insel?', a: 'Land mit Wasser rundherum', w: ['ein hoher Berg', 'ein großer Fluss'], fun: 'ein schwimmender Kuchen', level: 1, tip: 'Madeira und die Azoren sind Inseln von Portugal.' },
 ];
 
 // Grammatik-Hilfen für Fragen („von der Schweiz", „liegen die USA")
@@ -72,11 +72,11 @@ const bare = (name) => name.replace(/^(der|die|das|den) /, '');
 export function allGeoTasks() {
   const tasks = [];
   for (const c of COUNTRIES) {
-    tasks.push({ kind: 'flag', level: c.level, ico: c.flag, q: 'Welches Land hat diese Flagge?', a: c.de, pool: COUNTRIES.map((x) => x.de), country: c, tip: `Der Name beginnt mit „${bare(c.de)[0]}".` });
-    tasks.push({ kind: 'capital', level: Math.min(3, c.level + 1), ico: c.flag, q: `Wie heißt die Hauptstadt von ${DAT[c.id] || c.de}?`, a: c.capital, pool: COUNTRIES.map((x) => x.capital), country: c, tip: `Sie beginnt mit „${c.capital[0]}".` });
-    tasks.push({ kind: 'cont', level: c.level, ico: c.flag, q: `Auf welchem Kontinent ${PLURAL.has(c.id) ? 'liegen' : 'liegt'} ${c.de}?`, a: c.cont, pool: CONTINENTS, country: c, tip: c.cont === 'Europa' ? 'Es liegt bei uns in der Nähe.' : 'Es ist weit weg – man fliegt lange dorthin.' });
+    tasks.push({ kind: 'flag', level: c.level, ico: c.flag, q: 'Welches Land hat diese Flagge?', a: c.de, pool: COUNTRIES.map((x) => x.de), fun: 'das Schlaraffenland', country: c, tip: `Der Name beginnt mit „${bare(c.de)[0]}".` });
+    tasks.push({ kind: 'capital', level: Math.min(3, c.level + 1), ico: c.flag, q: `Wie heißt die Hauptstadt von ${DAT[c.id] || c.de}?`, a: c.capital, pool: COUNTRIES.map((x) => x.capital), fun: 'Entenhausen', country: c, tip: `Sie beginnt mit „${c.capital[0]}".` });
+    tasks.push({ kind: 'cont', level: c.level, ico: c.flag, q: `Auf welchem Kontinent ${PLURAL.has(c.id) ? 'liegen' : 'liegt'} ${c.de}?`, a: c.cont, pool: CONTINENTS, fun: 'auf dem Mond', country: c, tip: c.cont === 'Europa' ? 'Es liegt bei uns in der Nähe.' : 'Es ist weit weg – man fliegt lange dorthin.' });
   }
-  for (const r of RIVERS) tasks.push({ kind: 'river', level: r.level, ico: '🏞️', q: `An welchem Fluss liegt ${r.city}?`, a: r.river, w: r.w, tip: 'Große Städte liegen oft an Flüssen – früher kamen die Waren mit dem Schiff.' });
-  for (const g of GEO_QUESTIONS) tasks.push({ kind: 'geo', level: g.level, ico: g.ico, q: g.q, a: g.a, w: g.w, tip: g.tip });
+  for (const r of RIVERS) tasks.push({ kind: 'river', level: r.level, ico: '🏞️', q: `An welchem Fluss liegt ${r.city}?`, a: r.river, w: r.w, fun: 'am Kakao-Fluss', tip: 'Große Städte liegen oft an Flüssen – früher kamen die Waren mit dem Schiff.' });
+  for (const g of GEO_QUESTIONS) tasks.push({ kind: 'geo', level: g.level, ico: g.ico, q: g.q, a: g.a, w: g.w, tip: g.tip, fun: g.fun });
   return tasks;
 }

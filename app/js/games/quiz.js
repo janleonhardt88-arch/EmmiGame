@@ -1,15 +1,24 @@
 // Gemeinsamer Ablauf für Frage-Runden (Wald, Weltreise): Bild, Frage (wird vorgelesen), Antworten, Tipp
 import { state, save } from '../state.js';
 import { sfx, speak } from '../audio.js';
-import { $, esc, shuffle } from '../core.js';
+import { $, esc, shuffle, pick } from '../core.js';
+import { PRAISE } from '../data.js';
+import { PRAISE_WRONG } from '../fun.js';
+
+const ACCENTS = ['#ff7eb6', '#9b7bff', '#4fb3ff', '#62cc5c', '#ffb02e', '#3fb8a8'];
 
 // opts: { cls, tasks, bg, top(), onRight(task, firstTry, btn) -> Promise|void, onDone(result) }
 export function runQuiz(opts) {
   const q = { ...opts, i: 0, first: 0, tries: 0, lock: false };
-  q.options = (t) => shuffle([t.a, ...t.w]);
+  // Manchmal ist eine lustige Quatsch-Antwort dabei
+  q.options = (t) => {
+    const wrong = [...t.w];
+    if (t.fun && Math.random() < 0.5) wrong[wrong.length - 1] = t.fun;
+    return shuffle([t.a, ...wrong]);
+  };
   show(q);
   return {
-    pick: (el) => pick(q, el),
+    pick: (el) => choose(q, el),
     say: () => speak(q.tasks[q.i].q, 'de-DE'),
     stop: () => { q.stopped = true; },
   };
@@ -27,7 +36,7 @@ function show(q) {
       ${q.top()}
       <div class="quiz-round">
         <div class="cdots">${dots}</div>
-        <div class="quiz-card">
+        <div class="quiz-card" style="--accent:${pick(ACCENTS)}">
           <div class="quiz-ico">${t.icoHTML || `<span>${t.ico}</span>`}</div>
           <div class="quiz-q">${esc(t.q)} <button class="say-btn" data-act="quiz-say" aria-label="Vorlesen">🔊</button></div>
           <div class="task-fb" id="qfb">&nbsp;</div>
@@ -39,7 +48,7 @@ function show(q) {
   setTimeout(() => { if (!q.stopped && q.tasks[q.i] === t) speak(t.q, 'de-DE'); }, 300);
 }
 
-async function pick(q, el) {
+async function choose(q, el) {
   if (q.lock || q.stopped) return;
   const t = q.tasks[q.i];
   if (el.dataset.v === t.a) {
@@ -48,6 +57,10 @@ async function pick(q, el) {
     sfx.correct();
     const firstTry = q.tries === 0;
     if (firstTry) q.first++;
+    const fb = $('#qfb');
+    const praise = pick(PRAISE);
+    if (fb) fb.innerHTML = `<span class="good">${praise} ${pick(['🎉', '⭐', '🌟', '👏', '💪', '😄'])}</span>`;
+    speak(praise, 'de-DE');
     state.stats.correct += firstTry ? 1 : 0;
     save();
     await q.onRight?.(t, firstTry, el);
@@ -64,6 +77,6 @@ async function pick(q, el) {
     el.classList.add('wrong');
     el.disabled = true;
     sfx.wrong();
-    $('#qfb').innerHTML = `<span class="hint">💡 ${esc(t.tip || 'Lies die Frage nochmal genau.')}</span>`;
+    $('#qfb').innerHTML = `<span class="oops">${pick(PRAISE_WRONG)}</span> <span class="hint">💡 ${esc(t.tip || 'Lies die Frage nochmal genau.')}</span>`;
   }
 }

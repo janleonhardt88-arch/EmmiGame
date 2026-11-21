@@ -10,7 +10,13 @@ export { HOUSE_STAGES, FURNITURE };
 let inside = false;
 const house = () => (state.house ||= { stage: 0, items: {} });
 const done = () => house().stage >= HOUSE_STAGES.length;
-const furnArt = (f) => (f.svg ? art[f.svg]() : art.emoji(f.ico));
+// Emojis stehen unten bündig, damit Möbel auf dem Boden stehen statt zu schweben
+const furnArt = (f) => (f.svg ? art[f.svg]() : art.emoji(f.ico, 86, f.zone === 'floor' ? 52 : 50));
+function furnStyle(f) {
+  if (f.zone === 'wall' || f.zone === 'flat') return `left:${f.x}%;top:${f.y}%;width:${f.s}%`;
+  if (f.zone === 'ceil') return `left:${f.x}%;top:0;width:${f.s}%`;
+  return `left:${f.x}%;bottom:${100 - f.b}%;width:${f.s}%;z-index:${Math.round(f.b)}`;
+}
 const price = (wood, stars) => [wood ? `${wood} 🪵` : '', stars ? `${stars} ⭐` : ''].filter(Boolean).join(' + ');
 const canPay = (wood, stars) => state.wood >= wood && state.stars >= stars;
 
@@ -78,12 +84,12 @@ function renderInside() {
   $('#screen').innerHTML = `
     <div class="room-scene">
       ${woodBar()}
-      <div class="room" id="room">
+      <div class="room-wrap"><div class="room" id="room">
         <div class="room-wall"><div class="room-window"></div></div>
         <div class="room-floor"></div>
-        ${owned.map((k) => { const f = FURNITURE[k]; return `<button class="furn ${f.svg === 'rug' ? 'flat' : ''}" data-act="house-say" data-k="${k}" style="left:${f.x}%;top:${f.y}%;width:${f.s}%">${furnArt(f)}<span class="bubble"></span></button>`; }).join('')}
+        ${owned.map((k) => { const f = FURNITURE[k]; return `<button class="furn z-${f.zone}" data-act="house-say" data-k="${k}" style="${furnStyle(f)}">${furnArt(f)}<span class="bubble"></span></button>`; }).join('')}
         ${owned.length ? '' : '<div class="room-empty">Noch leer! Kauf unten deine ersten Möbel.</div>'}
-      </div>
+      </div></div>
       <div class="furn-shop">
         <button class="btn ghost" data-act="house-leave">⬅ Raus</button>
         <div class="furn-list">${shop.length ? shop.map(([k, f]) => `

@@ -101,4 +101,4 @@ export const HAIR = {
   mint: { de: 'Türkis', color: '#3fc7b4', price: 20 },
 };
 
-export const PRAISE = ['Super!', 'Toll!', 'Klasse!', 'Richtig!', 'Spitze!', 'Prima!', 'Wunderbar!'];
+export const PRAISE = ['Super!', 'Toll!', 'Klasse!', 'Richtig!', 'Spitze!', 'Prima!', 'Wunderbar!', 'Genial!', 'Fantastisch!', 'Megastark!', 'Weiter so!', 'Bombastisch!', 'Du bist ein Profi!', 'Hammer!', 'Sensationell!'];

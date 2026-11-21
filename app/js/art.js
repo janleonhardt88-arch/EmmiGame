@@ -679,7 +679,7 @@ export const iconMusic = (on = true) => svg(`
   ${on ? '' : '<path d="M14 14 L86 86" stroke="#e2559a" stroke-width="7" stroke-linecap="round"/>'}`);
 
 // Bild aus einem Emoji (für Vokabeln, Möbel, Fundstücke …)
-export const emoji = (e, size = 74) => svg(`<text x="50" y="54" text-anchor="middle" dominant-baseline="central" font-size="${size}" font-family="'Noto Color Emoji','Apple Color Emoji','Segoe UI Emoji',sans-serif">${e}</text>`);
+export const emoji = (e, size = 74, y = 54) => svg(`<text x="50" y="${y}" text-anchor="middle" dominant-baseline="central" font-size="${size}" font-family="'Noto Color Emoji','Apple Color Emoji','Segoe UI Emoji',sans-serif">${e}</text>`);
 
 // ---------- Häuschen (wächst mit dem Bau: Stufe 0 bis 5) ----------
 export function homeStage(stage) {
@@ -714,3 +714,22 @@ export const table = () => svg(`
   <path d="M20 46 V88 M80 46 V88" stroke="#8a5a2e" stroke-width="6" stroke-linecap="round"/>
   <ellipse cx="38" cy="30" rx="10" ry="4" fill="#fff" stroke="#c9c2d6" stroke-width="2"/><circle cx="62" cy="26" r="6" fill="#ff5a4e"/>`);
 export const rug = () => svg(`<ellipse cx="50" cy="50" rx="48" ry="20" fill="#ff9ccb" stroke="#e2559a" stroke-width="3"/><ellipse cx="50" cy="50" rx="36" ry="13" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="6 5"/>`, { par: 'none' });
+
+// Möbel mit eigener Zeichnung
+export const ceilingLamp = () => svg(`
+  <path d="M50 0 V58" stroke="#8a7a96" stroke-width="3"/>
+  <path d="M24 92 L34 58 H66 L76 92Z" fill="#ffd23b" stroke="#e6a100" stroke-width="3.5" stroke-linejoin="round"/>
+  <ellipse cx="50" cy="96" rx="12" ry="5" fill="#fff6c2"/>
+  <ellipse cx="50" cy="104" rx="30" ry="8" fill="#fff6a0" opacity=".45"/>`, { vb: '0 0 100 112', par: 'xMidYMin meet' });
+export const shelf = () => svg(`
+  <rect x="4" y="66" width="92" height="8" rx="2" fill="#a8703e" stroke="#6b3f1a" stroke-width="2.5"/>
+  <path d="M14 74 L18 86 M86 74 L82 86" stroke="#6b3f1a" stroke-width="4" stroke-linecap="round"/>
+  ${[['#ff7eb6', 12, 40], ['#4fb3ff', 23, 46], ['#ffd23b', 34, 38], ['#62cc5c', 45, 44], ['#9b7bff', 56, 40]].map(([c, x, h]) => `<rect x="${x}" y="${66 - h}" width="10" height="${h}" rx="2" fill="${c}" stroke="rgba(0,0,0,.25)" stroke-width="2"/>`).join('')}
+  <path d="M68 66 L78 28 L88 30 L80 66Z" fill="#ff9a2e" stroke="rgba(0,0,0,.25)" stroke-width="2"/>`);
+export const tvStand = () => svg(`
+  <rect x="10" y="74" width="80" height="22" rx="4" fill="#d9a86a" stroke="#8a5a2e" stroke-width="3"/>
+  <circle cx="50" cy="85" r="3" fill="#8a5a2e"/>
+  <rect x="16" y="22" width="68" height="46" rx="6" fill="#3a2a35" stroke="#241a22" stroke-width="3"/>
+  <rect x="22" y="28" width="56" height="34" rx="3" fill="#8fd0ff"/>
+  <path d="M22 54 Q38 40 50 50 T78 46 V62 H22Z" fill="#62cc5c"/><circle cx="66" cy="38" r="5" fill="#ffd23b"/>
+  <path d="M44 68 H56 V74 H44Z" fill="#241a22"/>`);
