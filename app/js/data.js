@@ -1,0 +1,84 @@
+// Spielinhalte: Pflanzen, Tiere, Gürtel, Preise.
+// Portugiesisch = europäisches Portugiesisch (pt-PT), mit Artikel.
+
+export const PLANTS = {
+  radish: {
+    de: 'das Radieschen', deAkk: 'das Radieschen', deIndef: 'ein Radieschen', name: 'Radieschen',
+    en: 'radish', pt: 'o rabanete',
+    price: 2, water: 2, reward: 5, belt: 0,
+  },
+  carrot: {
+    de: 'die Karotte', deAkk: 'die Karotte', deIndef: 'eine Karotte', name: 'Karotte',
+    en: 'carrot', pt: 'a cenoura',
+    price: 3, water: 2, reward: 7, belt: 0,
+  },
+  tomato: {
+    de: 'die Tomate', deAkk: 'die Tomate', deIndef: 'eine Tomate', name: 'Tomate',
+    en: 'tomato', pt: 'o tomate',
+    price: 4, water: 3, reward: 10, belt: 0,
+  },
+  strawberry: {
+    de: 'die Erdbeere', deAkk: 'die Erdbeere', deIndef: 'eine Erdbeere', name: 'Erdbeere',
+    en: 'strawberry', pt: 'o morango',
+    price: 5, water: 3, reward: 12, belt: 1,
+  },
+  sunflower: {
+    de: 'die Sonnenblume', deAkk: 'die Sonnenblume', deIndef: 'eine Sonnenblume', name: 'Sonnenblume',
+    en: 'sunflower', pt: 'o girassol',
+    price: 6, water: 4, reward: 16, belt: 2,
+  },
+  pumpkin: {
+    de: 'der Kürbis', deAkk: 'den Kürbis', deIndef: 'einen Kürbis', name: 'Kürbis',
+    en: 'pumpkin', pt: 'a abóbora',
+    price: 8, water: 5, reward: 22, belt: 3,
+  },
+};
+
+export const ANIMALS = {
+  chicken: { de: 'das Huhn', name: 'Huhn', en: 'chicken', pt: 'a galinha', price: 15, belt: 0, sound: 'Gack gack!' },
+  bunny: { de: 'der Hase', name: 'Hase', en: 'rabbit', pt: 'o coelho', price: 25, belt: 1, sound: 'Schnupper!' },
+  hedgehog: { de: 'der Igel', name: 'Igel', en: 'hedgehog', pt: 'o ouriço', price: 35, belt: 2, sound: 'Schnuff!' },
+  sheep: { de: 'das Schaf', name: 'Schaf', en: 'sheep', pt: 'a ovelha', price: 50, belt: 3, sound: 'Mähhh!' },
+};
+export const MAX_PER_ANIMAL = 3;
+
+export const BELTS = [
+  { de: 'Weißer Gürtel', dn: 'der weiße Gürtel', color: '#ffffff', xp: 0, pt: 'o cinto branco', en: 'white belt' },
+  { de: 'Gelber Gürtel', dn: 'der gelbe Gürtel', color: '#ffd93b', xp: 25, pt: 'o cinto amarelo', en: 'yellow belt' },
+  { de: 'Oranger Gürtel', dn: 'der orange Gürtel', color: '#ff9a3b', xp: 60, pt: 'o cinto laranja', en: 'orange belt' },
+  { de: 'Grüner Gürtel', dn: 'der grüne Gürtel', color: '#4cc35a', xp: 110, pt: 'o cinto verde', en: 'green belt' },
+  { de: 'Blauer Gürtel', dn: 'der blaue Gürtel', color: '#3b8cff', xp: 180, pt: 'o cinto azul', en: 'blue belt' },
+  { de: 'Brauner Gürtel', dn: 'der braune Gürtel', color: '#9a5b2e', xp: 270, pt: 'o cinto castanho', en: 'brown belt' },
+  { de: 'Schwarzer Gürtel', dn: 'der schwarze Gürtel', color: '#2b2b2b', xp: 400, pt: 'o cinto preto', en: 'black belt' },
+];
+
+export function beltIndex(xp) {
+  let i = 0;
+  while (i + 1 < BELTS.length && xp >= BELTS[i + 1].xp) i++;
+  return i;
+}
+
+export const START_BEDS = 4;
+export const MAX_BEDS = 8;
+export const BED_PRICES = [15, 25, 35, 50];
+
+// Einmaleins-Reihen je nach Gürtel (falls Eltern nichts festlegen)
+export const DOJO_ROWS = [
+  [2, 5, 10],
+  [2, 3, 4, 5, 10],
+  [2, 3, 4, 5, 6, 10],
+  [2, 3, 4, 5, 6, 7, 8, 9, 10],
+];
+export const DOJO_DIV_FROM_BELT = 4;
+export const DOJO_BOARDS = 10;
+export const DOJO_FAST_MS = 6000;
+
+export const HAIR = {
+  brown: { de: 'Braun', color: '#7a4a2c' },
+  light: { de: 'Hellbraun', color: '#a8703e' },
+  blond: { de: 'Blond', color: '#e3b34c' },
+  black: { de: 'Schwarz', color: '#2e2430' },
+  red: { de: 'Rot', color: '#c8562a' },
+};
+
+export const PRAISE = ['Super!', 'Toll!', 'Klasse!', 'Richtig!', 'Spitze!', 'Prima!', 'Wunderbar!'];

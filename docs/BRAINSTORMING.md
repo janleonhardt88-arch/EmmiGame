@@ -40,7 +40,12 @@ Pflanzen brauchen Pflege, die Welt wächst sichtbar mit ihrem Lernfortschritt.
 - Fortschritt lokal auf dem Gerät gespeichert
 - Eltern-Bereich (Rechenaufgabe als Sperre): Fortschritt, Schwierigkeit, Zeitlimit
 
-## Offene Fragen
+## Entscheidungen
+- Portugiesisch: europäisch (pt-PT); Emmi hat Grundkenntnisse (Mama Portugiesin, portugiesische Schule)
+- Stil: niedlich-bunt gezeichnet
+- Erster Prototyp: Garten + Karate-Dojo + Hofladen
+
+## Offene Fragen (alt)
 - Portugiesisch: brasilianisch oder europäisch? Spricht sie es schon etwas?
 - Stil: niedlich-bunt gezeichnet oder eher Emoji-/Bastel-Look?
 - Mit welchem Ort starten wir als erstem spielbaren Prototyp?
