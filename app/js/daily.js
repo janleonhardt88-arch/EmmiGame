@@ -15,7 +15,7 @@ export const QUESTS = {
   ballet: { goal: 1, text: () => 'Im Ballettstudio üben', ico: '🩰', place: 'ballet' },
   market: { goal: 1, text: () => 'Einen Kunden im Hofladen bedienen', ico: '🛎️', place: 'shop' },
   forest: { goal: 1, text: () => 'Einen Waldspaziergang machen', ico: '🌲', place: 'forest' },
-  globe: { goal: 1, text: () => 'Eine Weltreise machen', ico: '✈️', place: 'globe' },
+  globe: { goal: 1, text: () => 'Mit dem Flugzeug in ein Land fliegen', ico: '✈️', place: 'globe' },
   harbor: { goal: 1, text: () => 'Mit dem Schiff zum nächsten Hafen fahren', ico: '⛴️', place: 'harbor' },
 };
 export const DAILY_REWARD = 10;

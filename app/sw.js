@@ -16,7 +16,7 @@ const FILES = [
   'js/games/garden.js', 'js/games/dojo.js', 'js/games/shop.js', 'js/games/market.js',
   'js/games/stage.js', 'js/games/craft.js', 'js/games/climb.js', 'js/games/ballet.js',
   'js/games/forest.js', 'js/games/house.js', 'js/games/globe.js', 'js/games/quiz.js',
-  'js/sachkunde.js', 'js/seefahrt.js', 'js/games/harbor.js', 'js/erdkunde.js', 'js/house-data.js', 'js/fun.js',
+  'js/sachkunde.js', 'js/seefahrt.js', 'js/bastel.js', 'js/games/craft2.js', 'js/worldmap.js', 'js/games/harbor.js', 'js/erdkunde.js', 'js/house-data.js', 'js/fun.js',
   'voice/index.json',
   'fonts/nunito-latin-600-normal.woff2', 'fonts/nunito-latin-800-normal.woff2',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png', 'icons/icon-180.png',

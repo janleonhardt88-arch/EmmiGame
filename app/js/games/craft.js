@@ -3,6 +3,7 @@ import { state, save } from '../state.js';
 import * as art from '../art.js';
 import { sfx } from '../audio.js';
 import { api, $, esc, pick, rnd, shuffle } from '../core.js';
+import { startBeads, beadActions, beadMini, stopBeads, origamiMenu, origamiActions, stopOrigami, ORIGAMI } from './craft2.js';
 
 const STEPS = 8;
 const PALETTE = ['#ff5a7a', '#ff9a2e', '#ffd23b', '#62cc5c', '#4fb3ff', '#9b7bff', '#ff8cc6', '#3fb8a8'];
@@ -80,7 +81,14 @@ function braceletSvg(beads, { r = 36 } = {}) {
 
 function render() {
   if (round) return renderRound();
-  const saved = (state.bracelets || []).slice(-6).reverse();
+  const saved = (state.bracelets || []).slice(-4).reverse();
+  const pics = [...new Set((state.crafts?.beads || []).slice().reverse())].slice(0, 6);
+  const folded = ORIGAMI.filter((o) => state.crafts?.origami?.[o.id]);
+  const works = [
+    ...saved.map((b) => `<div class="jb-item">${braceletSvg(b)}</div>`),
+    ...pics.map((id) => `<div class="jb-item">${beadMini(id)}</div>`),
+    ...folded.map((o) => `<div class="jb-item ori">${o.ico}</div>`),
+  ];
   $('#screen').innerHTML = `
     <div class="craft">
       <div class="craft-wall"></div><div class="craft-table"></div>
@@ -89,11 +97,15 @@ function render() {
         <div class="avatar-big">${art.avatar(api.hairColor(), '#fff', { outfit: 'casual' })}</div>
         <div class="game-card">
           <h1>Bastelstube</h1>
-          <p>Fädle ein Perlen-Armband! 📿<br>Finde immer die <b>nächste Perle</b> im Muster.</p>
-          <button class="btn primary big" data-act="craft-start">Los geht's!</button>
+          <p>Was möchtest du heute basteln?</p>
+          <div class="craft-choice">
+            <button class="ctile" data-act="craft-start"><span>📿</span><b>Perlen-Armband</b><small>Finde die nächste Perle im Muster</small></button>
+            <button class="ctile" data-act="craft-beads"><span>🎨</span><b>Bügelperlen-Bild</b><small>Steck die andere Hälfte wie im Spiegel</small></button>
+            <button class="ctile" data-act="craft-origami"><span>🦢</span><b>Origami falten</b><small>Bring die Faltschritte in die richtige Reihenfolge</small></button>
+          </div>
           <div class="jewel-box">
-            <div class="jb-head"><span class="jb-ico">${art.box()}</span> Schmuckkästchen (${(state.bracelets || []).length})</div>
-            <div class="jb-list">${saved.length ? saved.map((b) => `<div class="jb-item">${braceletSvg(b)}</div>`).join('') : '<p class="note">Noch leer – bastel dein erstes Armband!</p>'}</div>
+            <div class="jb-head"><span class="jb-ico">${art.box()}</span> Meine Bastelwerke</div>
+            <div class="jb-list">${works.length ? works.join('') : '<p class="note">Noch leer – bastel dein erstes Werk!</p>'}</div>
           </div>
         </div>
       </div>
@@ -197,11 +209,15 @@ export default {
   label: 'Basteln',
   icon: () => art.yarnIcon(),
   render,
-  leave() { round = null; },
+  leave() { round = null; stopBeads(); stopOrigami(); },
   actions: {
     'craft-start': () => start(),
     'craft-again': () => { api.closeModal(); start(); },
     'craft-pick': (el) => onPick(el),
-    'craft-quit': () => { round = null; render(); },
+    'craft-quit': () => { round = null; stopBeads(); render(); },
+    'craft-home': () => { api.closeModal(); round = null; stopBeads(); stopOrigami(); render(); },
+    'craft-beads': () => { api.closeModal(); startBeads(); },
+    ...beadActions,
+    ...origamiActions,
   },
 };

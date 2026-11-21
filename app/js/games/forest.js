@@ -63,19 +63,53 @@ function start() {
       floatWood(`+${n} 🪵`, r.left + r.width / 2, r.top);
       const wn = $('#wood-n'); if (wn) wn.textContent = state.wood;
       sfx.chop();
-      // Manchmal liegt etwas Schönes am Wegesrand
-      if (Math.random() < 0.3) {
-        const [k, f] = pick(Object.entries(FINDS));
-        state.finds[k] = (state.finds[k] || 0) + 1;
-        gotFinds.push(k);
-        setTimeout(() => {
-          api.toast(`Gefunden: ${f.ico} ${f.de.replace(/^(der|die|das) /, '')} – 🇵🇹 ${f.pt}`);
-          speak(f.pt, 'pt-PT');
-        }, 500);
-      }
+      save();
+      // Ganz selten raschelt etwas am Wegesrand – höchstens einmal pro Spaziergang
+      if (!gotFinds.length && Math.random() < 0.12) return discover();
       save();
     },
     onDone: finish,
+  });
+}
+
+// „Oh, was ist denn das?" – ein Fund, den Emmi selbst aufdecken darf
+function discover() {
+  const [k, f] = pick(Object.entries(FINDS));
+  state.finds[k] = (state.finds[k] || 0) + 1;
+  gotFinds.push(k);
+  save();
+  return new Promise((done) => {
+    setTimeout(() => {
+      const host = $('#screen .forest');
+      if (!host || !quiz) return done();
+      const box = document.createElement('div');
+      box.className = 'discover';
+      box.innerHTML = `<button class="disc-card" data-disc="1">
+          <span class="disc-bush">🌿</span>
+          <b>Oh, was ist denn das? 👀</b>
+          <small>Tipp aufs Gebüsch!</small>
+        </button>`;
+      host.appendChild(box);
+      sfx.pop();
+      speak('Oh, was ist denn das?', 'de-DE');
+      box.addEventListener('click', (e) => {
+        if (e.target.closest('[data-disc]')) {
+          sfx.coin();
+          api.confetti(25);
+          box.innerHTML = `<div class="disc-card open">
+              <span class="disc-find">${f.ico}</span>
+              <b>Du hast ${esc(f.de.replace(/^der /, 'einen ').replace(/^die /, 'eine ').replace(/^das /, 'ein '))} gefunden!</b>
+              <button class="word pt" data-act="say" data-lang="pt-PT" data-text="${esc(f.pt)}"><span class="flag">🇵🇹</span><span class="w">${esc(f.pt)}</span></button>
+              <small>Das kommt zu deinen Naturschätzen.</small>
+              <button class="btn primary" data-disc-go="1">Weiter 🌲</button>
+            </div>`;
+          speak(f.pt, 'pt-PT');
+        } else if (e.target.closest('[data-disc-go]')) {
+          box.remove();
+          done();
+        }
+      });
+    }, 900);
   });
 }
 

@@ -691,12 +691,22 @@ PLACE_ART.forest = () => `<ellipse cx="60" cy="101" rx="52" ry="8" fill="rgba(0,
     <path d="M44 100 Q44 90 54 90 Q64 90 64 100Z" fill="#ff5a4e" stroke="#c9443a" stroke-width="2"/><rect x="51" y="99" width="6" height="7" rx="2" fill="#fff6e8"/>
     <circle cx="50" cy="95" r="1.6" fill="#fff"/><circle cx="57" cy="93" r="1.6" fill="#fff"/>
     ${[[82, 98], [92, 98], [87, 92]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="5" fill="#d9a86a" stroke="#8a5a2e" stroke-width="2"/>`).join('')}`;
-PLACE_ART.globe = () => `<ellipse cx="60" cy="101" rx="34" ry="6" fill="rgba(0,0,0,.12)"/>
-    <path d="M60 86 V98 M44 100 H76" stroke="#8a5a2e" stroke-width="6" stroke-linecap="round"/>
-    <path d="M22 46 A38 38 0 0 0 98 46" fill="none" stroke="#c99257" stroke-width="4"/>
-    <circle cx="60" cy="48" r="34" fill="#5aa9ff" stroke="#2f7fd6" stroke-width="3"/>
-    <path d="M40 28 Q52 22 58 32 Q54 40 46 38 Q38 36 40 28Z M64 44 Q78 40 84 52 Q80 66 70 62 Q62 56 64 44Z M36 54 Q44 52 48 62 Q42 72 36 66Z" fill="#62cc5c" stroke="#3fa34a" stroke-width="2"/>
-    <ellipse cx="48" cy="34" rx="8" ry="4" fill="#fff" opacity=".35" transform="rotate(-30 48 34)"/>`;
+PLACE_ART.globe = () => `<ellipse cx="60" cy="102" rx="54" ry="6" fill="rgba(0,0,0,.12)"/>
+    <rect x="4" y="96" width="112" height="8" rx="3" fill="#8a8f9c"/><path d="M12 100 H28 M40 100 H56 M68 100 H84 M96 100 H110" stroke="#fff" stroke-width="1.6"/>
+    <rect x="10" y="64" width="62" height="32" rx="4" fill="#eaf6ff" stroke="#7fa8c9" stroke-width="2.5"/>
+    <path d="M8 64 Q41 50 74 64Z" fill="#9b7bff" stroke="#7356e0" stroke-width="2.2" stroke-linejoin="round"/>
+    ${[18, 30, 42, 54].map((x) => `<rect x="${x}" y="72" width="8" height="12" rx="2" fill="#7cc8ff" stroke="#3b8fd6" stroke-width="1.4"/>`).join('')}
+    <rect x="62" y="80" width="8" height="16" rx="1.5" fill="#ffd23b" stroke="#e6a100" stroke-width="1.4"/>
+    <rect x="82" y="40" width="10" height="56" fill="#eaf6ff" stroke="#7fa8c9" stroke-width="2.2"/>
+    <path d="M76 40 L98 40 L95 28 L79 28Z" fill="#7cc8ff" stroke="#3b8fd6" stroke-width="2.2" stroke-linejoin="round"/>
+    <path d="M78 28 Q87 20 96 28Z" fill="#ff5a7a" stroke="#c9443a" stroke-width="2"/><circle cx="87" cy="21" r="2" fill="#ff5a7a"/>
+    <g transform="translate(70 18) rotate(-14)">
+      <path d="M-26 -3 L14 -3 Q24 0 14 3 L-26 3Z" fill="#fff" stroke="#3a2a35" stroke-width="1.6"/>
+      <path d="M-6 -2 L-14 -16 L-8 -16 L6 -2Z M-6 2 L-14 16 L-8 16 L6 2Z" fill="#ff7eb6" stroke="#3a2a35" stroke-width="1.4" stroke-linejoin="round"/>
+      <path d="M-24 -2 L-30 -10 L-26 -10 L-19 -2Z" fill="#ff7eb6" stroke="#3a2a35" stroke-width="1.3" stroke-linejoin="round"/>
+      ${[8, 2, -4, -10, -16].map((x) => `<circle cx="${x}" cy="0" r="1.3" fill="#7cc8ff"/>`).join('')}
+    </g>
+    <path d="M30 22 Q20 26 8 24" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/>`;
 
 export function place(id, stage = 0) {
   if (id === 'house') return svg(`<g transform="translate(-10 -12) scale(.7)">${inner(homeStage(stage))}</g>`, { vb: '0 0 120 110', par: 'xMidYMax meet' });

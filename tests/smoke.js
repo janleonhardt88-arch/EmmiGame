@@ -225,11 +225,16 @@ async function typeNumber(n) {
   if (!(await page.$('.furn[data-k="bed"]'))) errors.push('Bett wurde nicht ins Zimmer gestellt');
   await shot('12b-room');
 
-  step('Weltreise');
+  step('Flughafen');
   await goto('globe');
-  await page.click('[data-act="globe-start"]', f); await sleep(300);
-  await bruteForce('.qopt', 8, 1400);
-  await sleep(600);
+  await page.click('[data-act="globe-view"][data-v="world"]', f); await sleep(300);
+  await page.click('.pin[data-id="jp"]', f); await sleep(300);
+  await page.click('[data-act="globe-fly"]', f); await sleep(5200);
+  await bruteForce('.qopt', 6, 1400);
+  await sleep(800);
+  const geo = await page.evaluate(() => { const s = JSON.parse(localStorage.getItem('emmigame-v1')); return [s.geoAt, !!s.stamps.jp]; });
+  if (geo[0] !== 'jp' || !geo[1]) errors.push('Flug nach Japan ohne Stempel: ' + geo);
+  await shot('12c-airport');
 
   step('Karte & Tagesaufgaben');
   await closeModals();

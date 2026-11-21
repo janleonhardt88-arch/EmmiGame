@@ -8,6 +8,8 @@ import { COUNTRIES, allGeoTasks, GREETINGS } from '../app/js/erdkunde.js';
 import { FURNITURE } from '../app/js/house-data.js';
 import { JOKES, FACTS } from '../app/js/fun.js';
 import { seaVoiceTexts } from '../app/js/seefahrt.js';
+import { inCountry } from '../app/js/erdkunde.js';
+import { craftVoiceTexts } from '../app/js/bastel.js';
 
 const NAME = 'Emmi';
 const out = new Map();
@@ -58,6 +60,8 @@ const sea = seaVoiceTexts();
 for (const t of sea.de) add('de-DE', t);
 for (const t of sea.pt) add('pt-PT', t);
 for (const t of sea.en) add('en-GB', t);
-for (const t of ['Was kommt zuerst?', 'Rundreise geschafft!']) add('de-DE', t);
+for (const t of ['Was kommt zuerst?', 'Rundreise geschafft!', 'Oh, was ist denn das?']) add('de-DE', t);
+for (const c of COUNTRIES) add('de-DE', `Willkommen ${inCountry(c)}!`);
+for (const t of craftVoiceTexts()) add('de-DE', t);
 
 console.log(JSON.stringify([...out.values()]));

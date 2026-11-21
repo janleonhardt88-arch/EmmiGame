@@ -33,7 +33,7 @@ const PLACES = [
   { mod: climb, label: 'Kletterwand', pos: [88, 24], ppos: [18, 38] },
   { mod: craft, label: 'Bastelstube', pos: [12, 54], ppos: [50, 38] },
   { mod: forest, label: 'Wald', pos: [37, 52], ppos: [82, 38] },
-  { mod: globe, label: 'Weltreise', pos: [63, 52], ppos: [18, 61] },
+  { mod: globe, label: 'Flughafen', pos: [63, 52], ppos: [18, 61] },
   { mod: house, label: 'Häuschen', pos: [88, 54], ppos: [50, 61] },
   { mod: garden, label: 'Garten', pos: [21, 83], ppos: [82, 61] },
   { mod: harbor, label: 'Hafen', pos: [50, 86], ppos: [50, 85] },
