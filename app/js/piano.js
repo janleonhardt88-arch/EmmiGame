@@ -125,16 +125,21 @@ function render() {
   if (!m) return;
   const inst = state.pianoSound || 'piano';
   $('.pbody', m).innerHTML = `
+    <div class="phead">
+    <h2>🎹 Mein Klavier</h2>
     <div class="ptabs">
       <button class="tab ${mode === 'free' ? 'active' : ''}" data-pmode="free">🎵 Frei spielen</button>
       <button class="tab ${mode === 'song' ? 'active' : ''}" data-pmode="song">📖 Lied lernen</button>
       <button class="tab ${mode === 'echo' ? 'active' : ''}" data-pmode="echo">👂 Nachspielen</button>
+    </div>
+    <button class="btn primary pdone" data-act="piano-close">Fertig ✓</button>
     </div>
     ${mode === 'song' && !song ? `<div class="psongs">${SONGS.map((s) => `<button class="psong" data-song="${s.id}"><span>${s.ico}</span>${esc(s.de)}${(state.pianoSongs || {})[s.id] ? '<small>⭐ gelernt</small>' : ''}</button>`).join('')}</div>` : ''}
     ${mode === 'song' && song ? `<div class="psong-head"><b>${song.s.ico} ${esc(song.s.de)}</b>
         <button class="btn small" data-pdo="demo">▶ Vorspielen</button><button class="btn small ghost" data-pdo="songs">Anderes Lied</button></div>` : ''}
     ${mode === 'echo' && !echo ? '<div class="psong-head"><span>Das Klavier spielt ein paar Töne – spiel sie nach! Es werden immer mehr.</span><button class="btn primary" data-pdo="echo-start">Los geht’s!</button></div>' : ''}
     ${strip()}
+    <p class="protate">📱↻ Dreh das Gerät quer – dann werden die Tasten größer!</p>
     ${keyboard()}
     <div class="popts">
       ${Object.entries(INSTRUMENTS).map(([id, x]) => `<button class="popt ${inst === id ? 'sel' : ''}" data-inst="${id}">${x.ico} ${x.de}</button>`).join('')}
@@ -225,7 +230,7 @@ function songDone() {
 export function openPiano() {
   mode = 'free'; song = null; echo = null; clearTimers();
   music.duck(true);
-  const m = api.openModal('<h2>🎹 Mein Klavier</h2><div class="pbody"></div><div class="btn-row"><button class="btn primary big" data-act="piano-close">Fertig</button></div>', { cls: 'piano-modal wide', closable: false });
+  const m = api.openModal('<div class="pbody"></div>', { cls: 'piano-modal', closable: false });
   render();
   speak('o piano', 'pt-PT');
   m.addEventListener('pointerdown', (e) => {

@@ -1216,3 +1216,55 @@ h1, h2, h3 { font-weight: 800; }
 }
 #screen { isolation: isolate; } /* Inhalte der Orte bleiben unter Fenstern, Hinweisen und Konfetti */
 .toast { pointer-events: none; }
+
+/* Klavier fast bildschirmfüllend mit großen Tasten */
+#modal-layer:has(.piano-modal) { padding: 6px; }
+.piano-modal { width: 100%; max-width: none; height: calc(100dvh - 12px); max-height: none; padding: 8px 12px 10px; border-radius: 22px; display: flex; flex-direction: column; overflow: hidden; }
+.piano-modal .pbody { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 6px; }
+.phead { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.phead h2 { margin: 0; font-size: 24px; white-space: nowrap; }
+.phead .ptabs { margin: 0; flex: 1; }
+.pdone { font-size: 18px; padding: 10px 22px; }
+.piano-modal .psongs { margin: 0; grid-template-columns: repeat(6, 1fr); }
+.piano-modal .psong { padding: 6px 4px; font-size: 14px; }
+.piano-modal .psong span { font-size: 26px; }
+.piano-modal .note, .piano-modal .psong-head { margin: 0; }
+.piano-modal .pstrip { margin: 0; min-height: 52px; }
+.piano-modal .pprog { margin: 0 auto; }
+.piano-modal .pecho { margin: 0; }
+.piano-modal .pkeys { flex: 1; min-height: 160px; height: auto; padding: 12px 10px 10px; border-radius: 22px; }
+.piano-modal .pkey.white { margin: 0 3px; border-radius: 0 0 16px 16px; border-bottom-width: 10px; padding-bottom: 10px; }
+.piano-modal .pkey.white span { font-size: clamp(18px, 3.4vmin, 34px); }
+.piano-modal .pkey.black { width: 5vw; max-width: 64px; margin: 0 -2.5vw; height: 60%; border-radius: 0 0 12px 12px; }
+.piano-modal .popts { margin: 0; }
+.piano-modal .popt { min-height: 42px; font-size: 15px; }
+.protate { display: none; margin: 0; text-align: center; font-weight: 800; color: #7356e0; }
+@media (orientation: portrait) and (max-width: 700px) { .protate { display: block; } }
+@media (max-width: 760px) {
+  .phead h2 { font-size: 19px; }
+  .phead .ptabs .tab { font-size: 13px; padding: 6px 9px; }
+  .pdone { font-size: 15px; padding: 8px 14px; }
+  .piano-modal .psongs { grid-template-columns: repeat(3, 1fr); }
+  .piano-modal .pkey.white { margin: 0 1px; border-radius: 0 0 10px 10px; }
+  .piano-modal .pkey.black { width: 5.4vw; margin: 0 -2.7vw; }
+  .piano-modal .popt { font-size: 13px; padding: 4px 9px; min-height: 38px; }
+}
+/* Klavier auf dem Handy: kompakte Kopfzeile; quer gedreht darf gespielt werden */
+body:has(.piano-modal) .rotate-hint { display: none !important; }
+@media (max-width: 560px) {
+  .phead { flex-wrap: nowrap; gap: 6px; }
+  .phead h2 { display: none; }
+  .phead .ptabs { flex-wrap: nowrap; gap: 4px; justify-content: flex-start; }
+  .phead .ptabs .tab { font-size: 12px; padding: 6px 7px; min-height: 36px; white-space: nowrap; }
+  .pdone { font-size: 13px; padding: 7px 10px; white-space: nowrap; }
+  .piano-modal .popts { gap: 4px; }
+  .piano-modal .popt { font-size: 12px; padding: 3px 8px; min-height: 34px; }
+  .piano-modal .pnote { min-width: 32px; }
+}
+@media (max-height: 500px) and (orientation: landscape) {
+  .phead h2 { display: none; }
+  .piano-modal .pkeys { min-height: 120px; padding: 6px; }
+  .piano-modal .note { display: none; }
+  .piano-modal .popt { min-height: 30px; font-size: 12px; padding: 2px 8px; }
+  .phead .ptabs .tab { min-height: 32px; padding: 4px 10px; }
+}
