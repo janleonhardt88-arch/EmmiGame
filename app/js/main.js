@@ -19,6 +19,7 @@ import { initClips } from './recorder.js';
 import { startPlayTimer } from './playtime.js';
 import { music } from './music.js';
 import { openWardrobe, wardrobeActions } from './wardrobe.js';
+import { initUpdates } from './update.js';
 
 // Orte auf der Karte: Position [x, y] in Prozent für Quer- und Hochformat
 const PLACES = [
@@ -170,19 +171,14 @@ initVoices().then((index) => {
   const files = Object.values(index);
   const mark = `voices-${files.length}`;
   let done = null;
-  try { done = localStorage.getItem('emmigame-voices'); } catch (e) { /* egal */ }
+  try { done = localStorage.getItem('emmigame-voices-m1'); } catch (e) { /* egal */ }
   if (!files.length || done === mark || !navigator.serviceWorker?.controller) return;
   (async () => {
     for (const f of files) { try { await fetch('voice/' + f); } catch (e) { return; } }
-    try { localStorage.setItem('emmigame-voices', mark); } catch (e) { /* egal */ }
+    try { localStorage.setItem('emmigame-voices-m1', mark); } catch (e) { /* egal */ }
   })();
 });
 if (!state.welcomed) welcome();
 startPlayTimer();
 
-// Offline-Unterstützung (wo der Browser sie erlaubt)
-try {
-  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  }
-} catch (e) { /* z. B. in eingebetteten Ansichten nicht verfügbar */ }
+initUpdates();

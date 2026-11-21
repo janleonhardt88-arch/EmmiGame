@@ -672,3 +672,6 @@ h1, h2, h3 { font-weight: 800; }
   .w-left .big-input { width: 200px; }
 }
 .w-tile.head .w-pic svg, .mini-avatar > svg { overflow: hidden; }
+
+/* ---------- Update-Hinweis ---------- */
+.update-banner { position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 95; background: var(--purple); color: #fff; font-size: 19px; font-weight: 800; padding: 12px 24px; border-radius: 999px; box-shadow: 0 6px 0 var(--purple-d); white-space: nowrap; animation: pillpulse 1.6s ease-in-out infinite; }

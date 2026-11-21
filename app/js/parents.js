@@ -12,6 +12,7 @@ import { CLOCK_LEVELS } from './games/ballet.js';
 import { canRecord, clipUrl, clipCount, saveClip, deleteClip, startRecording } from './recorder.js';
 import { allTexts } from './vocab.js';
 import { playedMinutes } from './playtime.js';
+import { buildLabel } from './version.js';
 
 // ============ Elternbereich ============
 export function parentsGate() {
@@ -130,6 +131,7 @@ export function parentsPanel() {
           <button class="btn danger" id="p-reset">Spielstand löschen</button>
         </div>
       </section>
+      <p class="note" style="text-align:center">Version: ${buildLabel()}</p>
       <button class="btn primary big" data-act="close">Fertig</button>
     </div>`, { cls: 'parents-modal' });
 
