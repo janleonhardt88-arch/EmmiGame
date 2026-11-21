@@ -9,7 +9,7 @@ const CACHE = 'emmigame-app-' + BUILD;
 const MEDIA = 'emmigame-media-4';
 
 const FILES = [
-  './', 'index.html', 'manifest.webmanifest', 'css/style.css',
+  './', 'index.html', 'manifest.webmanifest', 'css/style.css', 'css/scenes.css',
   'js/main.js', 'js/version.js', 'js/art.js', 'js/audio.js', 'js/data.js', 'js/math.js', 'js/state.js',
   'js/core.js', 'js/vocab.js', 'js/words.js', 'js/ui.js', 'js/daily.js', 'js/parents.js', 'js/playtime.js',
   'js/recorder.js', 'js/music.js', 'js/wardrobe.js', 'js/update.js',

@@ -779,9 +779,11 @@ export function homeStage(stage) {
   const s = stage;
   let b = '<ellipse cx="100" cy="150" rx="92" ry="14" fill="#8fd46b"/>';
   if (s === 0) {
-    b += `<path d="M62 150 L62 104" stroke="#a8703e" stroke-width="5" stroke-linecap="round"/>
-      <rect x="36" y="92" width="52" height="22" rx="4" fill="#fff6e8" stroke="#c99257" stroke-width="3"/>
-      <text x="62" y="107" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="800" font-size="10" fill="#6b3f1a">Hier baue ich!</text>`;
+    b += `<path d="M38 150 V100 M86 150 V100" stroke="#a8703e" stroke-width="5" stroke-linecap="round"/>
+      <rect x="18" y="84" width="88" height="34" rx="6" fill="#fff6e8" stroke="#c99257" stroke-width="3"/>
+      <path d="M24 90 H100" stroke="#f3dfc4" stroke-width="2"/>
+      <text x="62" y="99" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="800" font-size="12" fill="#6b3f1a">Hier baue</text>
+      <text x="62" y="113" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="800" font-size="12" fill="#6b3f1a">ich! 🔨</text>`;
   }
   // Holzstapel liegt immer daneben, bis das Haus fertig ist
   if (s < 5) {
