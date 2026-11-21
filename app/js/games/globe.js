@@ -2,7 +2,7 @@
 import { state, save } from '../state.js';
 import * as art from '../art.js';
 import { sfx, speak } from '../audio.js';
-import { COUNTRIES, allGeoTasks } from '../erdkunde.js';
+import { COUNTRIES, allGeoTasks, GREETINGS, GREETING_WORDS } from '../erdkunde.js';
 import { api, $, esc, shuffle } from '../core.js';
 import { runQuiz } from './quiz.js';
 
@@ -30,8 +30,9 @@ function render() {
           <div class="passport">
             <div class="jb-head">Mein Reisepass</div>
             <div class="stamps">${COUNTRIES.map((c) => state.stamps[c.id]
-              ? `<button class="stamp" data-act="say" data-lang="pt-PT" data-text="${esc(c.pt)}" title="${esc(c.de)}">${c.flag}</button>`
+              ? `<button class="stamp" data-act="globe-country" data-id="${c.id}" title="${esc(c.de)}">${c.flag}</button>`
               : '<span class="stamp missing">?</span>').join('')}</div>
+            <p class="note">Tipp auf einen Stempel: Dann lernst du, wie man dort „Hallo" sagt! 👋</p>
           </div>
         </div>
       </div>
@@ -41,11 +42,13 @@ function render() {
 function makeRound() {
   const lv = level();
   const pool = ALL.filter((t) => t.level <= lv);
-  const picked = shuffle(pool).slice(0, ROUND);
+  // Höchstens zwei Grüße-Fragen pro Runde, der Rest gemischt
+  const greet = shuffle(pool.filter((t) => t.kind === 'greet')).slice(0, 2);
+  const picked = shuffle([...shuffle(pool.filter((t) => t.kind !== 'greet')).slice(0, ROUND - greet.length), ...greet]);
   return picked.map((t) => {
     if (t.w) return t;
     const wrong = shuffle(t.pool.filter((x) => x !== t.a)).slice(0, 2);
-    return { ...t, w: wrong, icoHTML: t.kind === 'flag' || t.kind === 'capital' || t.kind === 'cont' ? `<span class="flag-big">${t.ico}</span>` : null };
+    return { ...t, w: wrong, icoHTML: ['flag', 'capital', 'cont', 'greet'].includes(t.kind) ? `<span class="flag-big">${t.ico}</span>` : null };
   });
 }
 
@@ -75,13 +78,41 @@ function start() {
       if (c) {
         if (!state.stamps[c.id]) { state.stamps[c.id] = true; newStamps.push(c); }
         const fb = $('#qfb');
-        if (fb) fb.innerHTML = `<span class="good">${c.flag} 🇵🇹 ${esc(c.pt)} · 🇬🇧 ${esc(c.en)}</span>`;
-        setTimeout(() => speak(c.pt, 'pt-PT'), 300);
+        const g = GREETINGS[c.id];
+        if (t.kind === 'greet') {
+          if (fb) fb.innerHTML = `<span class="good">${c.flag} ${esc(t.greet.say)}${t.greet.say !== t.greet.show ? ` (${esc(t.greet.show)})` : ''} – sprich: <i>${esc(t.greet.how)}</i></span>`;
+          setTimeout(() => speak(t.greet.say, t.tts), 300);
+        } else {
+          if (fb) fb.innerHTML = `<span class="good">${c.flag} 🇵🇹 ${esc(c.pt)} · 🇬🇧 ${esc(c.en)}${g && c.id !== 'de' ? ` · 👋 ${esc(g.hi.show)}!` : ''}</span>`;
+          setTimeout(() => { speak(c.pt, 'pt-PT'); if (g && c.id !== 'de') speak(g.hi.say, g.tts, { queue: true }); }, 300);
+        }
       }
       save();
     },
     onDone: finish,
   });
+}
+
+// Länderkarte aus dem Reisepass: Namen, Hauptstadt und Grüße zum Anhören
+function countryCard(id) {
+  const c = COUNTRIES.find((x) => x.id === id);
+  const g = GREETINGS[id];
+  sfx.pop();
+  const row = (key) => `<button class="word greet" data-act="say" data-lang="${g.tts}" data-text="${esc(g[key].say)}">
+      <span class="gw">${GREETING_WORDS[key]}</span><span class="w">${esc(g[key].say)}${g[key].say !== g[key].show ? `<small>${esc(g[key].show)}</small>` : ''}</span><span class="how">${esc(g[key].how)}</span><span class="spk">${art.iconSpeaker()}</span></button>`;
+  api.openModal(`
+    <div class="country-card">
+      <div class="flag-huge">${c.flag}</div>
+      <h2>${esc(c.de.replace(/^(die|der|das) /, (m) => m[0].toUpperCase() + m.slice(1)))}</h2>
+      <div class="country-facts">
+        <span>🏙️ Hauptstadt: <b>${esc(c.capital)}</b></span>
+        <span>🌍 Kontinent: <b>${esc(c.cont)}</b></span>
+        <span>🗣️ Sprache: <b>${esc(g.lang)}</b></span>
+      </div>
+      <div class="words">${row('hi')}${row('bye')}${row('thanks')}</div>
+      <p class="note">🇵🇹 ${esc(c.pt)} · 🇬🇧 ${esc(c.en)}</p>
+    </div>`);
+  speak(g.hi.say, g.tts);
 }
 
 function finish({ first, total }) {
@@ -112,6 +143,7 @@ export default {
   actions: {
     'globe-start': () => start(),
     'globe-again': () => { api.closeModal(); start(); },
+    'globe-country': (el) => countryCard(el.dataset.id),
   },
   quiz: () => quiz,
   quit: () => { quiz?.stop(); quiz = null; render(); },

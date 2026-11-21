@@ -78,5 +78,57 @@ export function allGeoTasks() {
   }
   for (const r of RIVERS) tasks.push({ kind: 'river', level: r.level, ico: '🏞️', q: `An welchem Fluss liegt ${r.city}?`, a: r.river, w: r.w, fun: 'am Kakao-Fluss', tip: 'Große Städte liegen oft an Flüssen – früher kamen die Waren mit dem Schiff.' });
   for (const g of GEO_QUESTIONS) tasks.push({ kind: 'geo', level: g.level, ico: g.ico, q: g.q, a: g.a, w: g.w, tip: g.tip, fun: g.fun });
+  tasks.push(...greetingTasks());
+  return tasks;
+}
+
+// 👋 Hallo, Tschüss und Danke in der Sprache des Landes
+// say = so wird es geschrieben/gesprochen, show = lateinische Schrift, how = Aussprache-Hilfe für Kinder
+const W = (say, show, how) => ({ say, show: show || say, how });
+export const GREETINGS = {
+  de: { lang: 'Deutsch', tts: 'de-DE', hi: W('Hallo', '', 'HA-lo'), bye: W('Tschüss', '', 'TSCHÜSS'), thanks: W('Danke', '', 'DAN-ke') },
+  pt: { lang: 'Portugiesisch', tts: 'pt-PT', hi: W('Olá', '', 'o-LA'), bye: W('Adeus', '', 'a-DE-usch'), thanks: W('Obrigada', '', 'o-bri-GA-da') },
+  fr: { lang: 'Französisch', tts: 'fr-FR', hi: W('Bonjour', '', 'bon-SCHUR'), bye: W('Au revoir', '', 'o rö-WUAR'), thanks: W('Merci', '', 'mär-SI') },
+  es: { lang: 'Spanisch', tts: 'es-ES', hi: W('Hola', '', 'O-la'), bye: W('Adiós', '', 'a-DJOS'), thanks: W('Gracias', '', 'GRA-thias') },
+  it: { lang: 'Italienisch', tts: 'it-IT', hi: W('Ciao', '', 'TSCHAU'), bye: W('Arrivederci', '', 'a-ri-we-DER-tschi'), thanks: W('Grazie', '', 'GRA-tsje') },
+  gb: { lang: 'Englisch', tts: 'en-GB', hi: W('Hello', '', 'hä-LOU'), bye: W('Goodbye', '', 'gud-BAI'), thanks: W('Thank you', '', 'THÄNK-ju') },
+  at: { lang: 'Deutsch (Österreich)', tts: 'de-AT', hi: W('Servus', '', 'SER-wus'), bye: W('Baba', '', 'BA-ba'), thanks: W('Danke', '', 'DAN-ke') },
+  ch: { lang: 'Schweizerdeutsch', tts: 'de-CH', hi: W('Grüezi', '', 'GRÜE-tsi'), bye: W('Ade', '', 'a-DE'), thanks: W('Merci', '', 'MER-si') },
+  nl: { lang: 'Niederländisch', tts: 'nl-NL', hi: W('Hallo', '', 'HA-lo'), bye: W('Doei', '', 'DUI'), thanks: W('Dank je', '', 'DANK-je') },
+  dk: { lang: 'Dänisch', tts: 'da-DK', hi: W('Hej', '', 'HAI'), bye: W('Farvel', '', 'far-WEL'), thanks: W('Tak', '', 'TACK') },
+  pl: { lang: 'Polnisch', tts: 'pl-PL', hi: W('Cześć', '', 'TSCHESCHTSCH'), bye: W('Do widzenia', '', 'do wi-DSE-nja'), thanks: W('Dziękuję', '', 'dschen-KU-je') },
+  gr: { lang: 'Griechisch', tts: 'el-GR', hi: W('Γειά σου', 'Jassu', 'JA-ssu'), bye: W('Αντίο', 'Andio', 'an-DI-o'), thanks: W('Ευχαριστώ', 'Efcharisto', 'ef-cha-ri-STO') },
+  se: { lang: 'Schwedisch', tts: 'sv-SE', hi: W('Hej', '', 'HEJ'), bye: W('Hej då', '', 'hej DOO'), thanks: W('Tack', '', 'TACK') },
+  ie: { lang: 'Irisch', tts: 'ga-IE', hi: W('Dia duit', '', 'DJI-a gwitsch'), bye: W('Slán', '', 'SLAAN'), thanks: W('Go raibh maith agat', '', 'go ro MA a-gat') },
+  br: { lang: 'Portugiesisch (Brasilien)', tts: 'pt-BR', hi: W('Oi', '', 'OI'), bye: W('Tchau', '', 'TSCHAU'), thanks: W('Obrigada', '', 'o-bri-GA-da') },
+  us: { lang: 'Englisch (Amerika)', tts: 'en-US', hi: W('Hi', '', 'HAI'), bye: W('Bye', '', 'BAI'), thanks: W('Thanks', '', 'THÄNKS') },
+  ca: { lang: 'Französisch (Kanada)', tts: 'fr-CA', hi: W('Bonjour', '', 'bon-SCHUR'), bye: W('Salut', '', 'sa-LÜ'), thanks: W('Merci', '', 'mär-SI') },
+  mx: { lang: 'Spanisch (Mexiko)', tts: 'es-MX', hi: W('Hola', '', 'O-la'), bye: W('Adiós', '', 'a-DJOS'), thanks: W('Gracias', '', 'GRA-sjas') },
+  ar: { lang: 'Spanisch (Argentinien)', tts: 'es-AR', hi: W('Hola', '', 'O-la'), bye: W('Chau', '', 'TSCHAU'), thanks: W('Gracias', '', 'GRA-sjas') },
+  jp: { lang: 'Japanisch', tts: 'ja-JP', hi: W('こんにちは', 'Konnichiwa', 'kon-ni-tschi-WA'), bye: W('さようなら', 'Sayonara', 'sa-JO-na-ra'), thanks: W('ありがとう', 'Arigato', 'a-ri-GA-to') },
+  cn: { lang: 'Chinesisch', tts: 'zh-CN', hi: W('你好', 'Ni hao', 'ni HAU'), bye: W('再见', 'Zaijian', 'dsai-DJEN'), thanks: W('谢谢', 'Xiexie', 'SCHJE-schje') },
+  in: { lang: 'Hindi', tts: 'hi-IN', hi: W('नमस्ते', 'Namaste', 'na-MAS-te'), bye: W('अलविदा', 'Alvida', 'al-WI-da'), thanks: W('धन्यवाद', 'Dhanyavaad', 'dan-ja-WAAD') },
+  au: { lang: 'Englisch (Australien)', tts: 'en-AU', hi: W("G'day", '', 'ge-DEI'), bye: W('Bye', '', 'BAI'), thanks: W('Thanks', '', 'THÄNKS') },
+  eg: { lang: 'Arabisch', tts: 'ar-EG', hi: W('مرحبا', 'Marhaba', 'MAR-ha-ba'), bye: W('مع السلامة', 'Maa salama', 'MA-a sa-LA-ma'), thanks: W('شكرا', 'Shukran', 'SCHU-kran') },
+  za: { lang: 'Zulu', tts: 'zu-ZA', hi: W('Sawubona', '', 'sa-wu-BO-na'), bye: W('Hamba kahle', '', 'HAM-ba GA-hle'), thanks: W('Ngiyabonga', '', 'ngi-ja-BON-ga') },
+};
+export const GREETING_WORDS = { hi: 'Hallo', bye: 'Tschüss', thanks: 'Danke' };
+const IN_DAT = { ch: 'in der Schweiz', nl: 'in den Niederlanden', us: 'in den USA', gb: 'in Großbritannien' };
+export const inCountry = (c) => IN_DAT[c.id] || `in ${c.de}`;
+
+// Zusätzliche Fragen: „Wie sagt man ‚Hallo' in Frankreich?"
+export function greetingTasks() {
+  const tasks = [];
+  for (const c of COUNTRIES) {
+    const g = GREETINGS[c.id];
+    if (!g || c.id === 'de') continue;
+    for (const [key, word] of Object.entries(GREETING_WORDS)) {
+      const pool = [...new Set(Object.values(GREETINGS).map((x) => x[key].show).filter((s) => s !== g[key].show && s !== GREETINGS.de[key].show))];
+      tasks.push({
+        kind: 'greet', level: key === 'hi' ? Math.max(2, c.level) : 3, ico: c.flag, country: c, greet: g[key], tts: g.tts,
+        q: `Wie sagt man „${word}" ${inCountry(c)}?`, a: g[key].show, pool, tip: `Dort spricht man ${g.lang}.`,
+      });
+    }
+  }
   return tasks;
 }

@@ -24,6 +24,15 @@ VOICES = {
     'pt-PT': ('pt-PT-RaquelNeural', '-30%'),
     'en-GB': ('en-GB-SoniaNeural', '-25%'),
     'de-DE': ('de-DE-KatjaNeural', '-15%'),
+    # Grüße auf der Weltreise – jeweils in der Sprache des Landes
+    'fr-FR': ('fr-FR-DeniseNeural', '-15%'), 'es-ES': ('es-ES-ElviraNeural', '-15%'), 'it-IT': ('it-IT-ElsaNeural', '-15%'),
+    'de-AT': ('de-AT-IngridNeural', '-15%'), 'de-CH': ('de-CH-LeniNeural', '-15%'), 'nl-NL': ('nl-NL-FennaNeural', '-15%'),
+    'da-DK': ('da-DK-ChristelNeural', '-15%'), 'pl-PL': ('pl-PL-ZofiaNeural', '-15%'), 'el-GR': ('el-GR-AthinaNeural', '-15%'),
+    'sv-SE': ('sv-SE-SofieNeural', '-15%'), 'ga-IE': ('ga-IE-OrlaNeural', '-15%'), 'pt-BR': ('pt-BR-FranciscaNeural', '-15%'),
+    'en-US': ('en-US-JennyNeural', '-15%'), 'fr-CA': ('fr-CA-SylvieNeural', '-15%'), 'es-MX': ('es-MX-DaliaNeural', '-15%'),
+    'es-AR': ('es-AR-ElenaNeural', '-15%'), 'ja-JP': ('ja-JP-NanamiNeural', '-15%'), 'zh-CN': ('zh-CN-XiaoxiaoNeural', '-15%'),
+    'hi-IN': ('hi-IN-SwaraNeural', '-15%'), 'en-AU': ('en-AU-NatashaNeural', '-15%'), 'ar-EG': ('ar-EG-SalmaNeural', '-15%'),
+    'zu-ZA': ('zu-ZA-ThandoNeural', '-15%'),
 }
 FILTER = ('silenceremove=start_periods=1:start_threshold=-45dB,areverse,'
           'silenceremove=start_periods=1:start_threshold=-45dB,areverse,apad=pad_dur=0.15,loudnorm=I=-18:TP=-2')
@@ -36,7 +45,7 @@ def file_for(lang, text):
 
 async def make(sem, lang, text, target, counter):
     voice, rate = VOICES[lang]
-    spoken = text if text[-1] in '.!?' else text + '.'
+    spoken = text if (text[-1] in '.!?' or not text.isascii()) else text + '.'
     tmp = target + '.tmp.mp3'
     async with sem:
         for attempt in range(4):
@@ -76,7 +85,7 @@ async def main():
     await asyncio.gather(*jobs)
     # Nicht mehr benutzte Dateien aufräumen
     used = set(index.values())
-    for sub in ('de', 'en', 'pt'):
+    for sub in sorted({k.split('-')[0] for k in VOICES}):
         d = os.path.join(OUT, sub)
         for f in os.listdir(d) if os.path.isdir(d) else []:
             if f'{sub}/{f}' not in used:

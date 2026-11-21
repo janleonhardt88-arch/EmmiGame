@@ -793,8 +793,8 @@ h1, h2, h3 { font-weight: 800; }
 .task-fb .oops { color: #d35400; font-weight: 800; }
 .paid-money { width: 110px; height: 70px; }
 
-/* Kleine Tablets (wenig Höhe): alles etwas kompakter */
-@media (max-height: 680px) {
+/* Tablets mit wenig Höhe (z. B. Querformat mit Browserleiste): alles etwas kompakter */
+@media (max-height: 740px) {
   .awning { height: 22px; }
   .awning::after { display: none; }
   .shop-sign { display: none; }
@@ -810,4 +810,21 @@ h1, h2, h3 { font-weight: 800; }
   .quiz-ico { width: 13vmin; height: 13vmin; font-size: 10vmin; }
   .game-card { padding: 16px 22px; }
   .game-card h1 { font-size: 28px; }
+}
+
+/* ---------- Länderkarte ---------- */
+.country-card .flag-huge { font-size: 84px; line-height: 1; }
+.country-facts { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 6px 0 10px; }
+.country-facts span { background: #eef2ff; border-radius: 999px; padding: 4px 14px; font-size: 16px; }
+.word.greet { gap: 10px; }
+.word.greet .gw { flex: 0 0 92px; font-size: 16px; color: var(--ink-soft); }
+.word.greet .w { display: flex; flex-direction: column; line-height: 1.15; }
+.word.greet .w small { font-size: 14px; color: var(--ink-soft); }
+.word.greet .how { font-size: 15px; color: var(--purple-d); font-style: italic; margin-left: auto; }
+.word.greet .spk { margin-left: 8px; }
+
+/* Hochformat: Zimmer etwas höher, damit es den Platz nutzt */
+@media (orientation: portrait) {
+  .room { aspect-ratio: 1; width: min(100cqw, 100cqh); }
+  .room-window { width: 24%; }
 }
