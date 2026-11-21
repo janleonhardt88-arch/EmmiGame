@@ -189,7 +189,7 @@ initClips();
 render();
 // Sprachdateien laden und einmalig für den Offline-Betrieb vormerken
 initVoices().then((index) => {
-  const files = Object.values(index);
+  const files = Object.values(index).filter((f) => typeof f === 'string');
   const mark = `voices-${files.length}`;
   let done = null;
   try { done = localStorage.getItem('emmigame-voices-m4'); } catch (e) { /* egal */ }

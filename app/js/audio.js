@@ -90,9 +90,23 @@ export async function initVoices() {
   try { voiceIndex = await (await fetch('voice/index.json')).json(); } catch (e) { voiceIndex = {}; }
   return voiceIndex;
 }
-function bundledUrl(lang, text) {
-  const f = voiceIndex[`${lang}|${text}`];
-  return f ? 'voice/' + f : null;
+// Ein Eintrag ist entweder ein Dateipfad oder [Sammeldatei, Start, Länge] (gepackte Variante, z. B. im Claude-Artefakt)
+const packs = new Map();
+const packUrls = new Map();
+async function bundledUrl(lang, text) {
+  const key = `${lang}|${text}`;
+  const f = voiceIndex[key];
+  if (!f) return null;
+  if (typeof f === 'string') return 'voice/' + f;
+  if (packUrls.has(key)) return packUrls.get(key);
+  const [file, start, len] = f;
+  if (!packs.has(file)) packs.set(file, fetch('voice/' + file).then((r) => r.arrayBuffer()));
+  try {
+    const buf = await packs.get(file);
+    const url = URL.createObjectURL(new Blob([buf.slice(start, start + len)], { type: 'audio/mpeg' }));
+    packUrls.set(key, url);
+    return url;
+  } catch (e) { packs.delete(file); return null; }
 }
 export const bundledCount = (lang) => Object.keys(voiceIndex).filter((k) => k.startsWith(lang + '|')).length;
 
@@ -137,9 +151,12 @@ export function speak(text, lang = 'de-DE', { queue = false, force = false } = {
   const my = gen;
   chain = chain.then(() => {
     if (my !== gen) return undefined;
-    const url = clipUrl(lang, text) || bundledUrl(lang, text);
     music.duck(true);
-    return (url ? playClip(url) : playTTS(text, lang)).then(() => { if (my === gen) music.duck(false); });
+    return (async () => {
+      const url = clipUrl(lang, text) || await bundledUrl(lang, text);
+      if (my !== gen) return undefined;
+      return url ? playClip(url) : playTTS(text, lang);
+    })().then(() => { if (my === gen) music.duck(false); });
   });
 }
 
