@@ -1,7 +1,7 @@
 // ✈️ Flughafen – auf der Weltkarte ein Land antippen, hinfliegen, Fragen beantworten, Stempel sammeln
 import { state, save } from '../state.js';
 import * as art from '../art.js';
-import { sfx, speak } from '../audio.js';
+import { sfx, speak, speechDone } from '../audio.js';
 import { COUNTRIES, allGeoTasks, GREETINGS, GREETING_WORDS, inCountry } from '../erdkunde.js';
 import { LAND, SHAPES } from '../worldmap.js';
 import { api, $, esc, shuffle } from '../core.js';
@@ -172,7 +172,12 @@ function land(id) {
   const g = GREETINGS[id];
   speak(welcome(c), 'de-DE');
   if (g && id !== 'de') speak(g.hi.say, g.tts, { queue: true });
-  startQuiz(id);
+  // Begrüßung ausreden lassen, dann geht es mit den Fragen los
+  const head = $('.wmap-head b');
+  if (head) head.textContent = `🛬 ${welcome(c)}${g && id !== 'de' ? ` ${g.hi.show}!` : ''}`;
+  Promise.race([speechDone(), new Promise((r) => setTimeout(r, 6000))])
+    .then(() => new Promise((r) => setTimeout(r, 500)))
+    .then(() => { if (!flying && !quiz && api.screen() === 'globe') startQuiz(id); });
 }
 
 export const welcome = (c) => `Willkommen ${inCountry(c)}!`;
@@ -216,10 +221,10 @@ function startQuiz(id) {
         const g = GREETINGS[c.id];
         if (t.kind === 'greet') {
           if (fb) fb.innerHTML = `<span class="good">${c.flag} ${esc(t.greet.say)}${t.greet.say !== t.greet.show ? ` (${esc(t.greet.show)})` : ''} – sprich: <i>${esc(t.greet.how)}</i></span>`;
-          setTimeout(() => speak(t.greet.say, t.tts), 300);
+          speak(t.greet.say, t.tts, { queue: true });
         } else {
           if (fb) fb.innerHTML = `<span class="good">${c.flag} 🇵🇹 ${esc(c.pt)} · 🇬🇧 ${esc(c.en)}${g && c.id !== 'de' ? ` · 👋 ${esc(g.hi.show)}!` : ''}</span>`;
-          setTimeout(() => speak(c.pt, 'pt-PT'), 300);
+          speak(c.pt, 'pt-PT', { queue: true });
         }
       }
       save();

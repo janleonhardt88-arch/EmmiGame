@@ -1152,3 +1152,4 @@ h1, h2, h3 { font-weight: 800; }
 .sun .rays { transform-origin: 50% 50%; animation: spin 40s linear infinite; }
 @media (prefers-reduced-motion: reduce) { .eyes, .sun .rays { animation: none !important; } }
 @media (orientation: landscape) { .map-pet { left: auto; right: 78%; } }
+.say-big { display: inline-block; margin-left: 8px; padding: 2px 12px; border-radius: 999px; background: #fff3d6; color: #6b3f1a; font-weight: 800; font-size: 1.15em; animation: popin .4s cubic-bezier(.3, 1.6, .5, 1); }

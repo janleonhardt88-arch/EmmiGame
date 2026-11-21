@@ -119,8 +119,13 @@ function playClip(url) {
   return new Promise((resolve) => {
     const a = new Audio(url);
     currentAudio = a;
-    a.onended = a.onerror = () => resolve();
-    a.play().catch(() => resolve());
+    let fin = false;
+    const done = () => { if (!fin) { fin = true; clearTimeout(t); resolve(); } };
+    // Sicherheitsnetz: falls ein Gerät das Ende nicht meldet, nach Cliplänge weitermachen
+    let t = setTimeout(done, 12000);
+    a.onloadedmetadata = () => { if (isFinite(a.duration)) { clearTimeout(t); t = setTimeout(done, a.duration * 1000 + 1500); } };
+    a.onended = a.onerror = a.onpause = done;
+    a.play().catch(done);
   });
 }
 
@@ -159,6 +164,9 @@ export function speak(text, lang = 'de-DE', { queue = false, force = false } = {
     })().then(() => { if (my === gen) music.duck(false); });
   });
 }
+
+// Wird erfüllt, wenn alles Vorgelesene zu Ende gesprochen ist
+export const speechDone = () => chain;
 
 export function voiceInfo(lang) {
   if (!('speechSynthesis' in window)) return { ok: false, text: 'Sprachausgabe wird nicht unterstützt' };

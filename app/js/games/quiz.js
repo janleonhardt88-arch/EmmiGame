@@ -1,6 +1,6 @@
 // Gemeinsamer Ablauf für Frage-Runden (Wald, Weltreise): Bild, Frage (wird vorgelesen), Antworten, Tipp
 import { state, save } from '../state.js';
-import { sfx, speak } from '../audio.js';
+import { sfx, speak, speechDone } from '../audio.js';
 import { $, esc, shuffle, pick } from '../core.js';
 import { PRAISE } from '../data.js';
 import { PRAISE_WRONG } from '../fun.js';
@@ -45,7 +45,7 @@ function show(q) {
       </div>
       <button class="btn ghost quit" data-act="quiz-quit">Aufhören</button>
     </div>`;
-  setTimeout(() => { if (!q.stopped && q.tasks[q.i] === t) speak(t.q, 'de-DE'); }, 300);
+  setTimeout(() => { if (!q.stopped && !q.lock && q.tasks[q.i] === t) speak(t.q, 'de-DE'); }, 300);
 }
 
 async function choose(q, el) {
@@ -65,12 +65,16 @@ async function choose(q, el) {
     save();
     await q.onRight?.(t, firstTry, el);
     if (q.stopped) return;
+    // Erst weiter, wenn Lob und Aussprache fertig gesprochen sind – dann noch kurz durchatmen
+    const t0 = Date.now();
+    await Promise.race([speechDone(), new Promise((r) => setTimeout(r, 10000))]);
+    if (q.stopped) return;
     setTimeout(() => {
       if (q.stopped) return;
       q.i++;
       if (q.i >= q.tasks.length) q.onDone({ first: q.first, total: q.tasks.length });
       else show(q);
-    }, 1200);
+    }, Math.max(1600, 2000 - (Date.now() - t0)));
   } else {
     q.tries++;
     state.stats.wrong++;

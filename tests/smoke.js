@@ -34,10 +34,12 @@ async function bruteForce(optSel, rounds, wait) {
     if (await page.$('[data-disc]')) { await page.click('[data-disc]', f); await sleep(300); }
     if (await page.$('[data-disc-go]')) { await page.click('[data-disc-go]', f); await sleep(600); }
     for (const o of await page.$$(`${optSel}:not([disabled])`)) {
-      await o.click(f); await sleep(140);
+      await o.click(f).catch(() => {}); await sleep(140);
       if (await page.$(`${optSel}.right`)) break;
     }
     await sleep(wait);
+    // Nach einer richtigen Antwort wird erst zu Ende vorgelesen – auf die nächste Frage warten
+    for (let k = 0; k < 40 && await page.$(`${optSel}.right`); k++) await sleep(300);
   }
 }
 function solveMath(text) {
@@ -191,7 +193,8 @@ async function typeNumber(n) {
   step('Wald');
   await goto('forest');
   await page.click('[data-act="forest-start"]', f); await sleep(300);
-  await bruteForce('.qopt', 8, 1400);
+  await bruteForce('.qopt', 9, 1400);
+  for (let k = 0; k < 30 && !(await page.$('.modal.celebrate')); k++) await sleep(300);
   await sleep(600);
   const wood = await page.evaluate(() => JSON.parse(localStorage.getItem('emmigame-v1')).wood);
   if (!(wood >= 8)) errors.push('Kein Holz gesammelt: ' + wood);
@@ -232,8 +235,9 @@ async function typeNumber(n) {
   await goto('globe');
   await page.click('[data-act="globe-view"][data-v="world"]', f); await sleep(300);
   await page.click('.pin[data-id="jp"]', f); await sleep(300);
-  await page.click('[data-act="globe-fly"]', f); await sleep(5200);
-  await bruteForce('.qopt', 6, 1400);
+  await page.click('[data-act="globe-fly"]', f);
+  for (let k = 0; k < 50 && !(await page.$('.qopt')); k++) await sleep(300);
+  await bruteForce('.qopt', 7, 1400);
   await sleep(800);
   const geo = await page.evaluate(() => { const s = JSON.parse(localStorage.getItem('emmigame-v1')); return [s.geoAt, !!s.stamps.jp]; });
   if (geo[0] !== 'jp' || !geo[1]) errors.push('Flug nach Japan ohne Stempel: ' + geo);

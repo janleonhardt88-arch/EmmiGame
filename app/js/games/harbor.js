@@ -128,7 +128,14 @@ function start() {
       const r = btn.getBoundingClientRect();
       floatText(`+${n} 🐚`, r.left + r.width / 2, r.top);
       const el = $('#shell-n'); if (el) el.textContent = s.shells;
-      if (t.kind === 'lang') setTimeout(() => speak(t.a, t.lang === 'pt' ? 'pt-PT' : 'en-GB'), 700);
+      if (t.kind === 'lang') {
+        // Fremdwort groß zeigen und zweimal in Ruhe vorsprechen
+        const lang = t.lang === 'pt' ? 'pt-PT' : 'en-GB';
+        const fb = $('#qfb');
+        if (fb) fb.innerHTML += ` <span class="say-big">${t.flag} ${esc(t.a)}</span>`;
+        speak(t.a, lang, { queue: true });
+        speak(t.a, lang, { queue: true });
+      }
       // Manchmal taucht ein Meerestier auf
       else if (Math.random() < 0.4) {
         const keys = Object.keys(SEA_ANIMALS);
@@ -138,9 +145,9 @@ function start() {
         const isNew = !s.album[k];
         s.album[k] = (s.album[k] || 0) + 1;
         leg.animals.push(k);
+        speak(a.pt, 'pt-PT', { queue: true });
         setTimeout(() => {
           api.toast(`${isNew ? 'Neu im Album: ' : 'Da! '}${a.ico} ${a.de.replace(/^(der|die|das) /, '')} – 🇵🇹 ${a.pt}`);
-          speak(a.pt, 'pt-PT');
           spout(a.ico);
         }, 600);
       }
