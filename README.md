@@ -9,11 +9,14 @@ Englisch und Deutsch.
 
 Ideen & Konzept: [`docs/BRAINSTORMING.md`](docs/BRAINSTORMING.md)
 
-## Was drin ist (v0.4)
+## Was drin ist (v0.5)
 
 Startbildschirm ist eine **Weltkarte**: Emmi tippt auf ein Gebäude und ist am Ort. Kleine Abzeichen zeigen,
 wo etwas wartet (💧 gießen, 🧺 ernten, 🛎️ Kunden, ⭐ Tagesaufgabe).
 
+- 🌲 **Wald** – Sachkunde-Fragen (Tiere, Pflanzen, Jahreszeiten, Körper, Umwelt); jede richtige Antwort bringt Holz, unterwegs gibt es Naturschätze zu finden
+- 🏡 **Häuschen** – mit dem Holz in 5 Schritten ein eigenes Haus bauen und dann mit 14 Möbeln einrichten (Namen auf Portugiesisch und Englisch)
+- 🌍 **Weltreise** – Erdkunde: Flaggen, Länder, Hauptstädte, Kontinente, Flüsse, Himmelsrichtungen; Stempel im Reisepass
 - 🌱 **Garten** – säen, gießen (Plus/Minus bis 100, passt sich automatisch an), ernten; Deko aus dem Hofladen
 - 🥋 **Karate-Dojo** – 10 Bretter mit dem Einmaleins; Aufgaben, die noch nicht sitzen, kommen öfter dran
 - 🩰 **Ballettstudio** – *Tanz merken* und *Uhr-Ballett* (Uhrzeit lesen in 3 Stufen)
@@ -21,7 +24,7 @@ wo etwas wartet (💧 gießen, 🧺 ernten, 🛎️ Kunden, ⭐ Tagesaufgabe).
 - 🧶 **Bastelstube** – Perlen-Armbänder: Muster und Zahlenfolgen
 - 🧗 **Kletterwand** – Deutsch: Wortarten, Rechtschreibung, Silben, Reime, Groß/klein
 - 🏪 **Hofladen** – Samen, Tiere, Beete, Deko kaufen; Ernte verkaufen mit Wechselgeld (Euro & Cent)
-- 🥋 **Gürtel** von Weiß bis Schwarz, ✅ **Tagesaufgaben** mit Bonus-Sternen
+- 🥋 **Gürtel** von Weiß über Schwarz bis Bronze, Silber, Gold und Diamant (werden nach oben hin seltener), ✅ **Tagesaufgaben** mit Bonus-Sternen
 - 🎵 **Hintergrundmusik** – zwei echte Instrumentalstücke (MP3, mit ElevenLabs Music erzeugt), an Lernorten leiser, beim Vorlesen kurz abgesenkt; eigener Aus-Knopf
 - 🎙️ **Eigene Stimmen** – Wörter und Sätze selbst aufnehmen (z. B. Mama auf Portugiesisch)
 - 👗 **Figur gestalten** – Tipp auf den Namen oben links: 8 Frisuren, 9 Haarfarben, 5 Hauttöne, 8 Outfits, 5 Tutu-Farben, 7 Extras (Krone, Brille, Katzenohren …); vieles kostet Sterne

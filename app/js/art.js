@@ -614,7 +614,20 @@ const PLACE_ART = {
     <path d="M20 18 L36 18 L29 46 L8 46Z M52 18 L68 18 L70 46 L50 46Z M84 18 L100 18 L112 46 L91 46Z" fill="#ff7e8a"/>
     <path d="M8 46 Q18.4 58 28.8 46 Q39.2 58 49.6 46 Q60 58 70.4 46 Q80.8 58 91.2 46 Q101.6 58 112 46Z" fill="#ff7e8a" stroke="#d6566a" stroke-width="2.5" stroke-linejoin="round"/>`,
 };
-export function place(id) {
+PLACE_ART.forest = () => `<ellipse cx="60" cy="101" rx="52" ry="8" fill="rgba(0,0,0,.12)"/>
+    ${[[24, 30, 1], [60, 10, 1.25], [96, 30, 1]].map(([x, y, k]) => `<g transform="translate(${x} ${y}) scale(${k})"><path d="M-3 62 V72 H3 V62Z" fill="#8a5a2e"/><path d="M0 0 L-20 34 H-10 L-24 60 H24 L10 34 H20Z" fill="#3fa34a" stroke="#2a7a33" stroke-width="2.5" stroke-linejoin="round"/></g>`).join('')}
+    <path d="M44 100 Q44 90 54 90 Q64 90 64 100Z" fill="#ff5a4e" stroke="#c9443a" stroke-width="2"/><rect x="51" y="99" width="6" height="7" rx="2" fill="#fff6e8"/>
+    <circle cx="50" cy="95" r="1.6" fill="#fff"/><circle cx="57" cy="93" r="1.6" fill="#fff"/>
+    ${[[82, 98], [92, 98], [87, 92]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="5" fill="#d9a86a" stroke="#8a5a2e" stroke-width="2"/>`).join('')}`;
+PLACE_ART.globe = () => `<ellipse cx="60" cy="101" rx="34" ry="6" fill="rgba(0,0,0,.12)"/>
+    <path d="M60 86 V98 M44 100 H76" stroke="#8a5a2e" stroke-width="6" stroke-linecap="round"/>
+    <path d="M22 46 A38 38 0 0 0 98 46" fill="none" stroke="#c99257" stroke-width="4"/>
+    <circle cx="60" cy="48" r="34" fill="#5aa9ff" stroke="#2f7fd6" stroke-width="3"/>
+    <path d="M40 28 Q52 22 58 32 Q54 40 46 38 Q38 36 40 28Z M64 44 Q78 40 84 52 Q80 66 70 62 Q62 56 64 44Z M36 54 Q44 52 48 62 Q42 72 36 66Z" fill="#62cc5c" stroke="#3fa34a" stroke-width="2"/>
+    <ellipse cx="48" cy="34" rx="8" ry="4" fill="#fff" opacity=".35" transform="rotate(-30 48 34)"/>`;
+
+export function place(id, stage = 0) {
+  if (id === 'house') return svg(`<g transform="translate(-10 -12) scale(.7)">${inner(homeStage(stage))}</g>`, { vb: '0 0 120 110', par: 'xMidYMax meet' });
   return svg((PLACE_ART[id] || PLACE_ART.garden)(), { vb: '0 0 120 110', par: 'xMidYMax meet' });
 }
 
@@ -664,3 +677,40 @@ export const iconMusic = (on = true) => svg(`
   <ellipse cx="28" cy="72" rx="12" ry="9" fill="${on ? '#ff8cc6' : '#cfc3e6'}" stroke="${on ? '#e2559a' : '#9a8cb8'}" stroke-width="4"/>
   <ellipse cx="68" cy="64" rx="12" ry="9" fill="${on ? '#ff8cc6' : '#cfc3e6'}" stroke="${on ? '#e2559a' : '#9a8cb8'}" stroke-width="4"/>
   ${on ? '' : '<path d="M14 14 L86 86" stroke="#e2559a" stroke-width="7" stroke-linecap="round"/>'}`);
+
+// Bild aus einem Emoji (für Vokabeln, Möbel, Fundstücke …)
+export const emoji = (e, size = 74) => svg(`<text x="50" y="54" text-anchor="middle" dominant-baseline="central" font-size="${size}" font-family="'Noto Color Emoji','Apple Color Emoji','Segoe UI Emoji',sans-serif">${e}</text>`);
+
+// ---------- Häuschen (wächst mit dem Bau: Stufe 0 bis 5) ----------
+export function homeStage(stage) {
+  const s = stage;
+  let b = '<ellipse cx="100" cy="150" rx="92" ry="14" fill="#8fd46b"/>';
+  if (s === 0) {
+    b += `<path d="M62 150 L62 104" stroke="#a8703e" stroke-width="5" stroke-linecap="round"/>
+      <rect x="36" y="92" width="52" height="22" rx="4" fill="#fff6e8" stroke="#c99257" stroke-width="3"/>
+      <text x="62" y="107" text-anchor="middle" font-family="Nunito, sans-serif" font-weight="800" font-size="10" fill="#6b3f1a">Hier baue ich!</text>`;
+  }
+  // Holzstapel liegt immer daneben, bis das Haus fertig ist
+  if (s < 5) {
+    b += [[118, 140], [134, 140], [150, 140], [126, 128], [142, 128], [134, 116]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="8" fill="#d9a86a" stroke="#8a5a2e" stroke-width="2.5"/><circle cx="${x}" cy="${y}" r="3.5" fill="none" stroke="#b07a42" stroke-width="1.5"/>`).join('');
+  }
+  if (s >= 1) b += `<rect x="36" y="134" width="128" height="14" rx="3" fill="#b8b2c4" stroke="#7d7590" stroke-width="2.5"/>${[48, 70, 92, 114, 136, 156].map((x) => `<path d="M${x} 134 V148" stroke="#7d7590" stroke-width="1.6"/>`).join('')}`;
+  if (s >= 2) b += `<rect x="46" y="72" width="108" height="62" fill="#e8b97a" stroke="#a8703e" stroke-width="3"/>${[84, 96, 108, 120].map((y) => `<path d="M46 ${y} H154" stroke="#c99257" stroke-width="2"/>`).join('')}`;
+  if (s >= 5) b += `<rect x="124" y="30" width="14" height="30" fill="#c9443a" stroke="#8a2a24" stroke-width="2.5"/><circle cx="134" cy="22" r="6" fill="#e6e6ee" opacity=".9"/><circle cx="142" cy="12" r="8" fill="#eeeef4" opacity=".8"/>`;
+  if (s >= 3) b += `<path d="M34 76 L100 26 L166 76Z" fill="#ff6b5e" stroke="#c9443a" stroke-width="3" stroke-linejoin="round"/><path d="M58 58 H142 M76 44 H124" stroke="#e2453c" stroke-width="2"/>`;
+  if (s >= 4) {
+    b += `<path d="M88 134 V104 Q100 92 112 104 V134Z" fill="#a8703e" stroke="#6b3f1a" stroke-width="2.5"/><circle cx="107" cy="120" r="2.2" fill="#ffd23b"/>`;
+    b += [56, 128].map((x) => `<rect x="${x}" y="88" width="20" height="20" rx="2" fill="#8fd0ff" stroke="#6b3f1a" stroke-width="2.5"/><path d="M${x + 10} 88 V108 M${x} 98 H${x + 20}" stroke="#6b3f1a" stroke-width="2"/>`).join('');
+  }
+  if (s >= 5) {
+    b += [56, 128].map((x) => `<rect x="${x - 2}" y="108" width="24" height="6" rx="2" fill="#a8703e"/><circle cx="${x + 4}" cy="106" r="3" fill="#ff7eb6"/><circle cx="${x + 11}" cy="105" r="3" fill="#ffd23b"/><circle cx="${x + 18}" cy="106" r="3" fill="#9b7bff"/>`).join('');
+    b += `<path d="M100 112 C97 109 95 107 96.5 105 C98 104 99.5 104.5 100 106 C100.5 104.5 102 104 103.5 105 C105 107 103 109 100 112Z" fill="#ff7eb6"/>`;
+  }
+  return svg(b, { vb: '0 0 200 165', par: 'xMidYMax meet' });
+}
+
+export const table = () => svg(`
+  <rect x="10" y="34" width="80" height="12" rx="4" fill="#d9a86a" stroke="#8a5a2e" stroke-width="3"/>
+  <path d="M20 46 V88 M80 46 V88" stroke="#8a5a2e" stroke-width="6" stroke-linecap="round"/>
+  <ellipse cx="38" cy="30" rx="10" ry="4" fill="#fff" stroke="#c9c2d6" stroke-width="2"/><circle cx="62" cy="26" r="6" fill="#ff5a4e"/>`);
+export const rug = () => svg(`<ellipse cx="50" cy="50" rx="48" ry="20" fill="#ff9ccb" stroke="#e2559a" stroke-width="3"/><ellipse cx="50" cy="50" rx="36" ry="13" fill="none" stroke="#fff" stroke-width="3" stroke-dasharray="6 5"/>`, { par: 'none' });

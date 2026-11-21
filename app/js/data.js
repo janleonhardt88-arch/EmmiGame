@@ -42,15 +42,22 @@ export const ANIMALS = {
 };
 export const MAX_PER_ANIMAL = 3;
 
+// Gürtel: werden nach oben hin immer seltener (ca. 1 Punkt pro richtiger Aufgabe)
 export const BELTS = [
   { de: 'Weißer Gürtel', dn: 'der weiße Gürtel', color: '#ffffff', xp: 0, pt: 'o cinto branco', en: 'white belt' },
-  { de: 'Gelber Gürtel', dn: 'der gelbe Gürtel', color: '#ffd93b', xp: 25, pt: 'o cinto amarelo', en: 'yellow belt' },
-  { de: 'Oranger Gürtel', dn: 'der orange Gürtel', color: '#ff9a3b', xp: 60, pt: 'o cinto laranja', en: 'orange belt' },
-  { de: 'Grüner Gürtel', dn: 'der grüne Gürtel', color: '#4cc35a', xp: 110, pt: 'o cinto verde', en: 'green belt' },
-  { de: 'Blauer Gürtel', dn: 'der blaue Gürtel', color: '#3b8cff', xp: 180, pt: 'o cinto azul', en: 'blue belt' },
-  { de: 'Brauner Gürtel', dn: 'der braune Gürtel', color: '#9a5b2e', xp: 270, pt: 'o cinto castanho', en: 'brown belt' },
-  { de: 'Schwarzer Gürtel', dn: 'der schwarze Gürtel', color: '#2b2b2b', xp: 400, pt: 'o cinto preto', en: 'black belt' },
+  { de: 'Gelber Gürtel', dn: 'der gelbe Gürtel', color: '#ffd93b', xp: 40, pt: 'o cinto amarelo', en: 'yellow belt' },
+  { de: 'Oranger Gürtel', dn: 'der orange Gürtel', color: '#ff9a3b', xp: 120, pt: 'o cinto laranja', en: 'orange belt' },
+  { de: 'Grüner Gürtel', dn: 'der grüne Gürtel', color: '#4cc35a', xp: 250, pt: 'o cinto verde', en: 'green belt' },
+  { de: 'Blauer Gürtel', dn: 'der blaue Gürtel', color: '#3b8cff', xp: 450, pt: 'o cinto azul', en: 'blue belt' },
+  { de: 'Brauner Gürtel', dn: 'der braune Gürtel', color: '#9a5b2e', xp: 750, pt: 'o cinto castanho', en: 'brown belt' },
+  { de: 'Schwarzer Gürtel', dn: 'der schwarze Gürtel', color: '#2b2b2b', xp: 1150, pt: 'o cinto preto', en: 'black belt' },
+  { de: 'Bronze-Gürtel', dn: 'der Bronze-Gürtel', color: '#cd7f32', xp: 1700, pt: 'o cinto de bronze', en: 'bronze belt' },
+  { de: 'Silber-Gürtel', dn: 'der Silber-Gürtel', color: '#c3c9d3', xp: 2400, pt: 'o cinto de prata', en: 'silver belt' },
+  { de: 'Gold-Gürtel', dn: 'der Gold-Gürtel', color: '#f4c430', xp: 3300, pt: 'o cinto de ouro', en: 'gold belt' },
+  { de: 'Diamant-Gürtel', dn: 'der Diamant-Gürtel', color: '#8fe3ff', xp: 4500, pt: 'o cinto de diamante', en: 'diamond belt' },
 ];
+// Gürtel-Grenzen der ersten Version – für die Umrechnung alter Spielstände
+export const OLD_BELT_XP = [0, 25, 60, 110, 180, 270, 400];
 
 export function beltIndex(xp) {
   let i = 0;
@@ -77,7 +84,8 @@ export const DOJO_ROWS = [
   [2, 3, 4, 5, 6, 10],
   [2, 3, 4, 5, 6, 7, 8, 9, 10],
 ];
-export const DOJO_DIV_FROM_BELT = 4;
+// Geteilt-Aufgaben nur, wenn Eltern sie einschalten (automatisch zu schwer für die 2. Klasse)
+export const DOJO_DIV_FROM_BELT = 99;
 export const DOJO_BOARDS = 10;
 export const DOJO_FAST_MS = 6000;
 

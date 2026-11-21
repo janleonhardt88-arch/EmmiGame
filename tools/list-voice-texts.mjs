@@ -3,6 +3,9 @@
 import { PLANTS, ANIMALS, BELTS, DECOS, PRAISE } from '../app/js/data.js';
 import { CATEGORIES } from '../app/js/vocab.js';
 import { NOUNS, VERBS, ADJECTIVES, SPELLING, SYLLABLE_WORDS, RHYMES } from '../app/js/words.js';
+import { NATURE_QUESTIONS, FINDS } from '../app/js/sachkunde.js';
+import { COUNTRIES, allGeoTasks } from '../app/js/erdkunde.js';
+import { FURNITURE } from '../app/js/house-data.js';
 
 const NAME = 'Emmi';
 const out = new Map();
@@ -36,5 +39,12 @@ function timeLabel(h, m) {
   return `${60 - m} vor ${nh(h)}`;
 }
 for (let h = 1; h <= 12; h++) for (let m = 0; m < 60; m += 5) add('de-DE', `Es ist ${timeLabel(h, m)}.`);
+
+// Wald, Weltreise, Häuschen
+for (const t of NATURE_QUESTIONS) add('de-DE', t.q);
+for (const f of Object.values(FINDS)) { add('pt-PT', f.pt); add('en-GB', f.en); add('de-DE', f.de); }
+for (const t of allGeoTasks()) add('de-DE', t.q);
+for (const c of COUNTRIES) { add('pt-PT', c.pt); add('en-GB', c.en); }
+for (const f of Object.values(FURNITURE)) { add('pt-PT', f.pt); add('en-GB', f.en); add('de-DE', f.de); }
 
 console.log(JSON.stringify([...out.values()]));

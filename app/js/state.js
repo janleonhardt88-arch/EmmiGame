@@ -1,5 +1,5 @@
 // Spielstand – lokal auf dem Gerät gespeichert.
-import { START_BEDS } from './data.js';
+import { START_BEDS, BELTS, OLD_BELT_XP } from './data.js';
 
 const KEY = 'emmigame-v1';
 
@@ -40,10 +40,24 @@ export function defaults() {
     deco: {},
     facts: {}, // Einmaleins: wie oft richtig/falsch je Aufgabe
     welcomed: false,
+    beltV: 2,
+    wood: 0,
+    finds: {},
+    house: { stage: 0, items: {} },
+    stamps: {},
     limitMin: 0, // Spielzeit-Limit pro Tag in Minuten (0 = aus)
     play: null,
     daily: null,
   };
+}
+
+// Gürtel-Umstellung (längere Gürtel): bereits erreichten Gürtel behalten
+function migrate(s) {
+  if (s.beltV) return;
+  let i = 0;
+  while (i + 1 < OLD_BELT_XP.length && (s.xp || 0) >= OLD_BELT_XP[i + 1]) i++;
+  s.xp = Math.max(s.xp || 0, BELTS[i].xp);
+  s.beltV = 2;
 }
 
 function load() {
@@ -51,6 +65,7 @@ function load() {
     const s = JSON.parse(localStorage.getItem(KEY));
     if (s && s.v === 1) {
       const d = defaults();
+      migrate(s);
       return { ...d, ...s, stats: { ...d.stats, ...(s.stats || {}) }, look: { ...d.look, ...(s.look || {}) } };
     }
   } catch (e) { /* ignorieren */ }
@@ -65,6 +80,7 @@ export function save() {
 
 // Spielstand aus einer Sicherungsdatei übernehmen
 export function importState(data) {
+  migrate(data);
   const d = defaults();
   for (const k of Object.keys(state)) delete state[k];
   Object.assign(state, d, data, { stats: { ...d.stats, ...(data.stats || {}) }, look: { ...d.look, ...(data.look || {}) } });

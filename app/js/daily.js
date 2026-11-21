@@ -14,6 +14,8 @@ export const QUESTS = {
   climb: { goal: 1, text: () => 'Einmal bis zur Glocke klettern', ico: '🧗', place: 'climb' },
   ballet: { goal: 1, text: () => 'Im Ballettstudio üben', ico: '🩰', place: 'ballet' },
   market: { goal: 1, text: () => 'Einen Kunden im Hofladen bedienen', ico: '🛎️', place: 'shop' },
+  forest: { goal: 1, text: () => 'Einen Waldspaziergang machen', ico: '🌲', place: 'forest' },
+  globe: { goal: 1, text: () => 'Eine Weltreise machen', ico: '✈️', place: 'globe' },
 };
 export const DAILY_REWARD = 10;
 

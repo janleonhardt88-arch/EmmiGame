@@ -14,6 +14,9 @@ import stage from './games/stage.js';
 import craft from './games/craft.js';
 import climb from './games/climb.js';
 import shop from './games/shop.js';
+import forest from './games/forest.js';
+import house, { HOUSE_STAGES } from './games/house.js';
+import globe from './games/globe.js';
 import { parentsGate } from './parents.js';
 import { initClips } from './recorder.js';
 import { startPlayTimer } from './playtime.js';
@@ -23,13 +26,16 @@ import { initUpdates } from './update.js';
 
 // Orte auf der Karte: Position [x, y] in Prozent für Quer- und Hochformat
 const PLACES = [
-  { mod: dojo, label: 'Karate-Dojo', pos: [13, 33], ppos: [27, 20] },
-  { mod: ballet, label: 'Ballettstudio', pos: [37, 30], ppos: [73, 20] },
-  { mod: stage, label: 'Singbühne', pos: [63, 30], ppos: [27, 41] },
-  { mod: climb, label: 'Kletterwand', pos: [87, 33], ppos: [73, 41] },
-  { mod: craft, label: 'Bastelstube', pos: [22, 74], ppos: [27, 62] },
-  { mod: garden, label: 'Garten', pos: [50, 76], ppos: [50, 84] },
-  { mod: shop, label: 'Hofladen', pos: [78, 74], ppos: [73, 62] },
+  { mod: dojo, label: 'Karate-Dojo', pos: [12, 24], ppos: [18, 15] },
+  { mod: ballet, label: 'Ballettstudio', pos: [37, 21], ppos: [50, 15] },
+  { mod: stage, label: 'Singbühne', pos: [63, 21], ppos: [82, 15] },
+  { mod: climb, label: 'Kletterwand', pos: [88, 24], ppos: [18, 38] },
+  { mod: craft, label: 'Bastelstube', pos: [12, 54], ppos: [50, 38] },
+  { mod: forest, label: 'Wald', pos: [37, 52], ppos: [82, 38] },
+  { mod: globe, label: 'Weltreise', pos: [63, 52], ppos: [18, 61] },
+  { mod: house, label: 'Häuschen', pos: [88, 54], ppos: [50, 61] },
+  { mod: garden, label: 'Garten', pos: [30, 83], ppos: [82, 61] },
+  { mod: shop, label: 'Hofladen', pos: [70, 83], ppos: [35, 85] },
 ];
 const BY_ID = Object.fromEntries(PLACES.map((p) => [p.mod.id, p.mod]));
 
@@ -59,6 +65,10 @@ function badgeFor(id, open) {
     if (beds.length) return '💧';
   }
   if (id === 'shop' && Object.values(state.basket).some((n) => n > 0)) return '🛎️';
+  if (id === 'house') {
+    const next = HOUSE_STAGES[state.house?.stage || 0];
+    if (next && state.wood >= next.wood && state.stars >= next.stars) return '🔨';
+  }
   return open.has(id) ? '⭐' : '';
 }
 
@@ -79,7 +89,7 @@ function renderMap() {
         const badge = badgeFor(p.mod.id, open);
         return `<button class="place" data-act="goto" data-to="${p.mod.id}" style="--x:${p.pos[0]};--y:${p.pos[1]};--px:${p.ppos[0]};--py:${p.ppos[1]}">
           ${badge ? `<span class="place-badge">${badge}</span>` : ''}
-          <span class="place-art">${art.place(p.mod.id)}</span>
+          <span class="place-art">${art.place(p.mod.id, state.house?.stage || 0)}</span>
           <span class="place-sign">${p.label}</span>
         </button>`;
       }).join('')}
@@ -143,6 +153,9 @@ const actions = {
   wardrobe: () => { sfx.tick(); openWardrobe(); },
   say: (el) => speak(el.dataset.text, el.dataset.lang),
   'emmi-hi': (el) => emmiHi(el),
+  'quiz-pick': (el) => BY_ID[screen]?.quiz?.()?.pick(el),
+  'quiz-say': () => BY_ID[screen]?.quiz?.()?.say(),
+  'quiz-quit': () => BY_ID[screen]?.quit?.(),
   ...dailyActions,
   ...wardrobeActions,
 };
@@ -171,11 +184,11 @@ initVoices().then((index) => {
   const files = Object.values(index);
   const mark = `voices-${files.length}`;
   let done = null;
-  try { done = localStorage.getItem('emmigame-voices-m3'); } catch (e) { /* egal */ }
+  try { done = localStorage.getItem('emmigame-voices-m4'); } catch (e) { /* egal */ }
   if (!files.length || done === mark || !navigator.serviceWorker?.controller) return;
   (async () => {
     for (const f of files) { try { await fetch('voice/' + f); } catch (e) { return; } }
-    try { localStorage.setItem('emmigame-voices-m3', mark); } catch (e) { /* egal */ }
+    try { localStorage.setItem('emmigame-voices-m4', mark); } catch (e) { /* egal */ }
   })();
 });
 // Ältere Spielstände (vor der Begrüßung) nicht noch einmal begrüßen

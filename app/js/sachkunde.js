@@ -1,0 +1,73 @@
+// 🌲 Sachkunde (2. Klasse): Tiere, Pflanzen, Jahreszeiten, Körper, Umwelt
+// Jede Frage: Bild, Frage, richtige Antwort, falsche Antworten, Tipp
+export const NATURE_QUESTIONS = [
+  // Tiere
+  { ico: '🦔', q: 'Welches Tier hält Winterschlaf?', a: 'der Igel', w: ['das Reh', 'der Fuchs'], tip: 'Es rollt sich im Laubhaufen zusammen und hat Stacheln.' },
+  { ico: '🥚', q: 'Welches Tier legt Eier?', a: 'das Huhn', w: ['die Kuh', 'der Hund'], tip: 'Es lebt auf dem Bauernhof und gackert.' },
+  { ico: '🕷️', q: 'Wie viele Beine hat eine Spinne?', a: '8', w: ['6', '4'], tip: 'Mehr als ein Käfer!' },
+  { ico: '🐞', q: 'Wie viele Beine hat ein Insekt?', a: '6', w: ['8', '4'], tip: 'Käfer, Bienen und Ameisen sind Insekten.' },
+  { ico: '🐝', q: 'Welches Tier ist ein Insekt?', a: 'die Biene', w: ['die Spinne', 'die Schnecke'], tip: 'Insekten haben sechs Beine.' },
+  { ico: '🐦', q: 'Welches Tier ist ein Vogel?', a: 'der Specht', w: ['die Fledermaus', 'das Eichhörnchen'], tip: 'Vögel haben Federn und einen Schnabel.' },
+  { ico: '🐿️', q: 'Was frisst ein Eichhörnchen am liebsten?', a: 'Nüsse', w: ['Fleisch', 'Gras'], tip: 'Es versteckt sie im Herbst für den Winter.' },
+  { ico: '🦌', q: 'Wie heißt das Kind vom Reh?', a: 'das Kitz', w: ['das Fohlen', 'das Kalb'], tip: 'Es hat weiße Punkte auf dem Fell.' },
+  { ico: '🐴', q: 'Wie heißt das Kind vom Pferd?', a: 'das Fohlen', w: ['das Kitz', 'das Ferkel'], tip: 'Es reimt sich fast auf „Johlen".' },
+  { ico: '🐷', q: 'Wie heißt das Kind vom Schwein?', a: 'das Ferkel', w: ['das Lamm', 'das Küken'], tip: 'Es ist rosa und quiekt.' },
+  { ico: '🐑', q: 'Wie heißt das Kind vom Schaf?', a: 'das Lamm', w: ['das Ferkel', 'das Fohlen'], tip: 'Es macht „mäh".' },
+  { ico: '🐛', q: 'Was wird aus einer Raupe?', a: 'ein Schmetterling', w: ['eine Biene', 'ein Käfer'], tip: 'Sie verpuppt sich und bekommt bunte Flügel.' },
+  { ico: '🐸', q: 'Was wird aus einer Kaulquappe?', a: 'ein Frosch', w: ['ein Fisch', 'eine Schnecke'], tip: 'Es quakt am Teich.' },
+  { ico: '🦊', q: 'Wo wohnt der Fuchs?', a: 'im Bau', w: ['im Nest', 'im Stall'], tip: 'Er gräbt sich eine Höhle in die Erde.' },
+  { ico: '🐝', q: 'Wo wohnen Bienen?', a: 'im Bienenstock', w: ['im Fuchsbau', 'im Vogelnest'], tip: 'Dort machen sie auch Honig.' },
+  { ico: '🌳', q: 'Welcher Vogel klopft Löcher in Bäume?', a: 'der Specht', w: ['die Amsel', 'die Taube'], tip: 'Tock-tock-tock macht sein Schnabel.' },
+  { ico: '🌙', q: 'Welches Tier ist nachts wach?', a: 'die Eule', w: ['das Eichhörnchen', 'die Biene'], tip: 'Sie ruft „Uhu" und hat große Augen.' },
+  { ico: '🌼', q: 'Was sammeln Bienen in den Blüten?', a: 'Nektar', w: ['Blätter', 'Holz'], tip: 'Daraus machen sie Honig.' },
+  { ico: '🦔', q: 'Welches Tier hat Stacheln?', a: 'der Igel', w: ['der Hase', 'die Maus'], tip: 'Er rollt sich zu einer Kugel.' },
+  { ico: '🐄', q: 'Welches Tier gibt uns Milch?', a: 'die Kuh', w: ['das Huhn', 'das Pferd'], tip: 'Sie macht „muh".' },
+  // Bäume und Pflanzen
+  { ico: '🌲', q: 'Welcher Baum hat Nadeln?', a: 'die Tanne', w: ['die Eiche', 'die Buche'], tip: 'Er ist auch im Winter grün – wie ein Weihnachtsbaum.' },
+  { ico: '🌰', q: 'An welchem Baum wachsen Eicheln?', a: 'an der Eiche', w: ['an der Buche', 'an der Tanne'], tip: 'Das Wort steckt schon im Namen.' },
+  { ico: '🍁', q: 'Welcher Baum verliert im Herbst seine Blätter?', a: 'der Ahorn', w: ['die Tanne', 'die Fichte'], tip: 'Nadelbäume bleiben grün, Laubbäume nicht.' },
+  { ico: '🌱', q: 'Was braucht eine Pflanze zum Wachsen?', a: 'Wasser und Licht', w: ['Salz und Zucker', 'nur Dunkelheit'], tip: 'Denk an deinen Garten: Was gibst du den Pflanzen?' },
+  { ico: '🥕', q: 'Welcher Teil der Pflanze steckt in der Erde?', a: 'die Wurzel', w: ['die Blüte', 'das Blatt'], tip: 'Mit ihr trinkt die Pflanze Wasser.' },
+  { ico: '🌻', q: 'Woraus wächst eine neue Pflanze?', a: 'aus einem Samen', w: ['aus einem Stein', 'aus Sand'], tip: 'Die kaufst du im Hofladen.' },
+  { ico: '🍄', q: 'Welcher Pilz ist giftig?', a: 'der Fliegenpilz', w: ['der Champignon', 'der Steinpilz'], tip: 'Er ist rot mit weißen Punkten.' },
+  { ico: '❄️', q: 'Welche Blume blüht als eine der ersten im Frühling?', a: 'das Schneeglöckchen', w: ['die Sonnenblume', 'die Rose'], tip: 'Manchmal liegt sogar noch Schnee.' },
+  // Jahreszeiten und Wetter
+  { ico: '🍂', q: 'In welcher Jahreszeit fallen die Blätter von den Bäumen?', a: 'im Herbst', w: ['im Frühling', 'im Sommer'], tip: 'Dann werden die Blätter bunt.' },
+  { ico: '⛄', q: 'In welcher Jahreszeit ist es am kältesten?', a: 'im Winter', w: ['im Sommer', 'im Herbst'], tip: 'Dann kann es schneien.' },
+  { ico: '☀️', q: 'Welcher Monat ist im Sommer?', a: 'Juli', w: ['Januar', 'Oktober'], tip: 'Sommer: Juni, Juli, August.' },
+  { ico: '🗓️', q: 'Wie viele Jahreszeiten gibt es?', a: '4', w: ['3', '12'], tip: 'Frühling, Sommer, …' },
+  { ico: '📅', q: 'Wie viele Monate hat ein Jahr?', a: '12', w: ['10', '7'], tip: 'Von Januar bis Dezember.' },
+  { ico: '📆', q: 'Wie viele Tage hat eine Woche?', a: '7', w: ['5', '10'], tip: 'Montag, Dienstag, …' },
+  { ico: '❄️', q: 'Was ist Schnee?', a: 'gefrorenes Wasser', w: ['Zucker', 'Watte'], tip: 'Er schmilzt in deiner warmen Hand.' },
+  { ico: '🧊', q: 'Ab wie viel Grad gefriert Wasser zu Eis?', a: 'bei 0 Grad', w: ['bei 20 Grad', 'bei 100 Grad'], tip: 'Bei 100 Grad kocht Wasser.' },
+  { ico: '🌈', q: 'Wann siehst du einen Regenbogen?', a: 'bei Sonne und Regen', w: ['nur nachts', 'bei Nebel'], tip: 'Die Sonne scheint durch die Regentropfen.' },
+  // Körper und Gesundheit
+  { ico: '🦷', q: 'Wie viele Milchzähne hat ein Kind?', a: '20', w: ['10', '32'], tip: 'Erwachsene haben später 32.' },
+  { ico: '👃', q: 'Womit riechen wir?', a: 'mit der Nase', w: ['mit den Ohren', 'mit den Augen'], tip: 'Schnupper mal!' },
+  { ico: '👀', q: 'Wie viele Sinne hat der Mensch?', a: '5', w: ['3', '10'], tip: 'Sehen, hören, riechen, schmecken, fühlen.' },
+  { ico: '🍎', q: 'Was ist ein gesunder Snack?', a: 'ein Apfel', w: ['Gummibärchen', 'Chips'], tip: 'Er wächst am Baum.' },
+  { ico: '🪥', q: 'Wie oft am Tag putzt du dir die Zähne?', a: 'zweimal', w: ['einmal pro Woche', 'nie'], tip: 'Morgens und abends.' },
+  // Umwelt und Alltag
+  { ico: '🥤', q: 'Wohin gehört ein leerer Joghurtbecher?', a: 'in die gelbe Tonne', w: ['in die Biotonne', 'in die Papiertonne'], tip: 'Dahin kommt Verpackung aus Plastik.' },
+  { ico: '🍏', q: 'Wohin gehören Apfelreste?', a: 'in die Biotonne', w: ['in die gelbe Tonne', 'in den Glascontainer'], tip: 'Daraus kann wieder Erde werden.' },
+  { ico: '📰', q: 'Wohin gehört eine alte Zeitung?', a: 'in die Papiertonne', w: ['in die Biotonne', 'in die gelbe Tonne'], tip: 'Aus Altpapier wird neues Papier.' },
+  { ico: '💡', q: 'Wie sparst du Strom?', a: 'Licht ausschalten', w: ['Fenster aufmachen', 'Fernseher anlassen'], tip: 'Wenn du aus dem Zimmer gehst …' },
+  { ico: '🚦', q: 'Bei welcher Ampelfarbe darfst du gehen?', a: 'bei Grün', w: ['bei Rot', 'bei Gelb'], tip: 'Rot heißt stehen bleiben.' },
+  { ico: '🚲', q: 'Was trägst du beim Radfahren auf dem Kopf?', a: 'einen Helm', w: ['eine Mütze', 'eine Brille'], tip: 'Er schützt deinen Kopf beim Fallen.' },
+  { ico: '🧲', q: 'Was zieht ein Magnet an?', a: 'einen Nagel', w: ['ein Stück Holz', 'ein Blatt Papier'], tip: 'Magnete mögen Eisen.' },
+  { ico: '🌊', q: 'Was schwimmt im Wasser?', a: 'ein Stück Holz', w: ['ein Stein', 'ein Schlüssel'], tip: 'Boote wurden früher daraus gebaut.' },
+];
+
+// Fundstücke im Wald (Sammlung) – mit Namen auf Portugiesisch und Englisch
+export const FINDS = {
+  chestnut: { ico: '🌰', de: 'die Kastanie', pt: 'a castanha', en: 'chestnut' },
+  leaf: { ico: '🍂', de: 'das Blatt', pt: 'a folha', en: 'leaf' },
+  feather: { ico: '🪶', de: 'die Feder', pt: 'a pena', en: 'feather' },
+  mushroom: { ico: '🍄', de: 'der Pilz', pt: 'o cogumelo', en: 'mushroom' },
+  stone: { ico: '🪨', de: 'der Stein', pt: 'a pedra', en: 'stone' },
+  ladybird: { ico: '🐞', de: 'der Marienkäfer', pt: 'a joaninha', en: 'ladybird' },
+  snail: { ico: '🐌', de: 'die Schnecke', pt: 'o caracol', en: 'snail' },
+  flower: { ico: '🌼', de: 'die Blume', pt: 'a flor', en: 'flower' },
+  branch: { ico: '🌿', de: 'der Zweig', pt: 'o ramo', en: 'twig' },
+  berry: { ico: '🫐', de: 'die Heidelbeeren', pt: 'os mirtilos', en: 'blueberries' },
+};

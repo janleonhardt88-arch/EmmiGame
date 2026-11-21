@@ -68,6 +68,7 @@ function renderDojoRound() {
           </div>
         </div>
         <div class="speed"><span class="bolt">${art.bolt()}</span><div class="speed-track"><i style="animation-duration:${DOJO_FAST_MS}ms"></i></div></div>
+        <div class="dojo-hint" id="dhint"></div>
         <div class="choices">${t.choices.map((c) => `<button class="choice" data-act="dojo-pick" data-v="${c}">${c}</button>`).join('')}</div>
       </div>
       <button class="btn ghost quit" data-act="dojo-quit">Aufhören</button>
@@ -107,7 +108,21 @@ function dojoPick(btn) {
     btn.disabled = true;
     board.classList.remove('wobble'); void board.offsetWidth; board.classList.add('wobble');
     sfx.wrong();
+    $('#dhint').textContent = '💡 ' + hintFor(dojo.task.text);
   }
+}
+
+// Rechentipp nach einem Fehler: Malaufgabe als Plusaufgabe oder über eine leichte Kernaufgabe
+function hintFor(text) {
+  if (text.includes(':')) {
+    const [p, d] = text.split(':').map((x) => Number(x.trim()));
+    return `Welche Zahl mal ${d} ergibt ${p}? Zähl in ${d}er-Schritten: ${d}, ${2 * d}, ${3 * d} …`;
+  }
+  const [a, b] = text.split('·').map((x) => Number(x.trim()));
+  if (a <= 5) return `${a} · ${b} = ${Array(a).fill(b).join(' + ')}`;
+  if (b <= 5) return `${a} · ${b} = ${Array(b).fill(a).join(' + ')}`;
+  if (a === 10 || b === 10) return `Bei mal 10 hängst du eine 0 an.`;
+  return `Erst 5 · ${b} = ${5 * b}, dann noch ${a - 5} · ${b} = ${(a - 5) * b} dazu.`;
 }
 
 function finishDojo() {

@@ -185,6 +185,31 @@ async function typeNumber(n) {
   await bruteForce('.copt', 8, 1200);
   await sleep(1900);
 
+  step('Wald');
+  await goto('forest');
+  await page.click('[data-act="forest-start"]', f); await sleep(300);
+  await bruteForce('.qopt', 8, 1400);
+  await sleep(600);
+  const wood = await page.evaluate(() => JSON.parse(localStorage.getItem('emmigame-v1')).wood);
+  if (!(wood >= 8)) errors.push('Kein Holz gesammelt: ' + wood);
+
+  step('Häuschen bauen und einrichten');
+  await page.evaluate(() => { const s = JSON.parse(localStorage.getItem('emmigame-v1')); s.wood = 100; s.stars = 200; localStorage.setItem('emmigame-v1', JSON.stringify(s)); });
+  await page.reload(); await sleep(500);
+  await goto('house');
+  for (let k = 0; k < 5; k++) { await closeModals(); await page.click('[data-act="house-build"]', f); await sleep(400); }
+  await closeModals();
+  await page.click('[data-act="house-enter"]', f); await sleep(300);
+  await page.click('[data-act="house-buy"][data-k="bed"]', f); await sleep(300);
+  if (!(await page.$('.furn[data-k="bed"]'))) errors.push('Bett wurde nicht ins Zimmer gestellt');
+  await shot('12b-room');
+
+  step('Weltreise');
+  await goto('globe');
+  await page.click('[data-act="globe-start"]', f); await sleep(300);
+  await bruteForce('.qopt', 8, 1400);
+  await sleep(600);
+
   step('Karte & Tagesaufgaben');
   await closeModals();
   await page.click('.map-btn', f); await sleep(300);
