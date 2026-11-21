@@ -1,4 +1,5 @@
 import { clipUrl } from './recorder.js';
+import { music } from './music.js';
 // Soundeffekte (synthetisch, keine Dateien nötig) und Sprachausgabe.
 const prefs = { sound: true, speech: true };
 export function setAudioPrefs(p) { Object.assign(prefs, p); }
@@ -125,7 +126,8 @@ export function speak(text, lang = 'de-DE', { queue = false, force = false } = {
   chain = chain.then(() => {
     if (my !== gen) return undefined;
     const url = clipUrl(lang, text);
-    return url ? playClip(url) : playTTS(text, lang);
+    music.duck(true);
+    return (url ? playClip(url) : playTTS(text, lang)).then(() => { if (my === gen) music.duck(false); });
   });
 }
 

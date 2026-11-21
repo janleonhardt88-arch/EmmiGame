@@ -575,3 +575,9 @@ const DECO_ART = {
     <ellipse cx="45" cy="12" rx="3" ry="5" fill="#fff" opacity=".5" transform="rotate(20 45 12)"/>`,
 };
 export function deco(id) { return svg((DECO_ART[id] || DECO_ART.bench)(), { par: 'xMidYMax meet' }); }
+
+export const iconMusic = (on = true) => svg(`
+  <path d="M38 70 V24 L78 16 V62" fill="none" stroke="${on ? '#e2559a' : '#9a8cb8'}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <ellipse cx="28" cy="72" rx="12" ry="9" fill="${on ? '#ff8cc6' : '#cfc3e6'}" stroke="${on ? '#e2559a' : '#9a8cb8'}" stroke-width="4"/>
+  <ellipse cx="68" cy="64" rx="12" ry="9" fill="${on ? '#ff8cc6' : '#cfc3e6'}" stroke="${on ? '#e2559a' : '#9a8cb8'}" stroke-width="4"/>
+  ${on ? '' : '<path d="M14 14 L86 86" stroke="#e2559a" stroke-width="7" stroke-linecap="round"/>'}`);

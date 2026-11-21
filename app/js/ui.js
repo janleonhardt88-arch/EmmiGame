@@ -27,6 +27,7 @@ export function renderTop() {
     </div>
     <div class="top-right">
       <div class="stars-pill" id="stars"><span class="star-ico">${art.star()}</span><b>${state.stars}</b></div>
+      <button class="icon-btn ${state.music ? '' : 'off'}" data-act="music" aria-label="Musik">${art.iconMusic(state.music)}</button>
       <button class="icon-btn" data-act="sound" aria-label="Ton">${state.sound ? art.iconSound() : art.iconMute()}</button>
       <button class="icon-btn small" data-act="parents" aria-label="Eltern">${art.iconLock()}</button>
     </div>`;

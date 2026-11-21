@@ -21,6 +21,7 @@ export function defaults() {
     dojoDiv: false,
     dojoBest: 0,
     sound: true,
+    music: true,
     speech: true,
     stats: { correct: 0, wrong: 0, harvested: 0, boards: 0 },
     collection: {},

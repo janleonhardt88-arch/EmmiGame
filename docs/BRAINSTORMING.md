@@ -50,7 +50,9 @@ Pflanzen brauchen Pflege, die Welt wächst sichtbar mit ihrem Lernfortschritt.
 - Stil: niedlich-bunt gezeichnet oder eher Emoji-/Bastel-Look?
 - Mit welchem Ort starten wir als erstem spielbaren Prototyp?
 
-## Stand (v0.3)
+## Stand (v0.4: Weltkarte, Musik, Deko, Zeitlimit, schlaueres Üben)
+
+### davor: v0.3
 Umgesetzt: Garten, Karate-Dojo, Ballettstudio (Tanz merken, Uhrzeit), Singbühne (inkl. Sätze),
 Bastelstube (Perlen-Armbänder), Kletterwand, Hofladen (kaufen & verkaufen mit Wechselgeld),
 Gürtelsystem, Tagesaufgaben, eigene Sprachaufnahmen, Elternbereich.

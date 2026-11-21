@@ -17,6 +17,7 @@ import shop from './games/shop.js';
 import { parentsGate } from './parents.js';
 import { initClips } from './recorder.js';
 import { startPlayTimer } from './playtime.js';
+import { music } from './music.js';
 
 // Orte auf der Karte: Position [x, y] in Prozent für Quer- und Hochformat
 const PLACES = [
@@ -33,6 +34,7 @@ const BY_ID = Object.fromEntries(PLACES.map((p) => [p.mod.id, p.mod]));
 let screen = 'map';
 
 setAudioPrefs({ sound: state.sound, speech: state.speech });
+music.setEnabled(state.music);
 
 function go(to) {
   if (screen !== to) BY_ID[screen]?.leave?.();
@@ -42,6 +44,7 @@ function go(to) {
 
 function render() {
   document.body.dataset.screen = screen;
+  music.setPlace(screen);
   ui.renderTop();
   if (screen === 'map') renderMap(); else BY_ID[screen].render();
 }
@@ -133,6 +136,7 @@ const actions = {
   goto: (el) => { if (ui.modalOpen()) ui.closeModal(); sfx.tick(); go(el.dataset.to); },
   close: () => ui.closeModal(),
   sound: () => { state.sound = !state.sound; setAudioPrefs({ sound: state.sound }); save(); ui.renderTop(); sfx.pop(); },
+  music: () => { state.music = !state.music; music.setEnabled(state.music); save(); ui.renderTop(); sfx.tick(); },
   parents: () => parentsGate(),
   say: (el) => speak(el.dataset.text, el.dataset.lang),
   'emmi-hi': (el) => emmiHi(el),
@@ -153,7 +157,7 @@ document.addEventListener('click', (e) => {
   if (!el || el.disabled) return;
   actions[el.dataset.act]?.(el, e);
 });
-document.addEventListener('pointerdown', () => sfx.unlock(), { once: true });
+document.addEventListener('pointerdown', () => { sfx.unlock(); music.unlock(); }, { once: true });
 document.addEventListener('contextmenu', (e) => e.preventDefault());
 
 initClips();

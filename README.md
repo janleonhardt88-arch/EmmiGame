@@ -9,27 +9,30 @@ Englisch und Deutsch.
 
 Ideen & Konzept: [`docs/BRAINSTORMING.md`](docs/BRAINSTORMING.md)
 
-## Was drin ist (v0.3)
+## Was drin ist (v0.4)
 
-- 🌱 **Garten** – säen, gießen (Plus/Minus bis 100, passt sich automatisch an), ernten
-- 🥋 **Karate-Dojo** – 10 Bretter mit dem Einmaleins, Blitz-Bonus fürs schnelle Rechnen
-- 🩰 **Ballettstudio** – *Tanz merken* (Schrittfolgen nachtanzen, wird immer länger) und *Uhr-Ballett* (Uhrzeit lesen: volle/halbe Stunden → Viertel → 5-Minuten, adaptiv)
-- 🎤 **Singbühne** – Vokabeln auf Portugiesisch & Englisch: hören, lesen, Bild ↔ Wort (Farben, Zahlen, Tiere, Obst & Gemüse, Rund ums Haus) und **Sätze** (Olá!, Como estás?, Eu gosto de dançar …); jede richtige Antwort ist ein Ton im Lied
-- 🧶 **Bastelstube** – Perlen-Armbänder: Muster fortsetzen und Zahlenfolgen (adaptiv), fertige Armbänder landen im Schmuckkästchen
-- 🧗 **Kletterwand** – Deutsch: Nomen/Verb/Adjektiv, Rechtschreibung (ie, ck, tz, Doppelkonsonant, Dehnungs-h …), Silben klatschen, Reime, Groß/klein
-- 🏪 **Hofladen** – Samen, Tiere, neue Beete kaufen; **Ernte verkaufen**: Preise addieren und Wechselgeld mit Münzen geben (Euro & Cent)
-- 🥋 **Gürtel** von Weiß bis Schwarz als Fortschritt
-- 🇵🇹🇬🇧🇩🇪 Vokabeln zum Antippen und Anhören (Sprachausgabe des Tablets)
-- ✅ **Tagesaufgaben** – drei kleine Ziele pro Tag mit Bonus-Sternen
-- 🎙️ **Eigene Stimmen** – im Elternbereich Wörter und Sätze selbst aufnehmen (z. B. Mama auf Portugiesisch); das Spiel spielt dann diese Aufnahmen statt der Computerstimme
-- 🔒 **Elternbereich** (Rechenaufgabe als Sperre): Fortschritt, Schwierigkeiten, Einmaleins-Reihen, Name, Haarfarbe, Aufnahmen
+Startbildschirm ist eine **Weltkarte**: Emmi tippt auf ein Gebäude und ist am Ort. Kleine Abzeichen zeigen,
+wo etwas wartet (💧 gießen, 🧺 ernten, 🛎️ Kunden, ⭐ Tagesaufgabe).
+
+- 🌱 **Garten** – säen, gießen (Plus/Minus bis 100, passt sich automatisch an), ernten; Deko aus dem Hofladen
+- 🥋 **Karate-Dojo** – 10 Bretter mit dem Einmaleins; Aufgaben, die noch nicht sitzen, kommen öfter dran
+- 🩰 **Ballettstudio** – *Tanz merken* und *Uhr-Ballett* (Uhrzeit lesen in 3 Stufen)
+- 🎤 **Singbühne** – Vokabeln und Sätze auf Portugiesisch (Portugal) & Englisch; wenig geübte Wörter zuerst
+- 🧶 **Bastelstube** – Perlen-Armbänder: Muster und Zahlenfolgen
+- 🧗 **Kletterwand** – Deutsch: Wortarten, Rechtschreibung, Silben, Reime, Groß/klein
+- 🏪 **Hofladen** – Samen, Tiere, Beete, Deko kaufen; Ernte verkaufen mit Wechselgeld (Euro & Cent)
+- 🥋 **Gürtel** von Weiß bis Schwarz, ✅ **Tagesaufgaben** mit Bonus-Sternen
+- 🎵 **Hintergrundmusik** – zwei echte Instrumentalstücke (MP3, mit ElevenLabs Music erzeugt), an Lernorten leiser, beim Vorlesen kurz abgesenkt; eigener Aus-Knopf
+- 🎙️ **Eigene Stimmen** – Wörter und Sätze selbst aufnehmen (z. B. Mama auf Portugiesisch)
+- 🔒 **Elternbereich** – Fortschritt, schwierige Einmaleins-Aufgaben, Schwierigkeiten, tägliches Spielzeit-Limit, Name, Haarfarbe, Aufnahmen
 
 ## Technik
 
 - Reines HTML/CSS/JavaScript, keine Abhängigkeiten, kein Build-Schritt
 - PWA: offline spielbar, auf dem Android-Startbildschirm installierbar
 - Spielstand bleibt lokal auf dem Gerät – keine Werbung, kein Tracking
-- Code liegt in [`app/`](app/)
+- Code liegt in [`app/`](app/): `js/main.js` (Karte & Navigation), `js/games/*.js` (ein Modul pro Ort), `js/ui.js`, `js/parents.js`, `js/music.js` …
+- Rauchtest: `node tests/smoke.js` spielt alle Orte im Browser durch (braucht Playwright und einen lokalen Server, siehe Datei-Kopf)
 
 ## Lokal ausprobieren
 
