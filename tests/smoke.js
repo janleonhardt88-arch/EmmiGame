@@ -30,6 +30,9 @@ async function goto(id) {
 // Klickt Antworten durch, bis die richtige gefunden ist (für Aufgaben ohne berechenbare Lösung)
 async function bruteForce(optSel, rounds, wait) {
   for (let i = 0; i < rounds; i++) {
+    // Waldfund „Oh, was ist denn das?" aufdecken und weiter
+    if (await page.$('[data-disc]')) { await page.click('[data-disc]', f); await sleep(300); }
+    if (await page.$('[data-disc-go]')) { await page.click('[data-disc-go]', f); await sleep(600); }
     for (const o of await page.$$(`${optSel}:not([disabled])`)) {
       await o.click(f); await sleep(140);
       if (await page.$(`${optSel}.right`)) break;
