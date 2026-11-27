@@ -184,6 +184,25 @@ export const CABIN = {
   plant: { ico: '🪴', de: 'die Pflanze', pt: 'a planta', en: 'plant', price: 6, x: 92, y: 76, s: 9 },
 };
 
+// Kabinenwände und -böden zum Aussuchen
+export const CABIN_WALLS = {
+  blue: { de: 'Blaue Planken', css: 'repeating-linear-gradient(90deg, #9fcfe8 0 46px, #8fc3de 46px 48px)' },
+  white: { de: 'Weißes Holz', css: 'repeating-linear-gradient(90deg, #fbf7f0 0 46px, #ece4d6 46px 48px)' },
+  waves: { de: 'Wellen', css: 'radial-gradient(circle at 50% 100%, transparent 38%, #bfe3f7 40% 48%, transparent 50%) 0 0 / 40px 22px, #e6f5fd' },
+  stripes: { de: 'Matrosenstreifen', css: 'repeating-linear-gradient(0deg, #ffffff 0 22px, #6f9fe0 22px 34px)' },
+  shells: { de: 'Muscheln', css: 'radial-gradient(circle, #ffc2dc 0 5px, transparent 6px) 0 0 / 36px 36px, radial-gradient(circle, #ffe7a8 0 4px, transparent 5px) 18px 18px / 36px 36px, #fff5f0' },
+  coral: { de: 'Korallenrot', css: 'repeating-linear-gradient(90deg, #ffb8a8 0 46px, #ffaa98 46px 48px)' },
+  night: { de: 'Nachtmeer', css: 'radial-gradient(circle, #fff6a0 0 2px, transparent 3px) 0 0 / 30px 30px, radial-gradient(circle, #fff 0 1.5px, transparent 2.5px) 15px 12px / 30px 30px, #2f4a8a' },
+};
+export const CABIN_FLOORS = {
+  wood: { de: 'Holz', css: 'repeating-linear-gradient(90deg, #c99257 0 70px, #b47e45 70px 72px)' },
+  deck: { de: 'Schiffsdeck', css: 'repeating-linear-gradient(90deg, #e8c48e 0 40px, #8a5a2e 40px 42px)' },
+  sand: { de: 'Sand', css: 'radial-gradient(circle, #e0c287 0 1.5px, transparent 2.5px) 0 0 / 12px 12px, #f6e2b0' },
+  carpet: { de: 'Blauer Teppich', css: 'radial-gradient(circle, rgba(255,255,255,.25) 0 1px, transparent 2px) 0 0 / 10px 10px, #6f9fe0' },
+  pink: { de: 'Rosa Teppich', css: 'radial-gradient(circle, rgba(255,255,255,.3) 0 1px, transparent 2px) 0 0 / 10px 10px, #f7a9cb' },
+  tiles: { de: 'Fliesen', css: 'repeating-conic-gradient(#fff 0 25%, #cfe8f7 0 50%) 0 0 / 40px 40px' },
+};
+
 // Schiff bemalen
 export const HULLS = {
   red: { de: 'Rot', c: '#ff5a5a', o: '#c9443a' }, blue: { de: 'Blau', c: '#4f8fd6', o: '#2f66a8', price: 10 },

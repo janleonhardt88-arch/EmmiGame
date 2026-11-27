@@ -2,7 +2,7 @@
 import { state, save } from '../state.js';
 import * as art from '../art.js';
 import { sfx, speak } from '../audio.js';
-import { PORTS, SEA_ANIMALS, SEA_QUESTIONS, SHIP_MATH, SHIP_WORDS, SHIP_PHRASES, langTasks, KNOTS, CABIN, HULLS, FUNNELS } from '../seefahrt.js';
+import { PORTS, SEA_ANIMALS, SEA_QUESTIONS, SHIP_MATH, SHIP_WORDS, SHIP_PHRASES, langTasks, KNOTS, CABIN, HULLS, FUNNELS, CABIN_WALLS, CABIN_FLOORS } from '../seefahrt.js';
 import { COUNTRIES, GREETINGS, GREETING_WORDS } from '../erdkunde.js';
 import { api, $, esc, pick, shuffle } from '../core.js';
 import { runQuiz } from './quiz.js';
@@ -363,28 +363,105 @@ function knotStep(el) {
 }
 
 // ---------- Kabine ----------
+// Kabine: kaufen, und im Einrichten-Modus verschieben, Größe ändern, spiegeln, wegräumen, Wand und Boden wählen
+let cEdit = false;
+let cSel = null;
+let cPanel = 'wall';
+const cabinData = () => { const s = sh(); s.cabinPos ||= {}; s.cabinHidden ||= {}; return s; };
+const cPlace = (k) => { const c = CABIN[k]; const p = cabinData().cabinPos[k] || {}; return { x: p.x ?? c.x, y: p.y ?? c.y, s: c.s * (p.k || 1), flip: !!p.flip }; };
+const citemStyle = (k) => { const q = cPlace(k); return `left:${q.x}%;top:${q.y}%;width:${q.s}%;z-index:${Math.round(q.y)}${q.flip ? ';--flip:-1' : ''}`; };
+
 function renderCabin() {
-  const s = sh();
+  const s = cabinData();
   const items = Object.entries(CABIN);
+  const owned = items.filter(([k]) => s.cabin[k]).map(([k]) => k);
+  const shown = owned.filter((k) => !s.cabinHidden[k]);
+  const stored = owned.filter((k) => s.cabinHidden[k]);
+  if (cSel && !shown.includes(cSel)) cSel = null;
+  const wall = CABIN_WALLS[s.cabinWall] || CABIN_WALLS.blue;
+  const floor = CABIN_FLOORS[s.cabinFloor] || CABIN_FLOORS.wood;
+  let bar;
+  if (!cEdit) {
+    bar = `<button class="btn" data-act="harbor-home">← Zurück</button>
+      <button class="btn primary" data-act="cabin-edit">✏️ Einrichten</button>
+      ${items.map(([k, c]) => s.cabin[k]
+    ? `<button class="cshop own" data-act="harbor-citem" data-k="${k}"><span>${c.ico}</span><small>✓</small></button>`
+    : `<button class="cshop ${s.shells >= c.price ? '' : 'poor'}" data-act="harbor-buy" data-k="${k}"><span>${c.ico}</span><small>${c.price} 🐚</small></button>`).join('')}`;
+  } else {
+    const tab = (id, label) => `<button class="tab ${cPanel === id ? 'active' : ''}" data-act="cabin-panel" data-p="${id}">${label}</button>`;
+    let list;
+    if (cPanel === 'wall') list = Object.entries(CABIN_WALLS).map(([id, w]) => `<button class="swatch-card ${(s.cabinWall || 'blue') === id ? 'sel' : ''}" data-act="cabin-wall" data-id="${id}"><span style="background:${w.css}"></span><b>${esc(w.de)}</b></button>`).join('');
+    else if (cPanel === 'floor') list = Object.entries(CABIN_FLOORS).map(([id, w]) => `<button class="swatch-card ${(s.cabinFloor || 'wood') === id ? 'sel' : ''}" data-act="cabin-floor" data-id="${id}"><span style="background:${w.css}"></span><b>${esc(w.de)}</b></button>`).join('');
+    else list = stored.length ? stored.map((k) => `<button class="cshop" data-act="cabin-unstore" data-k="${k}"><span>${CABIN[k].ico}</span><small>aufstellen</small></button>`).join('') : '<p class="note">Die Seekiste ist leer. Wenn du etwas wegräumst, landet es hier.</p>';
+    bar = `<button class="btn primary" data-act="cabin-edit-done">✓ Fertig</button>
+      <div class="edit-panel"><div class="edit-tabs">${tab('wall', '🎨 Wand')}${tab('floor', '🟫 Boden')}${tab('store', `🧳 Seekiste (${stored.length})`)}</div><div class="furn-list">${list}</div></div>`;
+  }
+  const tools = cEdit && cSel ? (() => { const q = cPlace(cSel); return `<div class="furn-tools" style="left:${q.x}%;top:${Math.max(2, q.y - q.s * 0.9 - 12)}%">
+      <button data-act="cabin-size" data-d="-1" aria-label="Kleiner">➖</button><button data-act="cabin-size" data-d="1" aria-label="Größer">➕</button>
+      <button data-act="cabin-flip" aria-label="Spiegeln">↔️</button><button data-act="cabin-store" aria-label="Wegräumen">🧳</button></div>`; })() : '';
   $('#screen').innerHTML = `
-    <div class="harbor cabin-scene">
+    <div class="harbor cabin-scene ${cEdit ? 'editing' : ''}">
       ${shellBar()}
-      <div class="cabin">
-        <div class="cabin-wall"></div>
+      ${cEdit ? '<div class="edit-hint">✋ Schieb die Sachen mit dem Finger herum. Tipp eins an, dann kannst du es größer, kleiner oder spiegeln.</div>' : ''}
+      <div class="cabin" id="cabin">
+        <div class="cabin-wall" style="background:${wall.css}"></div>
         <div class="porthole"><div class="ph-sea"><span class="ph-fish">🐟</span></div></div>
         <div class="cabin-shelf"></div>
-        <div class="cabin-floor"></div>
-        ${items.filter(([k]) => s.cabin[k]).map(([k, c]) => `<button class="citem ci-${k}" data-act="harbor-citem" data-k="${k}" style="left:${c.x}%;top:${c.y}%;width:${c.s}%">${art.emoji(c.ico, 86, 50)}</button>`).join('')}
+        <div class="cabin-floor" style="background:${floor.css}"></div>
+        ${shown.map((k) => `<button class="citem ci-${k} ${cSel === k ? 'sel' : ''}" ${cEdit ? '' : 'data-act="harbor-citem"'} data-k="${k}" style="${citemStyle(k)}">${art.emoji(CABIN[k].ico, 86, 50)}</button>`).join('')}
+        ${tools}
         <div class="cabin-bubble" id="cabin-bubble"></div>
       </div>
-      <div class="cabin-shop">
-        <button class="btn" data-act="harbor-home">← Zurück</button>
-        ${items.map(([k, c]) => s.cabin[k]
-          ? `<button class="cshop own" data-act="harbor-citem" data-k="${k}"><span>${c.ico}</span><small>✓</small></button>`
-          : `<button class="cshop ${s.shells >= c.price ? '' : 'poor'}" data-act="harbor-buy" data-k="${k}"><span>${c.ico}</span><small>${c.price} 🐚</small></button>`).join('')}
-      </div>
+      <div class="cabin-shop">${bar}</div>
     </div>`;
+  if (cEdit) { cabinDrag(); cabinToolsInside(); }
 }
+
+function cabinToolsInside() {
+  const t = $('.furn-tools'); const room = $('#cabin');
+  if (!t || !room) return;
+  const r = room.getBoundingClientRect(); const b = t.getBoundingClientRect();
+  if (b.left < r.left + 4) t.style.left = `${((b.width / 2 + 4) / r.width) * 100}%`;
+  else if (b.right > r.right - 4) t.style.left = `${100 - ((b.width / 2 + 4) / r.width) * 100}%`;
+}
+
+function cabinDrag() {
+  const room = $('#cabin');
+  room?.querySelectorAll('.citem').forEach((el) => {
+    el.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      const k = el.dataset.k;
+      const r = room.getBoundingClientRect();
+      const start = { x: e.clientX, y: e.clientY };
+      const q = cPlace(k);
+      let moved = false;
+      try { el.setPointerCapture(e.pointerId); } catch (err) { /* ältere Geräte */ }
+      el.classList.add('dragging');
+      const move = (ev) => {
+        if (Math.abs(ev.clientX - start.x) + Math.abs(ev.clientY - start.y) > 6) moved = true;
+        if (!moved) return;
+        const x = Math.min(96, Math.max(4, q.x + ((ev.clientX - start.x) / r.width) * 100));
+        const y = Math.min(94, Math.max(8, q.y + ((ev.clientY - start.y) / r.height) * 100));
+        const s = cabinData();
+        s.cabinPos[k] = { ...(s.cabinPos[k] || {}), x, y };
+        el.setAttribute('style', citemStyle(k));
+        room.querySelector('.furn-tools')?.remove();
+      };
+      const up = () => {
+        el.removeEventListener('pointermove', move);
+        el.removeEventListener('pointerup', up);
+        el.removeEventListener('pointercancel', up);
+        el.classList.remove('dragging');
+        if (moved) { save(); sfx.pop(); cSel = k; } else { cSel = cSel === k ? null : k; sfx.tick(); }
+        renderCabin();
+      };
+      el.addEventListener('pointermove', move);
+      el.addEventListener('pointerup', up);
+      el.addEventListener('pointercancel', up);
+    });
+  });
+}
+
 function buyCabin(k) {
   const s = sh();
   const c = CABIN[k];
@@ -450,8 +527,17 @@ export default {
     'harbor-knots': () => { api.closeModal(); mode = 'knots'; knot = null; render(); },
     'harbor-knot': (el) => startKnot(el.dataset.k),
     'harbor-step': (el) => knotStep(el),
-    'harbor-home': () => { api.closeModal(); mode = 'home'; render(); },
-    'harbor-cabin': () => { mode = 'cabin'; sfx.pop(); render(); },
+    'harbor-home': () => { api.closeModal(); mode = 'home'; cEdit = false; cSel = null; render(); },
+    'harbor-cabin': () => { mode = 'cabin'; cEdit = false; cSel = null; sfx.pop(); render(); },
+    'cabin-edit': () => { cEdit = true; cSel = null; cPanel = 'wall'; sfx.pop(); renderCabin(); },
+    'cabin-edit-done': () => { cEdit = false; cSel = null; save(); api.toast('Deine Kabine ist wunderschön! ⚓✨'); renderCabin(); },
+    'cabin-panel': (el) => { cPanel = el.dataset.p; sfx.tick(); renderCabin(); },
+    'cabin-wall': (el) => { cabinData().cabinWall = el.dataset.id; save(); sfx.pop(); renderCabin(); },
+    'cabin-floor': (el) => { cabinData().cabinFloor = el.dataset.id; save(); sfx.pop(); renderCabin(); },
+    'cabin-size': (el) => { const p = (cabinData().cabinPos[cSel] ||= {}); p.k = Math.round(Math.min(1.8, Math.max(0.6, (p.k || 1) + Number(el.dataset.d) * 0.15)) * 100) / 100; save(); sfx.tick(); renderCabin(); },
+    'cabin-flip': () => { const p = (cabinData().cabinPos[cSel] ||= {}); p.flip = !p.flip; save(); sfx.tick(); renderCabin(); },
+    'cabin-store': () => { cabinData().cabinHidden[cSel] = true; cSel = null; save(); sfx.pop(); renderCabin(); },
+    'cabin-unstore': (el) => { delete cabinData().cabinHidden[el.dataset.k]; cSel = el.dataset.k; save(); sfx.pop(); renderCabin(); },
     'harbor-buy': (el) => buyCabin(el.dataset.k),
     'harbor-citem': (el) => sayCabin(el.dataset.k),
     'harbor-paint': () => paint(),

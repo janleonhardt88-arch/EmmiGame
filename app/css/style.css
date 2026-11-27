@@ -1287,3 +1287,16 @@ body:has(.piano-modal) .rotate-hint { display: none !important; }
 .swatch-card b { font-size: 13px; }
 .swatch-card.sel { border-color: var(--purple); }
 @media (max-width: 760px) { .edit-hint { font-size: 12px; top: 4px; max-width: 92vw; } .room-scene.editing .wood-bar { display: none; } }
+
+/* Kabine selbst einrichten */
+.citem svg { transform: scaleX(var(--flip, 1)); }
+.cabin-scene.editing .cabin { box-shadow: inset 0 0 0 6px #9b7bff, 0 6px 0 #c9a878; }
+.cabin-scene.editing .citem { touch-action: none; cursor: grab; }
+.cabin-scene.editing .citem::after { content: ''; position: absolute; inset: -4%; border: 2px dashed rgba(155, 123, 255, .6); border-radius: 12px; pointer-events: none; }
+.cabin-scene.editing .citem.sel::after { border: 3px solid #9b7bff; background: rgba(155, 123, 255, .08); }
+.cabin-scene.editing .citem.dragging { opacity: .85; filter: drop-shadow(0 8px 6px rgba(0, 0, 0, .25)); }
+.cabin-scene.editing .cabin-shop > .btn { align-self: center; flex: none; }
+.cabin-scene .edit-panel .furn-list { display: flex; gap: 8px; overflow-x: auto; }
+@media (max-width: 760px) { .cabin-scene.editing .wood-bar { display: none; } }
+.cabin-scene.editing .cabin-shop { flex-wrap: nowrap; justify-content: flex-start; width: 100%; padding: 0 2vmin; }
+@media (max-width: 560px) { .cabin-scene.editing .cabin-shop { flex-direction: column; align-items: stretch; gap: 6px; } .cabin-scene.editing .cabin-shop > .btn { align-self: flex-start; } }
